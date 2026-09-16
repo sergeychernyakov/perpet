@@ -38,3 +38,6 @@
 /design/
 
 .DS_Store
+
+# скриншоты упавших системных тестов
+/tmp/screenshots/
