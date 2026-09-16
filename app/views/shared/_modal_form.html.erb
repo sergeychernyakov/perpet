@@ -1,6 +1,6 @@
 <%= form_with model: lead, url: leads_path do |f| %>
-  <h2 class="modal__title" id="modal-title" data-modal-target="title">Присоединиться</h2>
-  <p class="modal__note" data-modal-target="note">Оставьте контакт — расскажем, как передержать питомца с PERPET.</p>
+  <h2 class="modal__title" id="modal-title" data-modal-target="title"><%= lead.heading %></h2>
+  <p class="modal__note" data-modal-target="note"><%= lead.note %></p>
 
   <%= f.hidden_field :kind, value: lead.kind.presence || "join", data: { modal_target: "kind" } %>
   <%= f.hidden_field :subject, value: lead.subject, data: { modal_target: "subject" } %>

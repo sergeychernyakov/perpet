@@ -9,6 +9,20 @@ class Lead < ApplicationRecord
     kind == "respond"
   end
 
+  def heading
+    respond? ? "Отклик на объявление" : "Присоединиться"
+  end
+
+  def note
+    if !respond?
+      "Оставьте контакт — расскажем, как передержать питомца с PERPET."
+    elsif subject.present?
+      "Вы откликаетесь: #{subject}"
+    else
+      "Оставьте контакт, и хозяин с вами свяжется."
+    end
+  end
+
   def success_text
     if respond?
       "Отклик отправлен — хозяин получит ваши контакты."

@@ -56,31 +56,3 @@
   font-family: var(--font-mono);
   font-size: 15px;
 }
-
-.errors {
-  margin-bottom: 20px;
-  padding: 16px 20px;
-  border-radius: clamp(20px, 1.8vw, 28px);
-  border: 2px solid var(--ink);
-  background: var(--blue);
-}
-
-.errors__title {
-  margin-bottom: 8px;
-  font-family: var(--font-display);
-  font-size: 18px;
-}
-
-.errors ul {
-  margin: 0;
-  padding-left: 20px;
-  font-size: 16px;
-}
-
-.field_with_errors {
-  display: contents;
-}
-
-.field_with_errors input {
-  border-color: var(--wine);
-}

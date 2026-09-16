@@ -3,9 +3,9 @@ class SupportTicketsController < ApplicationController
     @ticket = SupportTicket.new(ticket_params)
 
     if @ticket.save
-      render turbo_stream: turbo_stream.replace("ticket", partial: "support/ticket_sent", locals: { ticket: @ticket })
+      render turbo_stream: turbo_stream.update("ticket", partial: "support/ticket_sent", locals: { ticket: @ticket })
     else
-      render turbo_stream: turbo_stream.replace("ticket", partial: "support/ticket_form", locals: { ticket: @ticket }),
+      render turbo_stream: turbo_stream.update("ticket", partial: "support/ticket_form", locals: { ticket: @ticket }),
              status: :unprocessable_entity
     end
   end

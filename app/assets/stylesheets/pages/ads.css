@@ -55,6 +55,11 @@
   font-size: clamp(15px, 1.2vw, 20px);
 }
 
+.chip--search {
+  background: var(--wine);
+  color: var(--cream);
+}
+
 .ad {
   display: flex;
   flex-direction: column;

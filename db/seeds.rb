@@ -81,16 +81,10 @@ def create_ads
 end
 
 def create_my_ads
-  Ad.create!(
+  # Объявление про Барсика уже есть в каталоге — оно и принадлежит Анне.
+  Ad.find_by!(title: "Барсик, 4 года").update!(
     profile: @profile,
-    kind: "Кошка",
-    title: "Барсик, 4 года",
-    city: "Москва",
-    period: "12–26 июня",
-    price: "700 ₽ / день",
     description: "Передержка на время командировки, 12–26 июня. Отклики: 3.",
-    icon: "shape-03.svg",
-    status: "published",
     published_on: Date.current - 14.days
   )
 

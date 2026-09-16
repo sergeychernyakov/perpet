@@ -3,9 +3,9 @@ class LeadsController < ApplicationController
     @lead = Lead.new(lead_params)
 
     if @lead.save
-      render turbo_stream: turbo_stream.replace("modal-body", partial: "shared/modal_sent", locals: { lead: @lead })
+      render turbo_stream: turbo_stream.update("modal-body", partial: "shared/modal_sent", locals: { lead: @lead })
     else
-      render turbo_stream: turbo_stream.replace("modal-body", partial: "shared/modal_form", locals: { lead: @lead }),
+      render turbo_stream: turbo_stream.update("modal-body", partial: "shared/modal_form", locals: { lead: @lead }),
              status: :unprocessable_entity
     end
   end

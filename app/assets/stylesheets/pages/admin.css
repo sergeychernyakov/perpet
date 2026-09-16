@@ -146,22 +146,6 @@
   display: block;
 }
 
-.admin__form .errors {
-  padding: 16px 22px;
-  border-radius: var(--radius-card-sm);
-  border: 2px solid var(--wine);
-  background: var(--cream);
-  font-family: var(--font-mono);
-  font-size: 16px;
-  color: var(--wine);
-}
-
-.admin__form .errors ul {
-  margin: 0;
-  padding-left: 20px;
-  list-style: disc;
-}
-
 .admin__form select {
   width: 100%;
   height: 50px;

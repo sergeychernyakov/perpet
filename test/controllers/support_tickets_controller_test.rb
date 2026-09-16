@@ -22,5 +22,7 @@ class SupportTicketsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_match "минимум 20 символов", response.body
+    # turbo_stream.update сохраняет #ticket, чтобы повторная отправка тоже нашла цель.
+    assert_match %r{<turbo-stream action="update" target="ticket">}, response.body
   end
 end
