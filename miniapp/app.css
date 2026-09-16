@@ -5,6 +5,8 @@
   --wine: #6e0001;
   --ink: #000;
   --blue: #bed2f9;
+  /* Голубой не меняется в тёмной теме, значит текст на нём всегда тёмный. */
+  --on-blue: #17100f;
   --white: #fff;
   --radius-card: 28px;
   --radius-pill: 999px;
@@ -314,6 +316,7 @@ textarea {
   background: var(--blue);
   font-family: var(--font-mono);
   font-size: 14px;
+  color: var(--on-blue);
 }
 
 .muted {
