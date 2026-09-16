@@ -68,6 +68,8 @@ module Api
 
         assert_response :success
         assert_equal "vk-501", json["profile"]["name"]
+        # Технический адрес в контакты не попадает — он ничей.
+        assert_nil json["profile"]["email"]
 
         patch api_v1_profile_path, headers: vk_headers,
               params: { profile: { name: "Анна", pet_name: "Барсик", pet_age: "3 года" } }

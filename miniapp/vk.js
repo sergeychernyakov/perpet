@@ -54,8 +54,19 @@ export function suggestedProfile() {
   }
 }
 
+// У аккаунта без фото VK отдаёт свою серую заглушку (camera_*.png) —
+// вместо неё лучше показать инициалы.
 export function avatarUrl() {
-  return user?.photo_200 || user?.photo_100 || null
+  const photo = user?.photo_200 || user?.photo_100
+
+  return photo && !/camera_\d+\.(png|jpg)/.test(photo) ? photo : null
+}
+
+export function initials() {
+  return [ user?.first_name, user?.last_name ]
+    .filter(Boolean)
+    .map((part) => part[0].toUpperCase())
+    .join("")
 }
 
 // Профиль создаётся с техническим именем вида «vk-4242» — его и заменяем.

@@ -303,7 +303,9 @@ function vkCard() {
   const photo = vk.avatarUrl()
 
   return el("section", { class: "card card--who" }, [
-    photo && el("img", { class: "who__photo", src: photo, alt: "" }),
+    photo
+      ? el("img", { class: "who__photo", src: photo, alt: "" })
+      : el("span", { class: "who__photo who__photo--letters", text: vk.initials() }),
     el("div", {}, [
       el("h3", { text: [ user.first_name, user.last_name ].filter(Boolean).join(" ") }),
       el("p", { class: "card__meta", text: "Вход через ВКонтакте — пароль не нужен" })

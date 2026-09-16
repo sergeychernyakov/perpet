@@ -30,7 +30,9 @@ class User < ApplicationRecord
   private
 
   # У каждого пользователя сразу есть профиль — его страница доступна после входа.
+  # Гостю из VK технический адрес в контакты не пишем: он ничей и писать на него
+  # некуда, пусть человек укажет свой.
   def create_default_profile
-    create_profile!(name: email.split("@").first, email: email)
+    create_profile!(name: email.split("@").first, email: vk_id? ? nil : email)
   end
 end

@@ -474,3 +474,13 @@ body.vk-dark {
   padding-inline: 12px;
   white-space: nowrap;
 }
+
+.who__photo--letters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--wine);
+  font-family: var(--font-display);
+  font-size: 19px;
+  color: var(--cream);
+}
