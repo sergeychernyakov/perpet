@@ -5,6 +5,7 @@ def seed
   reset
   create_users
   create_ads
+  attach_catalog_photos
   create_my_ads
   create_articles
   create_faq
@@ -83,14 +84,29 @@ def create_ads
   puts "Объявлений в каталоге: #{Ad.published.count}"
 end
 
-# Фотография кота из макета — чтобы в каталоге сразу было видно, как выглядит
-# карточка с настоящим снимком, а не с силуэтом.
-PET_PHOTO = Rails.root.join("app/assets/images/profile-photo.jpg")
+# Фотографии котов из макета — чтобы в каталоге с первой же страницы было
+# видно, как выглядит карточка со снимком, а не только с силуэтом.
+PET_PHOTOS = {
+  "Барсик, 4 года" => "profile-photo.jpg",
+  "Симба, 1 год" => "pet-simba.jpg",
+  "Муся, 7 лет" => "pet-musya.jpg"
+}.freeze
 
-def attach_pet_photo(record)
-  return unless PET_PHOTO.exist?
+def attach_pet_photo(record, file)
+  path = Rails.root.join("app/assets/images", file)
+  return unless path.exist?
 
-  record.photo.attach(io: PET_PHOTO.open, filename: "barsik.jpg", content_type: "image/jpeg")
+  record.photo.attach(io: path.open, filename: file, content_type: "image/jpeg")
+end
+
+def attach_catalog_photos
+  PET_PHOTOS.each do |title, file|
+    ad = Ad.find_by(title: title) or next
+
+    attach_pet_photo(ad, file)
+  end
+
+  puts "Фотографий в каталоге: #{PET_PHOTOS.size}"
 end
 
 def create_my_ads
@@ -102,8 +118,7 @@ def create_my_ads
     published_on: Date.current - 14.days
   )
 
-  attach_pet_photo(barsik)
-  attach_pet_photo(@profile)
+  attach_pet_photo(@profile, "profile-photo.jpg")
 
   Ad.create!(
     profile: @profile,
