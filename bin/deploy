@@ -10,7 +10,9 @@ set -euo pipefail
 
 SSH_HOST="deploy@195.19.209.216"
 APP_DIR="/var/www/perpet"
-HEALTH_URL="http://perpet.xn--80akofbvesci4h.xn--p1ai/up"
+# Пока DNS не поднят, стучимся по IP и подставляем имя в заголовок Host.
+HEALTH_HOST="perpet.xn--80akofbvesci4h.xn--p1ai"
+HEALTH_URL="http://195.19.209.216/up"
 SSH_OPTS=(-o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=15)
 
 SEED=0
@@ -42,8 +44,8 @@ REMOTE
 
 echo "==> жду, пока поднимется Puma"
 for i in $(seq 1 20); do
-  code=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" || true)
-  [ "$code" = "200" ] && { echo "готово: $HEALTH_URL отвечает 200"; exit 0; }
+  code=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: $HEALTH_HOST" "$HEALTH_URL" || true)
+  [ "$code" = "200" ] && { echo "готово: https://$HEALTH_HOST/up отвечает 200"; exit 0; }
   sleep 3
 done
 
