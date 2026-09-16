@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Обновление прототипа PERPET на сервере: deploy@195.19.209.216:/var/www/perpet.
+# Забирает origin/main, ставит гемы, собирает ассеты, мигрирует и перезапускает Puma.
+#
+# Использование:
+#   bin/deploy            выкатить origin/main
+#   bin/deploy --seed     то же плюс пересоздать демонстрационные данные
+
+set -euo pipefail
+
+SSH_HOST="deploy@195.19.209.216"
+APP_DIR="/var/www/perpet"
+HEALTH_URL="http://perpet.xn--80akofbvesci4h.xn--p1ai/up"
+SSH_OPTS=(-o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=15)
+
+SEED=0
+[ "${1:-}" = "--seed" ] && SEED=1
+
+if [ -n "$(git status --porcelain)" ]; then
+  echo "ERROR: рабочее дерево грязное — сначала коммит или stash." >&2
+  exit 1
+fi
+
+echo "==> пушу origin/main"
+git push origin main
+
+echo "==> обновляю сервер"
+ssh "${SSH_OPTS[@]}" "$SSH_HOST" "APP_DIR='$APP_DIR' SEED=$SEED bash -euo pipefail" <<'REMOTE'
+cd "$APP_DIR"
+git fetch --quiet origin main
+git reset --hard --quiet origin/main
+
+export RAILS_ENV=production
+bundle install --quiet -j2
+bundle exec rails assets:precompile > /dev/null
+bundle exec rails db:migrate
+[ "$SEED" = "1" ] && bundle exec rails db:seed
+
+sudo -n systemctl restart --no-block perpet.service
+echo "версия на сервере: $(git rev-parse --short HEAD)"
+REMOTE
+
+echo "==> жду, пока поднимется Puma"
+for i in $(seq 1 20); do
+  code=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" || true)
+  [ "$code" = "200" ] && { echo "готово: $HEALTH_URL отвечает 200"; exit 0; }
+  sleep 3
+done
+
+echo "WARN: $HEALTH_URL не ответил 200 за минуту — проверьте 'ssh $SSH_HOST sudo journalctl -u perpet -n 50'" >&2
+exit 1
