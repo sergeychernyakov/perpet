@@ -46,6 +46,26 @@ class Ad < ApplicationRecord
     published_on ? "Опубликовано #{I18n.l(published_on, format: :long)}" : "Не опубликовано"
   end
 
+  # Карточка для мини-приложения VK.
+  def as_api
+    {
+      id: id,
+      title: title,
+      kind: kind,
+      city: city,
+      period: period,
+      price: price,
+      description: description,
+      icon: icon_name,
+      status: status,
+      status_label: status_label,
+      meta: meta,
+      published_on: published_on,
+      published_label: published_label,
+      mine: profile_id.present?
+    }
+  end
+
   private
 
   def build_search_text

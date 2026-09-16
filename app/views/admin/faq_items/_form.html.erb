@@ -1,6 +1,6 @@
 <%= form_with model: [ :admin, item ], class: "admin__form" do |f| %>
   <% if item.errors.any? %>
-    <div class="errors"><ul><% item.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
+    <div class="errors"><ul><% item.error_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
   <% end %>
 
   <label>

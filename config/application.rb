@@ -19,5 +19,13 @@ module Perpet
     # Сервис русскоязычный: локаль и часовой пояс по умолчанию.
     config.i18n.default_locale = :ru
     config.time_zone = "Moscow"
+
+    # Откуда мини-приложению VK разрешено ходить в /api/v1.
+    # Список задаётся через CORS_ORIGINS, «*» внутри домена разрешена.
+    default_origins = "https://vk.com,https://m.vk.com,https://*.vk-apps.com,http://localhost:5173"
+    config.x.cors_origins = ENV.fetch("CORS_ORIGINS", default_origins).split(",").map do |origin|
+      origin = origin.strip
+      origin.include?("*") ? /\A#{Regexp.escape(origin).gsub('\*', ".+")}\z/ : origin
+    end
   end
 end

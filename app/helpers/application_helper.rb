@@ -5,7 +5,7 @@ module ApplicationHelper
 
   # Первое сообщение об ошибке — в формах макета показывается одна строка.
   def error_message_for(record)
-    record.errors.first&.message
+    record.error_messages.first
   end
 
   # Кнопка, открывающая форму заявки: join — «присоединиться», respond — отклик на объявление.
