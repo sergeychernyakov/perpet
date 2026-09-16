@@ -1,9 +1,11 @@
 /* Вход, регистрация и восстановление пароля. */
 
+/* .main уже выставил flex-direction: column, поэтому по горизонтали
+   карточку центрирует align-items, а не justify-content. */
 .auth {
   display: flex;
-  justify-content: center;
-  padding: clamp(24px, 4vw, 64px) 0;
+  align-items: center;
+  padding-block: clamp(24px, 4vw, 64px);
 }
 
 .auth__card {
