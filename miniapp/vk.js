@@ -54,12 +54,14 @@ export function suggestedProfile() {
   }
 }
 
-// У аккаунта без фото VK отдаёт свою серую заглушку (camera_*.png) —
-// вместо неё лучше показать инициалы.
+// По адресу настоящее фото от заглушки не отличить: VK отдаёт и то и другое
+// обычной ссылкой на userapi.com. Зато он сам сообщает has_photo — если фото
+// нет, рисуем инициалы, а не серый стаб.
 export function avatarUrl() {
-  const photo = user?.photo_200 || user?.photo_100
+  if (!user) return null
+  if (user.has_photo === 0 || user.has_photo === false) return null
 
-  return photo && !/camera_\d+\.(png|jpg)/.test(photo) ? photo : null
+  return user.photo_200 || user.photo_100 || null
 }
 
 export function initials() {

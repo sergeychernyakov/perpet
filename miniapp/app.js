@@ -301,11 +301,15 @@ function vkCard() {
   if (!user) return null
 
   const photo = vk.avatarUrl()
+  const letters = el("span", { class: "who__photo who__photo--letters", text: vk.initials() })
+
+  // Картинку показываем сразу, а инициалы — только если она не загрузилась.
+  const avatar = photo
+    ? el("img", { class: "who__photo", src: photo, alt: "", onError: () => avatar.replaceWith(letters) })
+    : letters
 
   return el("section", { class: "card card--who" }, [
-    photo
-      ? el("img", { class: "who__photo", src: photo, alt: "" })
-      : el("span", { class: "who__photo who__photo--letters", text: vk.initials() }),
+    avatar,
     el("div", {}, [
       el("h3", { text: [ user.first_name, user.last_name ].filter(Boolean).join(" ") }),
       el("p", { class: "card__meta", text: "Вход через ВКонтакте — пароль не нужен" })
