@@ -20,6 +20,9 @@ module Perpet
     config.i18n.default_locale = :ru
     config.time_zone = "Moscow"
 
+    # Картинки через Active Storage не обрабатываем, гем для вариантов не нужен.
+    config.active_storage.variant_processor = :disabled
+
     # Откуда мини-приложению VK разрешено ходить в /api/v1.
     # Список задаётся через CORS_ORIGINS, «*» внутри домена разрешена.
     default_origins = "https://vk.com,https://m.vk.com,https://*.vk-apps.ru,https://*.vk-apps.com,http://localhost:5173"
