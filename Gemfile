@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 # json 3.x ломает ActiveSupport 8.1 (JSON.parse с двумя аргументами)
-gem "json", "~> 2.9"
+gem "json", "~> 3.0"
 
 # Русская локализация: даты, месяцы, тексты ошибок
 gem "rails-i18n"
