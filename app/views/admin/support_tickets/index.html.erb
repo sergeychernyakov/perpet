@@ -1,0 +1,36 @@
+<% content_for :title, "Обращения — админка" %>
+
+<main class="main admin">
+  <section class="admin__head">
+    <h1>Обращения</h1>
+    <%= render "admin/nav" %>
+  </section>
+
+  <section class="admin__panel">
+    <% if @tickets.any? %>
+      <table class="admin__table">
+        <thead>
+          <tr><th>Номер</th><th>Имя</th><th>E-mail</th><th>Тема</th><th>Сообщение</th><th>Когда</th><th></th></tr>
+        </thead>
+        <tbody>
+          <% @tickets.each do |ticket| %>
+            <tr>
+              <td><%= ticket.reference %></td>
+              <td><%= ticket.name %></td>
+              <td><%= mail_to ticket.email %></td>
+              <td><%= ticket.topic %></td>
+              <td><%= ticket.message %></td>
+              <td><%= l ticket.created_at, format: :short %></td>
+              <td class="admin__actions">
+                <%= button_to "Удалить", admin_support_ticket_path(ticket), method: :delete, class: "btn",
+                              form_class: "contents", data: { turbo_confirm: "Удалить обращение?" } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="admin__empty">Обращений пока нет.</p>
+    <% end %>
+  </section>
+</main>

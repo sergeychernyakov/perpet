@@ -1,0 +1,45 @@
+<% content_for :title, "Настройки аккаунта — PERPET" %>
+
+<main class="main auth">
+  <div class="auth__card">
+    <h1 class="auth__title">Аккаунт</h1>
+    <p class="auth__lead">Здесь меняются почта и пароль. Имя и город питомца — в профиле.</p>
+
+    <%= form_with model: resource, as: resource_name, url: registration_path(resource_name), method: :patch, class: "form" do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <label class="auth__field">
+        <span class="form__label">E-mail</span>
+        <%= f.email_field :email, autocomplete: "email", class: "form__input" %>
+      </label>
+
+      <label class="auth__field">
+        <span class="form__label">Новый пароль</span>
+        <%= f.password_field :password, autocomplete: "new-password", class: "form__input",
+                             placeholder: "оставьте пустым, если не меняете" %>
+      </label>
+
+      <label class="auth__field">
+        <span class="form__label">Новый пароль ещё раз</span>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form__input" %>
+      </label>
+
+      <label class="auth__field">
+        <span class="form__label">Текущий пароль</span>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "form__input",
+                             placeholder: "нужен для подтверждения изменений" %>
+      </label>
+
+      <div class="auth__actions">
+        <%= f.submit "Сохранить", class: "btn btn--wine btn--wide" %>
+        <%= link_to "К профилю", profile_path, class: "btn" %>
+      </div>
+    <% end %>
+
+    <div class="auth__links">
+      <%= button_to "Удалить аккаунт", registration_path(resource_name), method: :delete,
+                    form_class: "contents", class: "btn",
+                    data: { turbo_confirm: "Удалить аккаунт вместе с объявлениями?" } %>
+    </div>
+  </div>
+</main>

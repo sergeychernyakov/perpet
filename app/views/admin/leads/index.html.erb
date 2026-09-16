@@ -1,0 +1,35 @@
+<% content_for :title, "Заявки — админка" %>
+
+<main class="main admin">
+  <section class="admin__head">
+    <h1>Заявки</h1>
+    <%= render "admin/nav" %>
+  </section>
+
+  <section class="admin__panel">
+    <% if @leads.any? %>
+      <table class="admin__table">
+        <thead>
+          <tr><th>Имя</th><th>E-mail</th><th>Город</th><th>Тип</th><th>Когда</th><th></th></tr>
+        </thead>
+        <tbody>
+          <% @leads.each do |lead| %>
+            <tr>
+              <td><%= lead.name %></td>
+              <td><%= mail_to lead.email %></td>
+              <td><%= lead.city %></td>
+              <td><%= lead.respond? ? "Отклик: #{lead.subject}" : "Заявка" %></td>
+              <td><%= l lead.created_at, format: :short %></td>
+              <td class="admin__actions">
+                <%= button_to "Удалить", admin_lead_path(lead), method: :delete, class: "btn",
+                              form_class: "contents", data: { turbo_confirm: "Удалить заявку?" } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="admin__empty">Заявок пока нет.</p>
+    <% end %>
+  </section>
+</main>

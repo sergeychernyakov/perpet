@@ -2,7 +2,6 @@ require "test_helper"
 
 class AdsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @profile = Profile.create!(name: "Анна Петрова", city: "Москва", email: "anna@mail.ru")
     7.times do |i|
       Ad.create!(kind: i.even? ? "Кошка" : "Собака", title: "Питомец #{i}", city: "Москва",
                  period: "1–10 июля", price: "700 ₽ / день", description: "Описание #{i}",
@@ -32,12 +31,23 @@ class AdsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".empty__title", "Ничего не нашлось"
   end
 
-  test "создание черновика из профиля" do
-    assert_difference -> { @profile.ads.count }, 1 do
+  test "гость не может создать черновик" do
+    assert_no_difference -> { Ad.count } do
+      post ads_path
+    end
+
+    assert_redirected_to new_user_session_path
+  end
+
+  test "пользователь создаёт черновик в своём профиле" do
+    user = User.create!(email: "anna@mail.ru", password: "perpet123")
+    sign_in user
+
+    assert_difference -> { user.profile.ads.count }, 1 do
       post ads_path
     end
 
     assert_redirected_to profile_path
-    assert_equal "draft", @profile.ads.last.status
+    assert_equal "draft", user.profile.ads.last.status
   end
 end

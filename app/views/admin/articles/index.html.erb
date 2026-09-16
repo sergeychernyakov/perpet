@@ -1,0 +1,30 @@
+<% content_for :title, "Статьи — админка" %>
+
+<main class="main admin">
+  <section class="admin__head">
+    <h1>Статьи</h1>
+    <%= render "admin/nav" %>
+  </section>
+
+  <section class="admin__panel">
+    <p><%= link_to "Добавить", new_admin_article_path, class: "btn btn--wine" %></p>
+
+    <table class="admin__table">
+      <thead>
+        <tr><th>Заголовок</th><th>Тег</th><th>Время чтения</th><th>Порядок</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% @articles.each do |item| %>
+          <tr>
+            <td><%= item.title %></td><td><%= item.tag %></td><td><%= item.read_time %></td><td><%= item.position %></td>
+            <td class="admin__actions">
+              <%= link_to "Изменить", edit_admin_article_path(item), class: "btn" %>
+              <%= button_to "Удалить", admin_article_path(item), method: :delete, class: "btn", form_class: "contents",
+                            data: { turbo_confirm: "Удалить запись?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+</main>

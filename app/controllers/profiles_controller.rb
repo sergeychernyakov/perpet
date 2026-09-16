@@ -1,4 +1,5 @@
 class ProfilesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_profile
 
   def show
@@ -17,10 +18,10 @@ class ProfilesController < ApplicationController
   private
 
   def set_profile
-    @profile = Profile.current
+    @profile = current_user.profile
   end
 
   def profile_params
-    params.require(:profile).permit(:name, :city, :email)
+    params.require(:profile).permit(:name, :city, :email, :pet_name, :pet_age)
   end
 end

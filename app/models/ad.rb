@@ -3,6 +3,7 @@ class Ad < ApplicationRecord
   ALL_KINDS = "Все".freeze
   STATUS_LABELS = { "published" => "Активно", "draft" => "Черновик" }.freeze
   DEFAULT_ICON = "shape-04.svg".freeze
+  ICONS = %w[shape-03.svg shape-04.svg shape-17.svg shape-18.svg shape-19.svg].freeze
 
   belongs_to :profile, optional: true
 

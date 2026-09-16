@@ -1,0 +1,10 @@
+<% content_for :title, "Новая статья — админка" %>
+
+<main class="main admin">
+  <section class="admin__head">
+    <h1>Новая статья</h1>
+    <%= render "admin/nav" %>
+  </section>
+
+  <section class="admin__panel"><%= render "form", item: @article %></section>
+</main>

@@ -1,0 +1,30 @@
+<% content_for :title, "FAQ — админка" %>
+
+<main class="main admin">
+  <section class="admin__head">
+    <h1>FAQ</h1>
+    <%= render "admin/nav" %>
+  </section>
+
+  <section class="admin__panel">
+    <p><%= link_to "Добавить", new_admin_faq_item_path, class: "btn btn--wine" %></p>
+
+    <table class="admin__table">
+      <thead>
+        <tr><th>Вопрос</th><th>Порядок</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% @items.each do |item| %>
+          <tr>
+            <td><%= item.question %></td><td><%= item.position %></td>
+            <td class="admin__actions">
+              <%= link_to "Изменить", edit_admin_faq_item_path(item), class: "btn" %>
+              <%= button_to "Удалить", admin_faq_item_path(item), method: :delete, class: "btn", form_class: "contents",
+                            data: { turbo_confirm: "Удалить запись?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+</main>

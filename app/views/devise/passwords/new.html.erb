@@ -1,0 +1,23 @@
+<% content_for :title, "Восстановление пароля — PERPET" %>
+
+<main class="main auth">
+  <div class="auth__card">
+    <h1 class="auth__title">Забыли пароль?</h1>
+    <p class="auth__lead">Пришлём на почту ссылку для смены пароля.</p>
+
+    <%= form_with model: resource, as: resource_name, url: password_path(resource_name), class: "form" do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <label class="auth__field">
+        <span class="form__label">E-mail</span>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form__input", placeholder: "you@mail.ru", required: true %>
+      </label>
+
+      <div class="auth__actions">
+        <%= f.submit "Отправить ссылку", class: "btn btn--wine btn--wide" %>
+      </div>
+    <% end %>
+
+    <%= render "devise/shared/links" %>
+  </div>
+</main>

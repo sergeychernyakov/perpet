@@ -91,6 +91,10 @@
   outline: none;
 }
 
+.profile__form .form__error {
+  color: var(--cream);
+}
+
 .profile__save {
   align-self: flex-start;
 }
@@ -236,4 +240,17 @@
   bottom: 12%;
   width: 22%;
   pointer-events: none;
+}
+
+.profile__account {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: var(--gap);
+  padding-top: var(--gap);
+  border-top: 2px solid rgb(252 244 241 / 25%);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--cream);
 }

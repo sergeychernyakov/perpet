@@ -22,7 +22,7 @@
 
     <%= stylesheet_link_tag "vars", "base", "layout", "components",
                             "pages/home", "pages/ads", "pages/articles",
-                            "pages/about", "pages/profile", "pages/support",
+                            "pages/about", "pages/profile", "pages/support", "pages/auth", "pages/admin",
                             "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
@@ -32,8 +32,12 @@
       <%= render "shared/header" %>
       <%= render "shared/menu" %>
 
-      <% if flash[:notice] %>
+      <% if flash[:notice].present? %>
         <p class="flash"><%= flash[:notice] %></p>
+      <% end %>
+
+      <% if flash[:alert].present? %>
+        <p class="flash flash--alert"><%= flash[:alert] %></p>
       <% end %>
 
       <%= yield %>

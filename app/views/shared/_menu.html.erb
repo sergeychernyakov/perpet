@@ -4,4 +4,13 @@
   <%= link_to "О нас", about_path, class: "menu__link" %>
   <%= link_to "Профиль", profile_path, class: "menu__link" %>
   <%= link_to "Поддержка", support_path, class: "menu__link" %>
+
+  <% if user_signed_in? %>
+    <% if current_user.admin? %>
+      <%= link_to "Админка", admin_root_path, class: "menu__link" %>
+    <% end %>
+    <%= button_to "Выйти", destroy_user_session_path, method: :delete, class: "menu__link", form_class: "contents" %>
+  <% else %>
+    <%= link_to "Войти", new_user_session_path, class: "menu__link" %>
+  <% end %>
 </nav>

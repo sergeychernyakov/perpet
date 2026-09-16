@@ -1,0 +1,26 @@
+<%= form_with model: [ :admin, item ], class: "admin__form" do |f| %>
+  <% if item.errors.any? %>
+    <div class="errors"><ul><% item.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
+  <% end %>
+
+  <label>
+    <span class="form__label">Вопрос</span>
+    <%= f.text_field :question, class: "form__input", required: true %>
+  </label>
+
+  <label>
+    <span class="form__label">Ответ</span>
+    <%= f.text_area :answer, class: "form__textarea", rows: 5, required: true %>
+  </label>
+
+  <label>
+    <span class="form__label">Порядок</span>
+    <%= f.number_field :position, class: "form__input" %>
+  </label>
+
+
+  <div class="auth__actions">
+    <%= f.submit "Сохранить", class: "btn btn--wine" %>
+    <%= link_to "Отмена", admin_faq_items_path, class: "btn" %>
+  </div>
+<% end %>

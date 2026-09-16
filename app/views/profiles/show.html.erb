@@ -4,7 +4,7 @@
   <section class="profile">
     <div class="profile__photo">
       <%= image_tag "profile-photo.jpg", alt: "Фото питомца" %>
-      <span class="profile__caption"><%= @profile.pet_caption %></span>
+      <span class="profile__caption"><%= @profile.pet_caption.presence || "Расскажите о питомце" %></span>
     </div>
 
     <div>
@@ -13,7 +13,7 @@
       <%= form_with model: @profile, url: profile_path, method: :patch, class: "profile__form" do |f| %>
         <label class="profile__field">
           <span>Имя</span>
-          <%= f.text_field :name, placeholder: "Анна Петрова" %>
+          <%= f.text_field :name, placeholder: "Анна Петрова", required: true %>
         </label>
 
         <label class="profile__field">
@@ -26,8 +26,31 @@
           <%= f.text_field :email, placeholder: "anna@mail.ru" %>
         </label>
 
+        <label class="profile__field">
+          <span>Питомец</span>
+          <%= f.text_field :pet_name, placeholder: "Барсик" %>
+        </label>
+
+        <label class="profile__field">
+          <span>Возраст питомца</span>
+          <%= f.text_field :pet_age, placeholder: "3 года" %>
+        </label>
+
+        <% if (message = error_message_for(@profile)) %>
+          <p class="form__error"><%= message %></p>
+        <% end %>
+
         <%= f.submit "Сохранить", class: "btn profile__save" %>
       <% end %>
+
+      <div class="profile__account">
+        <span><%= current_user.email %></span>
+        <%= link_to "Аккаунт", edit_user_registration_path, class: "btn" %>
+        <% if current_user.admin? %>
+          <%= link_to "Админка", admin_root_path, class: "btn" %>
+        <% end %>
+        <%= button_to "Выйти", destroy_user_session_path, method: :delete, class: "btn", form_class: "contents" %>
+      </div>
     </div>
   </section>
 

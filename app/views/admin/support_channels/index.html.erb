@@ -1,0 +1,30 @@
+<% content_for :title, "Каналы поддержки — админка" %>
+
+<main class="main admin">
+  <section class="admin__head">
+    <h1>Каналы поддержки</h1>
+    <%= render "admin/nav" %>
+  </section>
+
+  <section class="admin__panel">
+    <p><%= link_to "Добавить", new_admin_support_channel_path, class: "btn btn--wine" %></p>
+
+    <table class="admin__table">
+      <thead>
+        <tr><th>Название</th><th>Время работы</th><th>Контакт</th><th>Порядок</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% @channels.each do |item| %>
+          <tr>
+            <td><%= item.title %></td><td><%= item.availability %></td><td><%= item.value %></td><td><%= item.position %></td>
+            <td class="admin__actions">
+              <%= link_to "Изменить", edit_admin_support_channel_path(item), class: "btn" %>
+              <%= button_to "Удалить", admin_support_channel_path(item), method: :delete, class: "btn", form_class: "contents",
+                            data: { turbo_confirm: "Удалить запись?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+</main>

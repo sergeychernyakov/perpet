@@ -1,0 +1,54 @@
+ru:
+  activerecord:
+    models:
+      ad: Объявление
+      article: Статья
+      faq_item: Вопрос
+      lead: Заявка
+      profile: Профиль
+      support_channel: Канал поддержки
+      support_ticket: Обращение
+    attributes:
+      ad:
+        city: Город
+        description: Описание
+        icon: Значок
+        kind: Вид питомца
+        period: Сроки
+        price: Цена
+        published_on: Дата публикации
+        status: Статус
+        title: Название
+      article:
+        body: Текст статьи
+        excerpt: Короткое описание
+        position: Порядок
+        read_time: Время чтения
+        tag: Тег
+        title: Заголовок
+      faq_item:
+        answer: Ответ
+        position: Порядок
+        question: Вопрос
+      lead:
+        city: Город
+        email: E-mail
+        name: Имя
+      profile:
+        city: Город
+        email: Контакт
+        name: Имя
+        pet_age: Возраст питомца
+        pet_name: Питомец
+      support_channel:
+        availability: Время работы
+        description: Описание
+        href: Ссылка
+        position: Порядок
+        title: Название
+        value: Контакт
+      support_ticket:
+        email: E-mail
+        message: Сообщение
+        name: Имя
+        topic: Тема

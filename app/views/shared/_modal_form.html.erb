@@ -7,12 +7,13 @@
 
   <label class="modal__field">
     <span class="form__label">Имя</span>
-    <%= f.text_field :name, class: "form__input", placeholder: "Анна", data: { modal_target: "firstField" } %>
+    <%= f.text_field :name, class: "form__input", placeholder: "Анна", required: true, minlength: 2,
+                     data: { modal_target: "firstField" } %>
   </label>
 
   <label class="modal__field">
     <span class="form__label">E-mail</span>
-    <%= f.email_field :email, class: "form__input", placeholder: "you@mail.ru" %>
+    <%= f.email_field :email, class: "form__input", placeholder: "you@mail.ru", required: true %>
   </label>
 
   <label class="modal__field">

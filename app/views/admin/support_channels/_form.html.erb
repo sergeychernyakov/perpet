@@ -1,0 +1,41 @@
+<%= form_with model: [ :admin, item ], class: "admin__form" do |f| %>
+  <% if item.errors.any? %>
+    <div class="errors"><ul><% item.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
+  <% end %>
+
+  <label>
+    <span class="form__label">Название</span>
+    <%= f.text_field :title, class: "form__input", required: true %>
+  </label>
+
+  <label>
+    <span class="form__label">Время работы</span>
+    <%= f.text_field :availability, class: "form__input" %>
+  </label>
+
+  <label>
+    <span class="form__label">Описание</span>
+    <%= f.text_area :description, class: "form__textarea", rows: 3 %>
+  </label>
+
+  <label>
+    <span class="form__label">Контакт</span>
+    <%= f.text_field :value, class: "form__input", required: true %>
+  </label>
+
+  <label>
+    <span class="form__label">Ссылка</span>
+    <%= f.text_field :href, class: "form__input" %>
+  </label>
+
+  <label>
+    <span class="form__label">Порядок</span>
+    <%= f.number_field :position, class: "form__input" %>
+  </label>
+
+
+  <div class="auth__actions">
+    <%= f.submit "Сохранить", class: "btn btn--wine" %>
+    <%= link_to "Отмена", admin_support_channels_path, class: "btn" %>
+  </div>
+<% end %>

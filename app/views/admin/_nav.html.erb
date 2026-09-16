@@ -1,0 +1,10 @@
+<nav class="admin__nav">
+  <%= link_to "Сводка", admin_root_path, "aria-current": ("page" if current_page?(admin_root_path)) %>
+  <%= link_to "Объявления", admin_ads_path, "aria-current": ("page" if controller_name == "ads") %>
+  <%= link_to "Статьи", admin_articles_path, "aria-current": ("page" if controller_name == "articles") %>
+  <%= link_to "FAQ", admin_faq_items_path, "aria-current": ("page" if controller_name == "faq_items") %>
+  <%= link_to "Каналы", admin_support_channels_path, "aria-current": ("page" if controller_name == "support_channels") %>
+  <%= link_to "Обращения", admin_support_tickets_path, "aria-current": ("page" if controller_name == "support_tickets") %>
+  <%= link_to "Заявки", admin_leads_path, "aria-current": ("page" if controller_name == "leads") %>
+  <%= link_to "На сайт", root_path %>
+</nav>

@@ -3,7 +3,7 @@
 
 def seed
   reset
-  create_profile
+  create_users
   create_ads
   create_my_ads
   create_articles
@@ -13,21 +13,29 @@ def seed
 end
 
 def reset
-  [ Lead, SupportTicket, SupportChannel, FaqItem, Article, Ad, Profile ].each(&:destroy_all)
+  [ Lead, SupportTicket, SupportChannel, FaqItem, Article, Ad, User ].each(&:destroy_all)
   puts "База очищена"
 end
 
-# ------------------ Профиль ------------------
+# ------------------ Пользователи и профиль ------------------
 
-def create_profile
-  @profile = Profile.create!(
+DEMO_PASSWORD = "perpet123".freeze
+
+def create_users
+  admin = User.create!(email: "admin@perpet.ru", password: DEMO_PASSWORD, role: :admin)
+  admin.profile.update!(name: "Администратор", city: "Москва")
+
+  user = User.create!(email: "anna@mail.ru", password: DEMO_PASSWORD)
+  @profile = user.profile
+  @profile.update!(
     name: "Анна Петрова",
     city: "Москва",
     email: "anna@mail.ru",
     pet_name: "Барсик",
     pet_age: "4 года"
   )
-  puts "Профиль: #{@profile.name}"
+
+  puts "Пользователи: #{admin.email} (администратор) и #{user.email}, пароль #{DEMO_PASSWORD}"
 end
 
 # ------------------ Объявления ------------------

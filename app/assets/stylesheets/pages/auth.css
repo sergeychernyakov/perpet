@@ -1,0 +1,86 @@
+/* Вход, регистрация и восстановление пароля. */
+
+.auth {
+  display: flex;
+  justify-content: center;
+  padding: clamp(24px, 4vw, 64px) 0;
+}
+
+.auth__card {
+  width: min(560px, 100%);
+  padding: clamp(28px, 3vw, 56px);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  animation: pop-in 0.5s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+}
+
+.auth__title {
+  font-size: clamp(30px, 3vw, 48px);
+  line-height: 1.1;
+}
+
+.auth__lead {
+  margin: 14px 0 28px;
+  font-family: var(--font-mono);
+  font-size: 17.3px;
+  line-height: 1.4;
+}
+
+.auth__field {
+  display: block;
+  margin-bottom: 18px;
+}
+
+.auth__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 28px;
+}
+
+.auth__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+}
+
+.auth__remember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+}
+
+.errors {
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  border-radius: clamp(20px, 1.8vw, 28px);
+  border: 2px solid var(--ink);
+  background: var(--blue);
+}
+
+.errors__title {
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.errors ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 16px;
+}
+
+.field_with_errors {
+  display: contents;
+}
+
+.field_with_errors input {
+  border-color: var(--wine);
+}

@@ -1,0 +1,55 @@
+<%= form_with model: [ :admin, ad ], class: "admin__form" do |f| %>
+  <% if ad.errors.any? %>
+    <div class="errors"><ul><% ad.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
+  <% end %>
+
+  <label>
+    <span class="form__label">Название</span>
+    <%= f.text_field :title, class: "form__input", required: true %>
+  </label>
+
+  <label>
+    <span class="form__label">Вид питомца</span>
+    <%= f.select :kind, Ad::KINDS %>
+  </label>
+
+  <label>
+    <span class="form__label">Город</span>
+    <%= f.text_field :city, class: "form__input" %>
+  </label>
+
+  <label>
+    <span class="form__label">Сроки</span>
+    <%= f.text_field :period, class: "form__input", placeholder: "12–26 июня" %>
+  </label>
+
+  <label>
+    <span class="form__label">Цена</span>
+    <%= f.text_field :price, class: "form__input", placeholder: "700 ₽ / день" %>
+  </label>
+
+  <label>
+    <span class="form__label">Описание</span>
+    <%= f.text_area :description, rows: 4, class: "form__textarea" %>
+  </label>
+
+  <label>
+    <span class="form__label">Значок</span>
+    <%= f.select :icon, Ad::ICONS %>
+  </label>
+
+  <label>
+    <span class="form__label">Статус</span>
+    <%= f.select :status, Ad::STATUS_LABELS.map { |value, title| [ title, value ] } %>
+  </label>
+
+  <label>
+    <span class="form__label">Дата публикации</span>
+    <%= f.date_field :published_on, class: "form__input" %>
+  </label>
+
+  <div class="auth__actions">
+    <%= f.submit "Сохранить", class: "btn btn--wine" %>
+    <%= link_to "Отмена", admin_ads_path, class: "btn" %>
+  </div>
+<% end %>

@@ -291,3 +291,8 @@
   font-size: 17.3px;
   animation: pop-in 0.4s cubic-bezier(0.22, 0.7, 0.2, 1) both;
 }
+
+.flash--alert {
+  background: var(--wine);
+  color: var(--cream);
+}

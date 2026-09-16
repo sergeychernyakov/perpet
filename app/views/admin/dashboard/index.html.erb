@@ -1,0 +1,65 @@
+<% content_for :title, "Админка — PERPET" %>
+
+<main class="main admin">
+  <section class="admin__head">
+    <h1>Админка</h1>
+    <%= render "admin/nav" %>
+  </section>
+
+  <div class="admin__cards">
+    <% @counts.each do |title, value| %>
+      <dl class="admin__card">
+        <dt><%= title %></dt>
+        <dd><%= value %></dd>
+      </dl>
+    <% end %>
+  </div>
+
+  <section class="admin__panel">
+    <h2>Последние обращения</h2>
+    <% if @tickets.any? %>
+      <table class="admin__table">
+        <thead>
+          <tr><th>Номер</th><th>Имя</th><th>E-mail</th><th>Тема</th><th>Когда</th></tr>
+        </thead>
+        <tbody>
+          <% @tickets.each do |ticket| %>
+            <tr>
+              <td><%= ticket.reference %></td>
+              <td><%= ticket.name %></td>
+              <td><%= ticket.email %></td>
+              <td><%= ticket.topic %></td>
+              <td><%= l ticket.created_at, format: :short %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="admin__empty">Обращений пока нет.</p>
+    <% end %>
+  </section>
+
+  <section class="admin__panel">
+    <h2>Последние заявки</h2>
+    <% if @leads.any? %>
+      <table class="admin__table">
+        <thead>
+          <tr><th>Имя</th><th>E-mail</th><th>Город</th><th>Тип</th><th>Когда</th></tr>
+        </thead>
+        <tbody>
+          <% @leads.each do |lead| %>
+            <tr>
+              <td><%= lead.name %></td>
+              <td><%= lead.email %></td>
+              <td><%= lead.city %></td>
+              <td><%= lead.respond? ? "Отклик: #{lead.subject}" : "Заявка" %></td>
+              <td><%= l lead.created_at, format: :short %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="admin__empty">Заявок пока нет.</p>
+    <% end %>
+  </section>
+</main>

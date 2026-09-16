@@ -1,4 +1,6 @@
 class AdsController < ApplicationController
+  before_action :authenticate_user!, only: :create
+
   def index
     @kind = params[:kind].presence || Ad::ALL_KINDS
     @query = params[:q].to_s.strip
@@ -11,7 +13,7 @@ class AdsController < ApplicationController
 
   # Черновик объявления из профиля: заполняется дальше в карточке.
   def create
-    Profile.current.ads.create!(
+    current_user.profile.ads.create!(
       kind: Ad::KINDS.first,
       title: "Новое объявление",
       description: "Заполните описание питомца и сроки передержки.",

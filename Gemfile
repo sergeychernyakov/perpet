@@ -23,6 +23,10 @@ gem "json", "~> 2.9"
 # Русская локализация: даты, месяцы, тексты ошибок
 gem "rails-i18n"
 
+# Вход, регистрация и роли
+gem "devise"
+gem "devise-i18n"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
