@@ -245,6 +245,9 @@
   border: 2px solid var(--ink);
   overflow: hidden;
   transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
+  animation: zoom-in 0.7s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 45%;
 }
 
 .promo:hover {

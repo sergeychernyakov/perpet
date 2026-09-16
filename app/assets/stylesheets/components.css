@@ -222,6 +222,25 @@
   display: contents;
 }
 
+/* Каскад: соседи в строке появляются со сдвигом, как в макете. */
+.ad:nth-child(3n + 2),
+.article:nth-child(3n + 2),
+.channel:nth-child(3n + 2),
+.promo:nth-child(3n + 2),
+.step:nth-child(3n + 2),
+.my-ad:nth-child(3n + 2) {
+  animation-range: entry 7% entry 52%;
+}
+
+.ad:nth-child(3n),
+.article:nth-child(3n),
+.channel:nth-child(3n),
+.promo:nth-child(3n),
+.step:nth-child(3n),
+.my-ad:nth-child(3n) {
+  animation-range: entry 14% entry 59%;
+}
+
 /* Пагинация */
 
 .pager {

@@ -17,6 +17,16 @@
   gap: clamp(8px, 1vw, 24px);
   padding: clamp(10px, 1.2vw, 22px) var(--gutter);
   background: var(--cream);
+
+  /* Тень появляется, когда страница уходит под шапку. */
+  animation: header-shadow linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0 64px;
+}
+
+@keyframes header-shadow {
+  from { box-shadow: 0 8px 20px rgb(0 0 0 / 0%); }
+  to { box-shadow: 0 8px 20px rgb(0 0 0 / 12%); }
 }
 
 .logo {
