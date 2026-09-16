@@ -80,19 +80,16 @@ export function appLink() {
   return `https://vk.com/app${VK_APP_ID}`
 }
 
-// Запись на стену с текстом объявления. VK сам покажет окно подтверждения,
-// без согласия человека ничего не публикуется.
+export function adLink(ad) {
+  return `${appLink()}#ad/${ad.id}`
+}
+
+// Штатное окно «Поделиться» ВКонтакте: куда отправить ссылку, человек выбирает
+// сам. Запись на стену (VKWebAppShowWallPostBox) не годится — неподтверждённым
+// приложениям VK её запрещает: «Приложению недоступно создание постов».
 export async function shareAd(ad) {
   const vk = bridge()
   if (!vk) throw new Error("Поделиться можно только внутри ВКонтакте")
 
-  const lines = [
-    `Ищу передержку: ${ad.title}`,
-    [ ad.city, ad.period ].filter(Boolean).join(", "),
-    ad.price,
-    ad.description,
-    `Откликнуться в PERPET: ${appLink()}`
-  ].filter(Boolean)
-
-  return vk.send("VKWebAppShowWallPostBox", { message: lines.join("\n") })
+  return vk.send("VKWebAppShare", { link: adLink(ad) })
 }

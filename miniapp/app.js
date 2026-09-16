@@ -124,13 +124,40 @@ async function share(event, ad) {
 
   try {
     await vk.shareAd(ad)
-    button.textContent = "Опубликовано"
+    button.textContent = "Отправлено"
   } catch {
     // Вне ВКонтакте моста нет, и человек должен понимать почему.
     button.textContent = "Только внутри VK"
     setTimeout(() => { button.textContent = label }, 2500)
   } finally {
     button.disabled = false
+  }
+}
+
+// Отдельный экран объявления: на него ведёт ссылка из «Поделиться».
+async function adScreen(id) {
+  render(backButton("ads"), ...skeletons(2))
+
+  try {
+    const { ad } = await api.ad(id)
+
+    render(
+      backButton("ads"),
+      banner(ad.title, [ ad.kind, ad.meta ].filter(Boolean).join(" · ")),
+      el("section", { class: "card" }, [
+        ad.description && el("p", { text: ad.description }),
+        el("p", { class: "card__meta", text: ad.published_label }),
+        el("div", { class: "card__foot" }, [
+          el("span", { class: "price", text: ad.price || "цена по договорённости" }),
+          el("div", { class: "card__buttons" }, [
+            vk.bridge() && el("button", { class: "btn", type: "button", onClick: (event) => share(event, ad) }, "Поделиться"),
+            el("button", { class: "btn btn--wine", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
+          ])
+        ])
+      ])
+    )
+  } catch (failure) {
+    render(backButton("ads"), error(failure.messages))
   }
 }
 
@@ -486,9 +513,10 @@ function open() {
     if (tab.dataset.route === name) tab.setAttribute("aria-current", "page")
   })
 
-  // Чтение статьи — единственный экран, который открывается поверх списка
-  // и не сбрасывает его: со «Назад» человек возвращается туда же, где был.
+  // Чтение статьи и карточка объявления открываются поверх списка и не сбрасывают
+  // его: со «Назад» человек возвращается туда же, где был.
   if (name === "article" && id) return articleScreen(id)
+  if (name === "ad" && id) return adScreen(id)
 
   state.page = 1
   ;(ROUTES[name] || adsScreen)()
