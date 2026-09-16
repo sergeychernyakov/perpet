@@ -13,6 +13,9 @@ def seed
 end
 
 def reset
+  # Файлы удаляем сразу, а не отложенной задачей: воркер при пересеве не
+  # запущен, и снимки копились бы на диске с каждым прогоном.
+  ActiveStorage::Attachment.find_each(&:purge)
   [ Lead, SupportTicket, SupportChannel, FaqItem, Article, Ad, User ].each(&:destroy_all)
   puts "База очищена"
 end
@@ -80,13 +83,27 @@ def create_ads
   puts "Объявлений в каталоге: #{Ad.published.count}"
 end
 
+# Фотография кота из макета — чтобы в каталоге сразу было видно, как выглядит
+# карточка с настоящим снимком, а не с силуэтом.
+PET_PHOTO = Rails.root.join("app/assets/images/profile-photo.jpg")
+
+def attach_pet_photo(record)
+  return unless PET_PHOTO.exist?
+
+  record.photo.attach(io: PET_PHOTO.open, filename: "barsik.jpg", content_type: "image/jpeg")
+end
+
 def create_my_ads
   # Объявление про Барсика уже есть в каталоге — оно и принадлежит Анне.
-  Ad.find_by!(title: "Барсик, 4 года").update!(
+  barsik = Ad.find_by!(title: "Барсик, 4 года")
+  barsik.update!(
     profile: @profile,
     description: "Передержка на время командировки, 12–26 июня. Отклики: 3.",
     published_on: Date.current - 14.days
   )
+
+  attach_pet_photo(barsik)
+  attach_pet_photo(@profile)
 
   Ad.create!(
     profile: @profile,
