@@ -32,8 +32,15 @@ class VkId
       VkLaunchParams.secrets.first
     end
 
+    # Вход через ВКонтакте на сайте включается отдельно от мини-приложения:
+    # для него в настройках приложения VK нужно прописать доверенный redirect
+    # URL, а без этого VK отклонит запрос. Пока не прописан — кнопки не видно.
+    def enabled?
+      ENV["VK_ID_ENABLED"].to_s.downcase.in?(%w[1 true yes])
+    end
+
     def configured?
-      app_id.present? && secret.present?
+      enabled? && app_id.present? && secret.present?
     end
 
     def verifier

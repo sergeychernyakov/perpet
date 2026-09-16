@@ -5,11 +5,13 @@ class VkAuthControllerTest < ActionDispatch::IntegrationTest
                             first_name: "Сергей", last_name: "Черняков", city: "Москва")
 
   setup do
+    ENV["VK_ID_ENABLED"] = "1"
     ENV["VK_APP_ID"] = "54774841"
     ENV["VK_APP_SECRET"] = "секретсекретсекрет01"
   end
 
   teardown do
+    ENV.delete("VK_ID_ENABLED")
     ENV.delete("VK_APP_ID")
     ENV.delete("VK_APP_SECRET")
   end
@@ -45,6 +47,18 @@ class VkAuthControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to new_user_session_path
     assert_equal "Вход через ВКонтакте не настроен", flash[:alert]
+  end
+
+  test "снятый выключатель прячет вход через ВКонтакте" do
+    ENV.delete("VK_ID_ENABLED")
+
+    assert_not VkId.configured?, "ключи есть, но выключатель снят"
+
+    get auth_vk_path
+    assert_redirected_to new_user_session_path
+
+    get new_user_session_path
+    assert_select ".btn--vk", false, "кнопки ВКонтакте на странице входа быть не должно"
   end
 
   test "новый человек заходит через ВКонтакте" do
