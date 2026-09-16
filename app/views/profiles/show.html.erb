@@ -3,7 +3,9 @@
 <main class="main">
   <section class="profile">
     <div class="profile__photo">
-      <%= image_tag "profile-photo.jpg", alt: "Фото питомца" %>
+      <%# Своё фото, если загрузили; иначе картинка из макета. %>
+      <%= image_tag @profile.photo_url || "profile-photo.jpg", alt: "Фото питомца",
+                    class: class_names("profile__photo-own" => @profile.photo.attached?) %>
       <span class="profile__caption"><%= @profile.pet_caption.presence || "Расскажите о питомце" %></span>
     </div>
 
@@ -35,6 +37,10 @@
           <span>Возраст питомца</span>
           <%= f.text_field :pet_age, placeholder: "3 года" %>
         </label>
+
+        <div class="profile__field">
+          <%= render "shared/photo_field", form: f, record: @profile, label: "Фото питомца" %>
+        </div>
 
         <% if (message = error_message_for(@profile)) %>
           <p class="form__error"><%= message %></p>

@@ -33,6 +33,8 @@
     <%= f.text_area :description, rows: 4, class: "form__textarea" %>
   </label>
 
+  <%= render "shared/photo_field", form: f, record: ad, label: "Фотография" %>
+
   <label>
     <span class="form__label">Значок</span>
     <%= f.select :icon, Ad::ICONS %>

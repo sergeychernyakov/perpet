@@ -125,7 +125,21 @@ module Api
         assert_equal [ "Кеша" ], json["ads"].map { |ad| ad["title"] }
       end
 
-      test "чужое объявление не редактируется" do
+      test "объявление создаётся с фотографией" do
+  pixel = Rack::Test::UploadedFile.new(
+    StringIO.new(Base64.decode64("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==")),
+    "image/png", original_filename: "pet.png"
+  )
+
+  post api_v1_ads_path, headers: vk_headers,
+       params: { ad: { title: "Кеша", kind: "Птица", photo: pixel } }
+
+  assert_response :created
+  assert_match %r{\A/rails/active_storage/}, json["ad"]["photo_url"]
+  assert Ad.last.photo.attached?
+end
+
+test "чужое объявление не редактируется" do
         patch api_v1_ad_path(@ad), headers: vk_headers, params: { ad: { title: "Взлом" } }
 
         assert_response :not_found

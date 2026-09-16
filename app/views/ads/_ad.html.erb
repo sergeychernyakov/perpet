@@ -1,6 +1,11 @@
 <article class="ad">
+  <%# Есть фотография — показываем её, нет — силуэт из макета. %>
   <div class="ad__cover">
-    <%= image_tag ad.icon_name, alt: "" %>
+    <% if ad.photo.attached? %>
+      <%= image_tag ad.photo_url, alt: ad.title, class: "ad__photo", loading: "lazy" %>
+    <% else %>
+      <%= image_tag ad.icon_name, alt: "" %>
+    <% end %>
     <span class="ad__kind"><%= ad.kind %></span>
   </div>
 

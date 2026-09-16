@@ -468,3 +468,25 @@
   border-radius: 6px;
   background: rgb(255 255 255 / 22%);
 }
+
+/* Поле выбора фотографии */
+
+.photo-field__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.photo-field__preview {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-card-sm);
+  border: 2px solid var(--ink);
+  object-fit: cover;
+  background: var(--blue);
+}
+
+.photo-field .btn {
+  cursor: pointer;
+}

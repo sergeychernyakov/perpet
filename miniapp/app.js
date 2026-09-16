@@ -1,6 +1,7 @@
-import { api, ApiError } from "./api.js"
+import { api, ApiError, apiBase } from "./api.js"
 import { el, field, skeletons, notice, error } from "./ui.js"
 import * as vk from "./vk.js"
+import { photoField } from "./photo.js"
 
 const screen = document.getElementById("screen")
 const tabbar = document.getElementById("tabbar")
@@ -102,6 +103,7 @@ async function loadAds(list, { append = false } = {}) {
 
 function adCard(ad) {
   return el("article", { class: "card" }, [
+    ad.photo_url && el("img", { class: "card__photo", src: apiBase + ad.photo_url, alt: ad.title, loading: "lazy" }),
     el("span", { class: "tag", text: ad.kind }),
     el("h3", { text: ad.title }),
     ad.meta && el("p", { class: "card__meta", text: ad.meta }),
@@ -406,6 +408,7 @@ function myAdCard(ad) {
 
 function newAdSheet() {
   const kinds = el("select", { name: "kind" }, KINDS.slice(1).map((kind) => el("option", { value: kind }, kind)))
+  const photo = photoField("Фотография питомца")
 
   const form = el("form", { class: "form", onSubmit: submit }, [
     el("h2", { id: "sheet-title", text: "Новое объявление" }),
@@ -415,6 +418,7 @@ function newAdSheet() {
     field("Сроки", "period", { placeholder: "12–26 июня" }),
     field("Цена", "price", { placeholder: "700 ₽ / день" }),
     field("Описание", "description", { rows: 4, placeholder: "Спокойный, привит, ест сухой корм." }),
+    photo.field,
     el("button", { class: "btn btn--wine btn--block", type: "submit" }, "Сохранить черновик")
   ])
 
@@ -428,14 +432,16 @@ function newAdSheet() {
     form.querySelectorAll(".error").forEach((node) => node.remove())
 
     try {
-      await api.createAd({
-        title: form.elements.title.value,
-        kind: kinds.value,
-        city: form.elements.city.value,
-        period: form.elements.period.value,
-        price: form.elements.price.value,
-        description: form.elements.description.value
-      })
+      const data = new FormData()
+      data.append("ad[title]", form.elements.title.value)
+      data.append("ad[kind]", kinds.value)
+      data.append("ad[city]", form.elements.city.value)
+      data.append("ad[period]", form.elements.period.value)
+      data.append("ad[price]", form.elements.price.value)
+      data.append("ad[description]", form.elements.description.value)
+      if (photo.file()) data.append("ad[photo]", photo.file())
+
+      await api.createAdWithPhoto(data)
       closeSheet()
       profileScreen()
     } catch (failure) {

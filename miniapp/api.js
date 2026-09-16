@@ -46,11 +46,37 @@ async function request(path, { method = "GET", body } = {}) {
   return data
 }
 
+// Запрос с файлом: тело — FormData, Content-Type ставит браузер сам,
+// иначе потеряется граница multipart.
+async function upload(path, method, form) {
+  let response
+
+  try {
+    response = await fetch(apiBase + path, {
+      method,
+      headers: { Accept: "application/json", "X-VK-Launch-Params": launchParams },
+      body: form
+    })
+  } catch {
+    throw new ApiError([ "Нет связи с сервером PERPET" ], 0)
+  }
+
+  const data = await response.json().catch(() => ({}))
+
+  if (!response.ok) {
+    throw new ApiError(data.errors || [ data.error || "Сервер вернул ошибку" ], response.status)
+  }
+
+  return data
+}
+
 export const api = {
   ads: (params) => request("/api/v1/ads?" + new URLSearchParams(params)),
   ad: (id) => request(`/api/v1/ads/${id}`),
   myAds: () => request("/api/v1/ads/mine"),
   createAd: (ad) => request("/api/v1/ads", { method: "POST", body: { ad } }),
+  createAdWithPhoto: (form) => upload("/api/v1/ads", "POST", form),
+  updateProfileWithPhoto: (form) => upload("/api/v1/profile", "PATCH", form),
   deleteAd: (id) => request(`/api/v1/ads/${id}`, { method: "DELETE" }),
   articles: (params) => request("/api/v1/articles?" + new URLSearchParams(params)),
   article: (id) => request(`/api/v1/articles/${id}`),

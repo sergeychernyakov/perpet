@@ -1,0 +1,20 @@
+<%# Поле фотографии: браузер уменьшает картинку до отправки. %>
+<div class="photo-field" data-controller="upload">
+  <span class="form__label"><%= label %></span>
+
+  <div class="photo-field__row">
+    <%= image_tag(record.photo_url, class: "photo-field__preview", alt: "",
+                  data: { upload_target: "preview" }) if record.photo.attached? %>
+    <% unless record.photo.attached? %>
+      <img class="photo-field__preview" alt="" hidden data-upload-target="preview">
+    <% end %>
+
+    <label class="btn">
+      Выбрать фото
+      <%= form.file_field :photo, accept: "image/jpeg,image/png,image/webp", class: "visually-hidden",
+                          data: { upload_target: "input", action: "upload#choose" } %>
+    </label>
+  </div>
+
+  <p class="form__hint" data-upload-target="note"></p>
+</div>

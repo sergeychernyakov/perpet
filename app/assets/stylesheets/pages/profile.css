@@ -263,3 +263,14 @@
   color: var(--cream);
   opacity: 0.85;
 }
+
+/* Загруженное фото заполняет рамку целиком, в отличие от картинки из макета. */
+.profile__photo .profile__photo-own {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  transform: none;
+  object-fit: cover;
+}

@@ -1,4 +1,6 @@
 class Profile < ApplicationRecord
+  include HasPhoto
+
   belongs_to :user
   has_many :ads, dependent: :nullify
 
@@ -27,7 +29,8 @@ class Profile < ApplicationRecord
       email: email,
       pet_name: pet_name,
       pet_age: pet_age,
-      pet_caption: pet_caption
+      pet_caption: pet_caption,
+      photo_url: photo_url
     }
   end
 end

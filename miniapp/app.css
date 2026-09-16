@@ -513,3 +513,38 @@ body.vk-dark {
 @media (prefers-reduced-motion: reduce) {
   .btn--loading::after { animation: none; }
 }
+
+/* Поле фотографии */
+
+.photo__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.photo__preview {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  border: 2px solid var(--ink);
+  object-fit: cover;
+  background: var(--blue);
+}
+
+.photo__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* Фотография в карточке объявления */
+.card__photo {
+  width: calc(100% + 36px);
+  margin: -18px -18px 4px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  border-bottom: 2px solid var(--ink);
+}

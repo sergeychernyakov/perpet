@@ -45,7 +45,7 @@ module Api
       private
 
       def ad_params
-        params.require(:ad).permit(:title, :kind, :city, :period, :price, :description, :icon, :status)
+        params.require(:ad).permit(:title, :kind, :city, :period, :price, :description, :icon, :status, :photo)
       end
     end
   end

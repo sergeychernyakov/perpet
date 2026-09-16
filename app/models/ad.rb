@@ -5,6 +5,8 @@ class Ad < ApplicationRecord
   DEFAULT_ICON = "shape-04.svg".freeze
   ICONS = %w[shape-03.svg shape-04.svg shape-17.svg shape-18.svg shape-19.svg].freeze
 
+  include HasPhoto
+
   belongs_to :profile, optional: true
 
   validates :title, presence: true
@@ -62,6 +64,7 @@ class Ad < ApplicationRecord
       meta: meta,
       published_on: published_on,
       published_label: published_label,
+      photo_url: photo_url,
       mine: profile_id.present?
     }
   end

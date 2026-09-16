@@ -43,7 +43,7 @@ module Admin
     end
 
     def ad_params
-      params.require(:ad).permit(:title, :kind, :city, :period, :price, :description, :icon, :status, :published_on)
+      params.require(:ad).permit(:title, :kind, :city, :period, :price, :description, :icon, :status, :published_on, :photo)
     end
   end
 end
