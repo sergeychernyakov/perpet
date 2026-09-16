@@ -44,6 +44,18 @@ export async function connect({ onAppearance } = {}) {
   return user
 }
 
+// Почта из ВКонтакте: VK сам спрашивает у человека согласие и отдаёт адрес,
+// привязанный к странице. Ждём дольше обычного — человеку нужно нажать кнопку
+// в окне согласия.
+export async function requestEmail() {
+  const vk = bridge()
+  if (!vk) throw new Error("Почту можно взять только внутри ВКонтакте")
+
+  const result = await within(vk.send("VKWebAppGetEmail"), 60_000)
+
+  return result?.email || null
+}
+
 // Имя и город из VK — чтобы человек не перепечатывал то, что и так известно.
 export function suggestedProfile() {
   if (!user) return null

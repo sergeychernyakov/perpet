@@ -162,17 +162,48 @@ async function adScreen(id) {
 }
 
 function respondSheet(ad) {
+  // Внутри ВКонтакте имя и город уже известны, а почту можно попросить у VK —
+  // тогда человеку не нужно печатать ничего.
+  const fromVk = vk.suggestedProfile()
+
+  const fillEmail = vk.bridge() && el("button", {
+    class: "btn", type: "button", onClick: takeEmailFromVk
+  }, "Взять почту из ВКонтакте")
+
   const form = el("form", { class: "form", onSubmit: submit }, [
     el("h2", { id: "sheet-title", text: "Отклик на объявление" }),
     el("p", { class: "muted", text: `Вы откликаетесь: ${ad.title}` }),
-    field("Имя", "name", { placeholder: "Анна" }),
+    field("Имя", "name", { value: fromVk?.name, placeholder: "Анна" }),
     field("E-mail", "email", { type: "email", placeholder: "you@mail.ru" }),
-    field("Город", "city", { placeholder: "Москва" }),
+    fillEmail,
+    field("Город", "city", { value: fromVk?.city, placeholder: "Москва" }),
     el("button", { class: "btn btn--wine btn--block", type: "submit" }, "Отправить")
   ])
 
   openSheet(form)
-  form.elements.name.focus()
+  form.elements[fromVk ? "email" : "name"].focus()
+
+  async function takeEmailFromVk(event) {
+    const button = event.currentTarget
+    const label = button.textContent
+    button.disabled = true
+
+    try {
+      const email = await vk.requestEmail()
+
+      if (email) {
+        form.elements.email.value = email
+        button.remove()
+      } else {
+        button.textContent = label
+      }
+    } catch {
+      // Человек отказался или VK не разрешил приложению спрашивать почту.
+      button.textContent = "Не получилось — впишите вручную"
+    } finally {
+      button.disabled = false
+    }
+  }
 
   async function submit(event) {
     event.preventDefault()
