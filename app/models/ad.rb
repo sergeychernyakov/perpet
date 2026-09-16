@@ -2,6 +2,7 @@ class Ad < ApplicationRecord
   KINDS = [ "Кошка", "Собака", "Грызун", "Птица" ].freeze
   ALL_KINDS = "Все".freeze
   STATUS_LABELS = { "published" => "Активно", "draft" => "Черновик" }.freeze
+  DEFAULT_ICON = "shape-04.svg".freeze
 
   belongs_to :profile, optional: true
 
@@ -25,7 +26,11 @@ class Ad < ApplicationRecord
   }
 
   def self.normalize(text)
-    text.to_s.mb_chars.downcase.to_s.squish
+    text.to_s.downcase.squish
+  end
+
+  def icon_name
+    icon.presence || DEFAULT_ICON
   end
 
   def status_label
