@@ -27,6 +27,9 @@ gem "rails-i18n"
 gem "devise"
 gem "devise-i18n"
 
+# CORS для мини-приложения VK, которое ходит в API с другого домена
+gem "rack-cors"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 

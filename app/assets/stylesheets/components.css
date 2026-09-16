@@ -405,3 +405,41 @@
 .field_with_errors input {
   border-color: var(--wine);
 }
+
+/* Браузеры без animation-timeline (Safari на iOS младше 26): анимации ждут,
+   пока reveal_controller не пометит блок как попавший в экран. */
+.no-view-timeline .banner,
+.no-view-timeline .advantage,
+.no-view-timeline .note,
+.no-view-timeline .promo,
+.no-view-timeline .pie,
+.no-view-timeline .pie span,
+.no-view-timeline .benefit,
+.no-view-timeline .fact,
+.no-view-timeline .step,
+.no-view-timeline .benefits__title img,
+.no-view-timeline .quote img,
+.no-view-timeline .important__art img,
+.no-view-timeline .ad,
+.no-view-timeline .article,
+.no-view-timeline .my-ad,
+.no-view-timeline .channel,
+.no-view-timeline .faq,
+.no-view-timeline .faq__item,
+.no-view-timeline .ticket {
+  animation-play-state: paused;
+}
+
+.no-view-timeline .in-view {
+  animation-play-state: running;
+}
+
+.no-view-timeline .header {
+  animation: none;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0%);
+  transition: box-shadow 0.25s;
+}
+
+.no-view-timeline .header.is-scrolled {
+  box-shadow: 0 8px 20px rgb(0 0 0 / 12%);
+}
