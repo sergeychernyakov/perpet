@@ -12,6 +12,22 @@
 - **SQLite** — файлы в `/var/www/perpet/storage`, наполняются через `db:seed`.
 - **Ruby 3.2.3** системный, гемы в `vendor/bundle` внутри проекта.
 
+## Переменные окружения
+
+Лежат в `/var/www/perpet/.env` (права 600, читает systemd через `EnvironmentFile`).
+В репозиторий файл не попадает — `.gitignore` его исключает.
+
+| Переменная | Зачем |
+| --- | --- |
+| `RAILS_ENV`, `PORT`, `RAILS_MAX_THREADS`, `RAILS_LOG_*` | запуск Puma |
+| `APP_HOST` | домен в ссылках из писем |
+| `VK_APP_ID` | ID мини-приложения VK |
+| `VK_APP_SECRET` | защищённый ключ: им проверяется подпись параметров запуска VK |
+| `CORS_ORIGINS` | кому можно ходить в `/api/v1` из браузера |
+
+Без `VK_APP_SECRET` в production API не пустит никого: подпись проверить нечем.
+В разработке ключа нет и проверка не включается — достаточно `vk_user_id`.
+
 ## Обновление
 
 ```bash
@@ -30,6 +46,9 @@ ssh deploy@195.19.209.216 'cd /var/www/perpet && RAILS_ENV=production bundle exe
 
 1. A-запись `perpet` → `195.19.209.216` в DNS домена маркетпульт.рф.
 2. После этого — сертификат: `sudo certbot --nginx -d perpet.xn--80akofbvesci4h.xn--p1ai`.
+3. Залить мини-приложение на хостинг VK — см. `miniapp/README.md`.
+   Пока пункта 1 нет, из VK оно до API не достучится: там разрешён только HTTPS,
+   а сертификат выпускается на имя, которого ещё нет в DNS.
 
 ---
 
