@@ -3,7 +3,8 @@ module Admin
     before_action :set_article, only: %i[edit update destroy]
 
     def index
-      @articles = Article.ordered
+      @pager = paginate(Article.ordered)
+      @articles = @pager.records
     end
 
     def new

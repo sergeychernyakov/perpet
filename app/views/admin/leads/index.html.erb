@@ -8,7 +8,7 @@
 
   <section class="admin__panel">
     <% if @leads.any? %>
-      <table class="admin__table">
+      <table class="admin__table" id="admin-table">
         <thead>
           <tr><th>Имя</th><th>E-mail</th><th>Город</th><th>Тип</th><th>Когда</th><th></th></tr>
         </thead>
@@ -31,5 +31,7 @@
     <% else %>
       <p class="admin__empty">Заявок пока нет.</p>
     <% end %>
+
+    <%= render "shared/pager", pager: @pager, anchor: "admin-table" %>
   </section>
 </main>

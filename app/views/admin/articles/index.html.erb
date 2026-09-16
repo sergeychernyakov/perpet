@@ -9,7 +9,7 @@
   <section class="admin__panel">
     <p><%= link_to "Добавить", new_admin_article_path, class: "btn btn--wine" %></p>
 
-    <table class="admin__table">
+    <table class="admin__table" id="admin-table">
       <thead>
         <tr><th>Заголовок</th><th>Тег</th><th>Время чтения</th><th>Порядок</th><th></th></tr>
       </thead>
@@ -26,5 +26,7 @@
         <% end %>
       </tbody>
     </table>
+
+    <%= render "shared/pager", pager: @pager, anchor: "admin-table" %>
   </section>
 </main>

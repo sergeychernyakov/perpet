@@ -57,6 +57,20 @@ class AdminTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "длинные списки в админке разбиты на страницы" do
+    sign_in_admin
+    30.times { |index| Lead.create!(name: "Гость #{index}", email: "guest#{index}@mail.ru", kind: "join") }
+
+    get admin_leads_path
+    assert_response :success
+    assert_select ".admin__table tbody tr", Admin::BaseController::PER_PAGE
+    assert_select ".pager__page", minimum: 2
+
+    get admin_leads_path, params: { page: 2 }
+    assert_response :success
+    assert_select ".admin__table tbody tr", 30 - Admin::BaseController::PER_PAGE
+  end
+
   test "администратор создаёт объявление" do
     sign_in_admin
 

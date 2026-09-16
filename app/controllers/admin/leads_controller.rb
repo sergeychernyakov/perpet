@@ -1,7 +1,8 @@
 module Admin
   class LeadsController < BaseController
     def index
-      @leads = Lead.order(created_at: :desc)
+      @pager = paginate(Lead.order(created_at: :desc))
+      @leads = @pager.records
     end
 
     def destroy

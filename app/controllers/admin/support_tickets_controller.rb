@@ -1,7 +1,8 @@
 module Admin
   class SupportTicketsController < BaseController
     def index
-      @tickets = SupportTicket.order(created_at: :desc)
+      @pager = paginate(SupportTicket.order(created_at: :desc))
+      @tickets = @pager.records
     end
 
     def destroy

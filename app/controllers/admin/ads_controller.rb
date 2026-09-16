@@ -3,7 +3,8 @@ module Admin
     before_action :set_ad, only: %i[edit update destroy]
 
     def index
-      @ads = Ad.recent
+      @pager = paginate(Ad.recent)
+      @ads = @pager.records
     end
 
     def new
