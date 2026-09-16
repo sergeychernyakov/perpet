@@ -1,5 +1,6 @@
 import { api, ApiError } from "./api.js"
 import { el, field, skeletons, notice, error } from "./ui.js"
+import * as vk from "./vk.js"
 
 const screen = document.getElementById("screen")
 const tabbar = document.getElementById("tabbar")
@@ -107,9 +108,30 @@ function adCard(ad) {
     ad.description && el("p", { text: ad.description }),
     el("div", { class: "card__foot" }, [
       el("span", { class: "price", text: ad.price || "цена по договорённости" }),
-      el("button", { class: "btn btn--wine", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
+      el("div", { class: "card__buttons" }, [
+        vk.bridge() && el("button", { class: "btn", type: "button", onClick: (event) => share(event, ad) }, "Поделиться"),
+        el("button", { class: "btn btn--wine", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
+      ])
     ])
   ])
+}
+
+// Репост объявления на стену: окно подтверждения показывает сам ВКонтакте.
+async function share(event, ad) {
+  const button = event.currentTarget
+  const label = button.textContent
+  button.disabled = true
+
+  try {
+    await vk.shareAd(ad)
+    button.textContent = "Опубликовано"
+  } catch {
+    // Вне ВКонтакте моста нет, и человек должен понимать почему.
+    button.textContent = "Только внутри VK"
+    setTimeout(() => { button.textContent = label }, 2500)
+  } finally {
+    button.disabled = false
+  }
 }
 
 function respondSheet(ad) {
@@ -217,17 +239,23 @@ async function profileScreen() {
   try {
     const [ { profile }, { ads } ] = await Promise.all([ api.profile(), api.myAds() ])
 
+    // Имя и город подставляем из VK, пока человек не вписал свои.
+    const fromVk = vk.suggestedProfile()
+    const prefilled = fromVk && vk.untouchedName(profile.name)
+
     const form = el("form", { class: "form", onSubmit: save }, [
-      field("Имя", "name", { value: profile.name, placeholder: "Анна Петрова" }),
-      field("Город", "city", { value: profile.city, placeholder: "Москва" }),
+      field("Имя", "name", { value: prefilled ? fromVk.name : profile.name, placeholder: "Анна Петрова" }),
+      field("Город", "city", { value: profile.city || (prefilled ? fromVk.city : ""), placeholder: "Москва" }),
       field("Контакт для связи", "email", { value: profile.email, placeholder: "anna@mail.ru" }),
       field("Питомец", "pet_name", { value: profile.pet_name, placeholder: "Барсик" }),
       field("Возраст питомца", "pet_age", { value: profile.pet_age, placeholder: "3 года" }),
+      prefilled && el("p", { class: "muted", text: "Имя и город подставлены из вашей страницы ВКонтакте — поправьте, если нужно." }),
       el("button", { class: "btn btn--wine", type: "submit" }, "Сохранить")
     ])
 
     render(
       banner("Профиль", profile.pet_caption || "Расскажите о питомце"),
+      vkCard(),
       el("section", { class: "card card--flat" }, form),
       el("section", { class: "banner" }, [
         el("h1", { text: "Мои объявления" }),
@@ -265,6 +293,22 @@ async function profileScreen() {
       failure.status === 401 && el("p", { class: "muted", text: "Откройте приложение внутри VK — профиль привязан к вашей странице." })
     )
   }
+}
+
+// Карточка «кто вошёл»: аватарка и имя берутся у ВКонтакте, вводить их не нужно.
+function vkCard() {
+  const user = vk.vkUser()
+  if (!user) return null
+
+  const photo = vk.avatarUrl()
+
+  return el("section", { class: "card card--who" }, [
+    photo && el("img", { class: "who__photo", src: photo, alt: "" }),
+    el("div", {}, [
+      el("h3", { text: [ user.first_name, user.last_name ].filter(Boolean).join(" ") }),
+      el("p", { class: "card__meta", text: "Вход через ВКонтакте — пароль не нужен" })
+    ])
+  ])
 }
 
 function myAdCard(ad) {
@@ -423,9 +467,12 @@ function go(route) {
   location.hash = route
 }
 
+function route() {
+  return (location.hash.replace(/^#/, "") || "ads").split("/")[0]
+}
+
 function open() {
-  const route = location.hash.replace(/^#/, "") || "ads"
-  const [ name, id ] = route.split("/")
+  const [ name, id ] = (location.hash.replace(/^#/, "") || "ads").split("/")
 
   closeSheet()
   tabbar.querySelectorAll(".tab").forEach((tab) => {
@@ -448,26 +495,21 @@ tabbar.addEventListener("click", (event) => {
 
 window.addEventListener("hashchange", open)
 
-// ---------- VK Bridge ----------
+// ---------- запуск ----------
 
-async function connectVk() {
-  if (!window.vkBridge) return
+// Экран рисуем сразу, не дожидаясь ВКонтакте: мост может и не ответить.
+// Когда данные придут, дополняем шапку и, если открыт профиль, перерисуем его.
+function start() {
+  open()
 
-  try {
-    await vkBridge.send("VKWebAppInit")
+  vk.connect({
+    onAppearance: (mode) => document.body.classList.toggle("vk-dark", mode === "dark")
+  }).then((user) => {
+    if (!user) return
 
-    const info = await vkBridge.send("VKWebAppGetUserInfo")
-    if (info?.first_name) topbarNote.textContent = `Привет, ${info.first_name}!`
-  } catch {
-    // Вне VK мост недоступен — приложение работает и так.
-  }
-
-  vkBridge.subscribe(({ detail }) => {
-    if (detail?.type !== "VKWebAppUpdateConfig") return
-
-    document.body.classList.toggle("vk-dark", detail.data.appearance === "dark")
+    if (user.first_name) topbarNote.textContent = `Привет, ${user.first_name}!`
+    if (route() === "profile") profileScreen()
   })
 }
 
-connectVk()
-open()
+start()
