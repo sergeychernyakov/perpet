@@ -22,6 +22,9 @@
   border: 2px solid var(--ink);
   background: var(--wine);
   color: var(--cream);
+  animation: rise 0.8s both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 55%;
 }
 
 .banner__title {
