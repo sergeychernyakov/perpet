@@ -13,14 +13,17 @@ class VkLaunchParams
 
   attr_reader :params
 
-  def self.secret
-    ENV["VK_APP_SECRET"].presence
+  # Ключей может быть несколько: при переезде на другое приложение VK какое-то
+  # время должны работать оба, иначе между сменой ключа и заливкой не работает
+  # ни одно. Список задаётся через запятую.
+  def self.secrets
+    ENV["VK_APP_SECRET"].to_s.split(",").map(&:strip).reject(&:empty?)
   end
 
   # Без защищённого ключа проверять нечего: в dev и в тестах пускаем всех,
   # в production — никого.
   def self.open_access?
-    secret.nil? && !Rails.env.production?
+    secrets.empty? && !Rails.env.production?
   end
 
   def initialize(query)
@@ -51,12 +54,14 @@ class VkLaunchParams
     given = params["sign"].to_s
     return false if given.blank?
 
-    ActiveSupport::SecurityUtils.secure_compare(given, expected_signature)
+    self.class.secrets.any? do |secret|
+      ActiveSupport::SecurityUtils.secure_compare(given, signature_with(secret))
+    end
   end
 
-  def expected_signature
+  def signature_with(secret)
     payload = params.select { |key, _| key.start_with?("vk_") }.sort.to_h
-    digest = OpenSSL::HMAC.digest("SHA256", self.class.secret, payload.to_query)
+    digest = OpenSSL::HMAC.digest("SHA256", secret, payload.to_query)
     Base64.urlsafe_encode64(digest).delete("=")
   end
 end

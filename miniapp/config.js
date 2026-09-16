@@ -4,4 +4,4 @@ export const API_BASE = "https://perpet.xn--80akofbvesci4h.xn--p1ai"
 
 // ID приложения VK — нужен только для справки, параметры запуска VK
 // присылает сам, а подпись проверяет сервер защищённым ключом.
-export const VK_APP_ID = 54774377
+export const VK_APP_ID = 54774841
