@@ -9,12 +9,18 @@ class User < ApplicationRecord
 
   # Посетитель мини-приложения VK: логина и пароля у него нет, поэтому заводим
   # техническую учётную запись, привязанную к vk_user_id.
+  #
+  # Мини-приложение открывает несколько запросов сразу, и на первом запуске
+  # они пытаются создать пользователя одновременно. Уникальные индексы на
+  # vk_id и email это ловят — проигравшему запросу просто отдаём уже созданного.
   def self.for_vk(vk_id)
     find_by(vk_id: vk_id) || create!(
       vk_id: vk_id,
       email: "vk-#{vk_id}@vk.perpet.local",
       password: Devise.friendly_token(24)
     )
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
+    find_by!(vk_id: vk_id)
   end
 
   def display_name

@@ -81,6 +81,29 @@ module Api
         end
       end
 
+      test "одновременные запросы не создают двух пользователей VK" do
+        # Мини-приложение на первом экране дёргает профиль и «мои объявления» разом.
+        assert_difference -> { User.count }, 1 do
+          2.times { User.for_vk("777") }
+        end
+
+        # Проигравший гонку запрос получает уже созданного пользователя, а не ошибку:
+        # его find_by ещё не видит записи, а create! упирается в уникальный индекс.
+        expected = User.find_by!(vk_id: "777")
+        original = User.method(:find_by)
+        calls = 0
+        User.define_singleton_method(:find_by) do |*args, **options|
+          calls += 1
+          calls == 1 ? nil : original.call(*args, **options)
+        end
+
+        begin
+          assert_equal expected, User.for_vk("777")
+        ensure
+          User.singleton_class.send(:remove_method, :find_by)
+        end
+      end
+
       test "пустое имя профиля не сохраняется" do
         patch api_v1_profile_path, headers: vk_headers, params: { profile: { name: "" } }
 
