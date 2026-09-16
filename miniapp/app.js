@@ -63,32 +63,39 @@ async function adsScreen() {
     onSubmit: (event) => { event.preventDefault(); state.query = input.value.trim(); state.page = 1; adsScreen() }
   }, [ input, el("button", { class: "btn btn--wine", type: "submit" }, "Найти") ])
 
-  const list = el("div", { class: "form" }, skeletons())
+  const list = el("div", { class: "form" })
 
   render(banner("Объявления", "Питомцы, которым нужна передержка"), filters, search, list)
+  loadAds(list)
+}
+
+// Страницы не подменяют друг друга, а дописываются в конец списка — так
+// привычнее на телефоне и не теряется то, что человек уже просмотрел.
+async function loadAds(list, { append = false } = {}) {
+  const tail = el("div", { class: "form" }, skeletons(append ? 1 : 3))
+  append ? list.append(tail) : list.replaceChildren(tail)
 
   try {
     const { ads, meta } = await api.ads({ kind: state.kind, q: state.query, page: state.page })
 
     if (!ads.length) {
-      list.replaceChildren(el("section", { class: "card card--flat" }, [
+      tail.replaceWith(el("section", { class: "card card--flat" }, [
         el("h3", { text: "Ничего не нашлось" }),
         el("p", { class: "muted", text: "Попробуйте другой вид питомца или очистите поиск." })
       ]))
       return
     }
 
-    list.replaceChildren(
-      ...ads.map(adCard),
-      meta.page < meta.pages &&
-        el("button", {
-          class: "btn btn--block",
-          type: "button",
-          onClick: () => { state.page += 1; adsScreen() }
-        }, `Показать ещё · страница ${meta.page + 1} из ${meta.pages}`)
-    )
+    const left = meta.total - meta.page * meta.per_page
+    const more = left > 0 && el("button", {
+      class: "btn btn--block",
+      type: "button",
+      onClick: (event) => { event.currentTarget.remove(); state.page += 1; loadAds(list, { append: true }) }
+    }, `Показать ещё · осталось ${left}`)
+
+    tail.replaceWith(...ads.map(adCard), ...(more ? [ more ] : []))
   } catch (failure) {
-    list.replaceChildren(error(failure.messages))
+    tail.replaceWith(error(failure.messages))
   }
 }
 
@@ -148,31 +155,38 @@ function respondSheet(ad) {
 // ---------- статьи ----------
 
 async function articlesScreen() {
-  const list = el("div", { class: "form" }, skeletons())
+  const list = el("div", { class: "form" })
 
   render(banner("Статьи", "Как готовить питомца к передержке"), list)
+  loadArticles(list)
+}
+
+async function loadArticles(list, { append = false } = {}) {
+  const tail = el("div", { class: "form" }, skeletons(append ? 1 : 3))
+  append ? list.append(tail) : list.replaceChildren(tail)
 
   try {
     const { articles, meta } = await api.articles({ page: state.page })
 
-    list.replaceChildren(
-      ...articles.map((article) =>
-        el("button", { class: "card", type: "button", onClick: () => go(`article/${article.id}`) }, [
-          article.tag && el("span", { class: "tag", text: article.tag }),
-          el("h3", { text: article.title }),
-          article.excerpt && el("p", { text: article.excerpt }),
-          article.read_time && el("p", { class: "card__meta", text: article.read_time })
-        ])
-      ),
-      meta.page < meta.pages &&
-        el("button", {
-          class: "btn btn--block",
-          type: "button",
-          onClick: () => { state.page += 1; articlesScreen() }
-        }, "Показать ещё")
+    const cards = articles.map((article) =>
+      el("button", { class: "card", type: "button", onClick: () => go(`article/${article.id}`) }, [
+        article.tag && el("span", { class: "tag", text: article.tag }),
+        el("h3", { text: article.title }),
+        article.excerpt && el("p", { text: article.excerpt }),
+        article.read_time && el("p", { class: "card__meta", text: article.read_time })
+      ])
     )
+
+    const left = meta.total - meta.page * meta.per_page
+    const more = left > 0 && el("button", {
+      class: "btn btn--block",
+      type: "button",
+      onClick: (event) => { event.currentTarget.remove(); state.page += 1; loadArticles(list, { append: true }) }
+    }, `Показать ещё · осталось ${left}`)
+
+    tail.replaceWith(...cards, ...(more ? [ more ] : []))
   } catch (failure) {
-    list.replaceChildren(error(failure.messages))
+    tail.replaceWith(error(failure.messages))
   }
 }
 
@@ -419,9 +433,11 @@ function open() {
     if (tab.dataset.route === name) tab.setAttribute("aria-current", "page")
   })
 
+  // Чтение статьи — единственный экран, который открывается поверх списка
+  // и не сбрасывает его: со «Назад» человек возвращается туда же, где был.
   if (name === "article" && id) return articleScreen(id)
-  if (name !== "ads") state.page = 1
 
+  state.page = 1
   ;(ROUTES[name] || adsScreen)()
 }
 
