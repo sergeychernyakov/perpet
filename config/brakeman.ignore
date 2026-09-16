@@ -1,0 +1,9 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "8e73cee8da3d71c94eca32931257ae6682c60318c4637d0c930f7dc1a66c24c2",
+      "note": "Адрес собирается из константы VkId::AUTHORIZE_URL — хост всегда id.vk.com, данных от пользователя в нём нет. allow_other_host нужен, потому что это уход на сторонний сайт по замыслу."
+    }
+  ],
+  "brakeman_version": "8.0.6"
+}

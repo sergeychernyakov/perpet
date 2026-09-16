@@ -23,6 +23,40 @@ class User < ApplicationRecord
     find_by!(vk_id: vk_id)
   end
 
+  # Вход через VK ID на сайте. Тот же человек, что заходил в мини-приложение,
+  # узнаётся по vk_id — аккаунт, профиль и объявления у него общие.
+  def self.from_vk_id(person)
+    user = find_by(vk_id: person.vk_id) || find_by(email: person.email.to_s.downcase.presence)
+    return create_from_vk_id(person) if user.nil?
+
+    user.vk_id = person.vk_id
+    # Технический адрес меняем на настоящий, если ВКонтакте его дал.
+    user.email = person.email if person.email.present? && user.technical_email?
+    user.save(validate: false) if user.changed?
+
+    user
+  end
+
+  def self.create_from_vk_id(person)
+    user = create!(
+      vk_id: person.vk_id,
+      email: person.email.presence || "vk-#{person.vk_id}@vk.perpet.local",
+      password: Devise.friendly_token(24)
+    )
+
+    # Имя по умолчанию берётся из адреса почты — у пришедшего из VK оно заведомо
+    # хуже настоящего, так что сразу заменяем.
+    user.profile.update(name: person.full_name) if person.full_name.present?
+
+    user
+  end
+  private_class_method :create_from_vk_id
+
+  # Адрес, который мы придумали сами, когда VK его не дал.
+  def technical_email?
+    email.to_s.end_with?("@vk.perpet.local")
+  end
+
   def display_name
     profile&.name.presence || email
   end

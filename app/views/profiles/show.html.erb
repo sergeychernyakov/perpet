@@ -45,6 +45,11 @@
 
       <div class="profile__account">
         <span><%= current_user.email %></span>
+        <% if current_user.vk_id.present? %>
+          <span class="profile__vk">ВКонтакте привязан</span>
+        <% else %>
+          <%= render "shared/vk_button", label: "Привязать ВКонтакте" %>
+        <% end %>
         <%= link_to "Аккаунт", edit_user_registration_path, class: "btn" %>
         <% if current_user.admin? %>
           <%= link_to "Админка", admin_root_path, class: "btn" %>

@@ -91,7 +91,7 @@ async function loadAds(list, { append = false } = {}) {
     const more = left > 0 && el("button", {
       class: "btn btn--block",
       type: "button",
-      onClick: (event) => { event.currentTarget.remove(); state.page += 1; loadAds(list, { append: true }) }
+      onClick: (event) => showMore(event, () => loadAds(list, { append: true }))
     }, `Показать ещё · осталось ${left}`)
 
     tail.replaceWith(...ads.map(adCard), ...(more ? [ more ] : []))
@@ -232,6 +232,18 @@ function respondSheet(ad) {
   }
 }
 
+// Пока едет следующая страница, кнопка остаётся на месте и честно говорит,
+// что происходит: исчезнувшая кнопка выглядит как будто нажатие не сработало.
+function showMore(event, load) {
+  const button = event.currentTarget
+  button.disabled = true
+  button.classList.add("btn--loading")
+  button.textContent = "Загружаем…"
+
+  state.page += 1
+  load().finally(() => button.remove())
+}
+
 // ---------- статьи ----------
 
 async function articlesScreen() {
@@ -261,7 +273,7 @@ async function loadArticles(list, { append = false } = {}) {
     const more = left > 0 && el("button", {
       class: "btn btn--block",
       type: "button",
-      onClick: (event) => { event.currentTarget.remove(); state.page += 1; loadArticles(list, { append: true }) }
+      onClick: (event) => showMore(event, () => loadArticles(list, { append: true }))
     }, `Показать ещё · осталось ${left}`)
 
     tail.replaceWith(...cards, ...(more ? [ more ] : []))

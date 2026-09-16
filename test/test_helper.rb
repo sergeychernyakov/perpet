@@ -21,7 +21,10 @@ class ActionDispatch::IntegrationTest
     sign_in User.create!(email: "admin-#{SecureRandom.hex(4)}@perpet.ru", password: "perpet123", role: :admin)
   end
 
+  # Возвращает пользователя, а не результат sign_in: в тестах он почти всегда нужен.
   def sign_in_member(email: nil)
-    sign_in User.create!(email: email || "user-#{SecureRandom.hex(4)}@mail.ru", password: "perpet123")
+    user = User.create!(email: email || "user-#{SecureRandom.hex(4)}@mail.ru", password: "perpet123")
+    sign_in user
+    user
   end
 end

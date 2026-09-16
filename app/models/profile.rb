@@ -8,6 +8,16 @@ class Profile < ApplicationRecord
     [ pet_name, pet_age ].compact_blank.join(", ")
   end
 
+  # Заполняем только пустое: то, что человек вписал сам, важнее данных из VK.
+  def fill_missing_from_vk(person)
+    changes = {}
+    changes[:name] = person.full_name if person.full_name.present? && (name.blank? || name.match?(/\Avk-\d+\z/))
+    changes[:city] = person.city if city.blank? && person.city.present?
+    changes[:email] = person.email if email.blank? && person.email.present?
+
+    update(changes) if changes.any?
+  end
+
   # Профиль для мини-приложения VK.
   def as_api
     {

@@ -443,3 +443,28 @@
 .no-view-timeline .header.is-scrolled {
   box-shadow: 0 8px 20px rgb(0 0 0 / 12%);
 }
+
+/* Кнопка входа через ВКонтакте: фирменный синий VK — он тут уместнее
+   бордового, человек ищет глазами знакомый цвет. */
+.btn--vk {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #07f;
+  color: #fff;
+}
+
+.btn--vk:hover {
+  background: #0062cc;
+  color: #fff;
+}
+
+.btn--vk__mark {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 22%);
+}

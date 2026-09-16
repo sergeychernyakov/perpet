@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   devise_for :users
   root "pages#home"
 
+  # Вход и привязка ВКонтакте на сайте (VK ID).
+  get "auth/vk", to: "vk_auth#create", as: :auth_vk
+  get "auth/vk/callback", to: "vk_auth#callback", as: :auth_vk_callback
+
   get "about", to: "pages#about", as: :about
   get "support", to: "support#show", as: :support
 

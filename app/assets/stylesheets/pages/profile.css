@@ -256,3 +256,10 @@
   font-size: 15px;
   color: var(--cream);
 }
+
+.profile__vk {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--cream);
+  opacity: 0.85;
+}
