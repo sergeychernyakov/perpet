@@ -1,0 +1,11 @@
+{
+  "name": "perpet-miniapp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Мини-приложение PERPET для VK: объявления о передержке, статьи, профиль и поддержка",
+  "scripts": {
+    "start": "npx --yes serve . -l 5173",
+    "build": "node build.js",
+    "deploy": "npm run build && npx --yes @vkontakte/vk-miniapps-deploy"
+  }
+}

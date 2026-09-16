@@ -14,39 +14,44 @@
   overflow: hidden;
 }
 
+/* Пропорции композиции из макета: картинки задаются высотой в процентах,
+   поэтому не вылезают за свою колонку и не наезжают на текст. */
 .hero__art {
   position: relative;
-  min-height: clamp(360px, 34vw, 780px);
+  aspect-ratio: 626 / 620;
+  min-height: clamp(280px, 30vw, 620px);
   pointer-events: none;
 }
 
 .hero__art img {
   position: absolute;
+  max-width: 100%;
 }
 
 .hero__art-cat {
   left: 0;
   top: 0;
-  width: 46%;
+  height: 98%;
   animation: drift-left 1s cubic-bezier(0.22, 0.7, 0.2, 1) both;
 }
 
 .hero__art-paw {
   left: 34%;
   top: 52%;
-  width: 30%;
+  height: 58%;
   animation: zoom-in 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.18s both;
 }
 
 .hero__art-dog {
-  right: -6%;
+  right: 0;
   top: 14%;
-  width: 44%;
+  height: 77%;
   animation: drift-right 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.1s both;
 }
 
 .hero__body {
   position: relative;
+  z-index: 1;
   justify-self: end;
   width: min(100%, 620px);
   text-align: right;
@@ -256,9 +261,15 @@
   box-shadow: 10px 10px 0 var(--blue);
 }
 
+/* Рисунок живёт в нижней половине карточки: выше начинается текст,
+   а тёмная фигура под тёмными буквами нечитаема. */
 .promo img {
   position: absolute;
   bottom: -8%;
+  max-width: 100%;
+  max-height: 58%;
+  object-fit: contain;
+  object-position: left bottom;
   opacity: 0.95;
   pointer-events: none;
 }

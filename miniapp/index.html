@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <title>PERPET — передержка питомцев</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="PERPET в VK: объявления о передержке, статьи, профиль питомца и поддержка.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&family=Comfortaa:wght@300..700&family=Inter:wght@100..900&display=swap">
+    <link rel="stylesheet" href="app.css">
+
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  </head>
+
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <span class="logo">PERPET</span>
+        <span class="topbar__note" id="topbar-note">передержка питомцев</span>
+      </header>
+
+      <main class="screen" id="screen" aria-live="polite"></main>
+
+      <nav class="tabbar" id="tabbar">
+        <button class="tab" type="button" data-route="ads">Объявления</button>
+        <button class="tab" type="button" data-route="articles">Статьи</button>
+        <button class="tab" type="button" data-route="profile">Профиль</button>
+        <button class="tab" type="button" data-route="support">Поддержка</button>
+      </nav>
+    </div>
+
+    <div class="sheet" id="sheet" hidden>
+      <div class="sheet__card" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+        <button class="sheet__close" type="button" id="sheet-close" aria-label="Закрыть">✕</button>
+        <div id="sheet-body"></div>
+      </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

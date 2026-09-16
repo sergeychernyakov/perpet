@@ -88,9 +88,11 @@
   <div class="flow" id="flow">
     <% @steps.each do |step| %>
       <article class="step">
-        <%= image_tag step.icon, alt: "", style: "left: #{step.offset_x}; width: #{step.width};" %>
         <h3 class="step__title"><%= step.title %></h3>
         <p class="step__text"><%= step.text %></p>
+        <span class="step__art">
+          <%= image_tag step.icon, alt: "", style: "left: #{step.offset_x}; width: #{step.width};" %>
+        </span>
         <% if step.route %>
           <%= link_to step.cta, send(step.route), class: "btn" %>
         <% else %>
