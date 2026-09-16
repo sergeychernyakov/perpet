@@ -1,0 +1,58 @@
+<% content_for :title, "Поддержка — PERPET" %>
+
+<main class="main">
+  <section class="support__head">
+    <div>
+      <h1 class="support__title">Поддержка</h1>
+      <p class="support__lead">
+        Отвечаем 24/7 по любым вопросам о передержке, объявлениях и документах.
+        Обычно отвечаем за 15 минут.
+      </p>
+    </div>
+
+    <div class="support__contacts">
+      <a class="support__contact" href="tel:+79635747920">+7 963 574-79-20</a>
+      <a class="support__contact" href="mailto:perpet@mail.ru">perpet@mail.ru</a>
+    </div>
+  </section>
+
+  <div class="grid grid--cards">
+    <% @channels.each do |channel| %>
+      <a class="channel" href="<%= channel.href %>" target="_blank" rel="noreferrer">
+        <span class="tag"><%= channel.availability %></span>
+        <h3 class="channel__title"><%= channel.title %></h3>
+        <p class="channel__text"><%= channel.description %></p>
+        <span class="channel__value"><%= channel.value %></span>
+      </a>
+    <% end %>
+  </div>
+
+  <section class="faq">
+    <h2 class="faq__title">Частые вопросы</h2>
+
+    <% @faq.each_with_index do |item, index| %>
+      <details class="faq__item" <%= "open" if index.zero? %>>
+        <summary class="faq__question">
+          <span><%= item.question %></span>
+          <span class="faq__sign"></span>
+        </summary>
+        <p class="faq__answer"><%= item.answer %></p>
+      </details>
+    <% end %>
+  </section>
+
+  <section class="ticket">
+    <div>
+      <h2 class="ticket__title">Написать нам</h2>
+      <p class="ticket__lead">
+        Опишите ситуацию — чем подробнее, тем быстрее разберёмся.
+        Если вопрос по конкретному объявлению, укажите его название.
+      </p>
+      <p class="ticket__time">Среднее время ответа — 15 минут, ночью до 2 часов.</p>
+    </div>
+
+    <div id="ticket">
+      <%= render "support/ticket_form", ticket: @ticket %>
+    </div>
+  </section>
+</main>

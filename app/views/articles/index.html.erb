@@ -1,0 +1,23 @@
+<% content_for :title, "Статьи — PERPET" %>
+
+<main class="main">
+  <section class="articles__head">
+    <div>
+      <h1 class="articles__title">Статьи</h1>
+      <p class="articles__lead">
+        Как передать питомца, что писать в объявлении, как проверить временного хозяина
+        и о чём договариваться заранее.
+      </p>
+    </div>
+
+    <div class="articles__art">
+      <%= image_tag "shape-18.svg", alt: "" %>
+    </div>
+  </section>
+
+  <div class="grid grid--cards grid--articles" id="arts-top">
+    <%= render partial: "articles/article", collection: @articles, as: :article %>
+  </div>
+
+  <%= render "shared/pager", pager: @pager, anchor: "arts-top" %>
+</main>

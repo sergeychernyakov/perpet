@@ -1,0 +1,335 @@
+/* Главная страница. */
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(20px, 3vw, 48px);
+  align-items: center;
+  min-height: clamp(480px, 42vw, 950px);
+  padding: clamp(28px, 4vw, 90px) clamp(20px, 3vw, 60px);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--ink);
+  background: var(--blue);
+  overflow: hidden;
+}
+
+.hero__art {
+  position: relative;
+  min-height: clamp(360px, 34vw, 780px);
+  pointer-events: none;
+}
+
+.hero__art img {
+  position: absolute;
+}
+
+.hero__art-cat {
+  left: 0;
+  top: 0;
+  width: 46%;
+  animation: drift-left 1s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+}
+
+.hero__art-paw {
+  left: 34%;
+  top: 52%;
+  width: 30%;
+  animation: zoom-in 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.18s both;
+}
+
+.hero__art-dog {
+  right: -6%;
+  top: 14%;
+  width: 44%;
+  animation: drift-right 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.1s both;
+}
+
+.hero__body {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 620px);
+  text-align: right;
+  animation: pop-in 0.9s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+}
+
+.hero__title {
+  font-size: var(--title-xl);
+  line-height: 0.96;
+}
+
+.hero__text {
+  margin: clamp(18px, 2vw, 30px) 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(15px, 1.3vw, 23.1px);
+  line-height: 1.35;
+  text-align: left;
+}
+
+.hero__text--right {
+  margin-top: clamp(28px, 5vw, 100px);
+  text-align: right;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.hero__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 44px;
+  border-radius: 25px;
+  border: 1px solid var(--ink);
+  background: var(--cream);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.hero__arrow:hover {
+  background: var(--blue);
+  transform: translateX(3px);
+}
+
+.hero__arrow img {
+  width: 19.2px;
+  height: 17px;
+  pointer-events: none;
+}
+
+/* Почему нас выбирают */
+
+.why {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: clamp(16px, 2vw, 48px);
+  scroll-margin-top: 110px;
+}
+
+.advantages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.advantage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: clamp(130px, 11vw, 186px);
+  padding: 22px clamp(22px, 2.4vw, 40px) 22px clamp(110px, 14vw, 260px);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  overflow: hidden;
+  transition: transform 0.25s, background 0.25s;
+}
+
+.advantage:hover {
+  transform: scale(1.02);
+  background: var(--blue);
+}
+
+.advantage img {
+  position: absolute;
+  left: 4%;
+  top: 6%;
+  width: clamp(78px, 11vw, 200px);
+  pointer-events: none;
+}
+
+.advantage p {
+  font-size: var(--text);
+  line-height: 1.25;
+  text-align: right;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2vw, 32px);
+  padding: clamp(22px, 2.6vw, 56px);
+  border-radius: var(--radius-card);
+  border: 4px solid var(--ink);
+  background: var(--blue);
+  transition: transform 0.3s;
+}
+
+.stat:hover {
+  transform: scale(1.01);
+}
+
+.stat__title {
+  font-size: clamp(26px, 3.4vw, 64px);
+  line-height: 1;
+}
+
+.pie {
+  position: relative;
+  width: min(100%, 618px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: conic-gradient(var(--cream) 0 var(--pie, 62.8%), var(--wine) var(--pie, 62.8%) 100%);
+  animation: pie-sweep 1s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+}
+
+.pie span {
+  position: absolute;
+  width: 30%;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3.4vw, 64px);
+  line-height: 1;
+  animation: pie-label 1s both;
+}
+
+.pie__minor {
+  left: 12%;
+  top: 28%;
+  color: var(--cream);
+}
+
+.pie__major {
+  left: 45%;
+  top: 66%;
+  color: var(--ink);
+}
+
+/* Текстовый блок и промо-карточки */
+
+.note {
+  display: flex;
+  justify-content: flex-end;
+  padding: clamp(28px, 3vw, 48px) clamp(22px, 3.6vw, 68px);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--ink);
+  background: var(--blue);
+}
+
+.note p {
+  max-width: 705px;
+  font-size: var(--text);
+  text-align: right;
+}
+
+.promos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(16px, 1.8vw, 49px);
+}
+
+.promo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(380px, 30vw, 565px);
+  padding: clamp(24px, 2.4vw, 40px);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--ink);
+  overflow: hidden;
+  transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
+}
+
+.promo:hover {
+  transform: translateY(-8px) scale(1.015);
+  background: var(--cream);
+  box-shadow: 10px 10px 0 var(--blue);
+}
+
+.promo img {
+  position: absolute;
+  bottom: -8%;
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.promo__title,
+.promo__text,
+.promo .btn {
+  position: relative;
+}
+
+.promo__title {
+  max-width: 340px;
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.15;
+}
+
+.promo__text {
+  margin-top: 18px;
+  max-width: 300px;
+  font-size: var(--text);
+  line-height: 1.25;
+}
+
+.promo .btn {
+  align-self: flex-start;
+  min-width: 200px;
+  margin-top: auto;
+}
+
+/* Блок «ВАЖНО» */
+
+.important {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  padding: clamp(28px, 4vw, 78px) clamp(22px, 3vw, 75px);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--ink);
+  background: var(--blue);
+  overflow: hidden;
+}
+
+.important__body {
+  position: relative;
+  max-width: 560px;
+}
+
+.important__title {
+  font-size: clamp(48px, 7vw, 123px);
+  line-height: 0.96;
+}
+
+.important__body p {
+  margin-top: clamp(20px, 2.4vw, 40px);
+  font-size: var(--text);
+}
+
+.important__body p:first-of-type {
+  margin-top: clamp(24px, 3vw, 71px);
+}
+
+.important__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: clamp(24px, 3vw, 62px);
+}
+
+.important__actions .btn:first-child {
+  min-width: 300px;
+}
+
+.important__art {
+  position: relative;
+  min-height: 260px;
+}
+
+.important__art img {
+  position: absolute;
+  right: -18%;
+  top: -10%;
+  width: 125%;
+  max-width: none;
+  pointer-events: none;
+  animation: drift-right 1.2s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+}

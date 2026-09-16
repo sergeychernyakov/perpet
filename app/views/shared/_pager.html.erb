@@ -1,0 +1,26 @@
+<% return unless pager.many? %>
+<% page_url = ->(page) { "#{request.path}?#{request.query_parameters.merge(page: page).to_query}##{anchor}" } %>
+
+<nav class="pager" aria-label="Постраничная навигация">
+  <% if pager.first? %>
+    <span class="pager__step pager__step--off">← Назад</span>
+  <% else %>
+    <a class="pager__step" href="<%= page_url.call(pager.page - 1) %>">← Назад</a>
+  <% end %>
+
+  <% pager.page_numbers.each do |number| %>
+    <% if number == pager.page %>
+      <span class="pager__page pager__page--current" aria-current="page"><%= number %></span>
+    <% else %>
+      <a class="pager__page" href="<%= page_url.call(number) %>"><%= number %></a>
+    <% end %>
+  <% end %>
+
+  <% if pager.last? %>
+    <span class="pager__step pager__step--off">Вперёд →</span>
+  <% else %>
+    <a class="pager__step" href="<%= page_url.call(pager.page + 1) %>">Вперёд →</a>
+  <% end %>
+
+  <span class="pager__label"><%= pager.label %></span>
+</nav>

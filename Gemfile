@@ -17,6 +17,12 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# json 3.x ломает ActiveSupport 8.1 (JSON.parse с двумя аргументами)
+gem "json", "~> 2.9"
+
+# Русская локализация: даты, месяцы, тексты ошибок
+gem "rails-i18n"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 

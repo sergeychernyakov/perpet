@@ -1,0 +1,10 @@
+<article class="article">
+  <span class="tag"><%= article.tag %></span>
+  <h3 class="article__title"><%= article.title %></h3>
+  <p class="article__text"><%= article.excerpt %></p>
+
+  <div class="article__footer">
+    <span class="article__read"><%= article.read_time %></span>
+    <%= modal_button "Читать", css: "btn" %>
+  </div>
+</article>

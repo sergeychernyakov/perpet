@@ -1,0 +1,28 @@
+<%= form_with model: lead, url: leads_path do |f| %>
+  <h2 class="modal__title" id="modal-title" data-modal-target="title">Присоединиться</h2>
+  <p class="modal__note" data-modal-target="note">Оставьте контакт — расскажем, как передержать питомца с PERPET.</p>
+
+  <%= f.hidden_field :kind, value: lead.kind.presence || "join", data: { modal_target: "kind" } %>
+  <%= f.hidden_field :subject, value: lead.subject, data: { modal_target: "subject" } %>
+
+  <label class="modal__field">
+    <span class="form__label">Имя</span>
+    <%= f.text_field :name, class: "form__input", placeholder: "Анна", data: { modal_target: "firstField" } %>
+  </label>
+
+  <label class="modal__field">
+    <span class="form__label">E-mail</span>
+    <%= f.email_field :email, class: "form__input", placeholder: "you@mail.ru" %>
+  </label>
+
+  <label class="modal__field">
+    <span class="form__label">Город</span>
+    <%= f.text_field :city, class: "form__input", placeholder: "Москва" %>
+  </label>
+
+  <% if (message = error_message_for(lead)) %>
+    <p class="form__error"><%= message %></p>
+  <% end %>
+
+  <%= f.submit "Отправить", class: "btn btn--wine btn--block", style: "margin-top: 28px;" %>
+<% end %>

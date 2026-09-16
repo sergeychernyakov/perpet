@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get "about", to: "pages#about", as: :about
   get "support", to: "support#show", as: :support
 
-  resources :ads, only: %i[index]
+  resources :ads, only: %i[index create]
   resources :articles, only: %i[index]
   resources :support_tickets, only: %i[create]
   resources :leads, only: %i[create]

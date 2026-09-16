@@ -1,0 +1,107 @@
+<% content_for :title, "Знакомство с нами — PERPET" %>
+
+<main class="main">
+  <section class="about__head">
+    <h1>Знакомство с нами</h1>
+  </section>
+
+  <section class="problem">
+    <div class="problem__body">
+      <h2 class="problem__title">Проблема</h2>
+      <p class="problem__text">
+        Людей, которые берут домой питомцев, становится всё больше. К сожалению, призыв ответственно подходить
+        к вопросу — особенно в плане финансов — выполняется не всегда. Это не должно становиться проблемой
+        ни для питомцев, ни для их хозяев: каждый может попасть в трудную ситуацию, когда питомца приходится
+        оставить на время (отъезд, командировка и прочее). А самое трудное — организовать его комфортное
+        пребывание в чужих руках, не боясь финансовых трудностей.
+      </p>
+      <%= modal_button "присоединиться" %>
+    </div>
+
+    <div class="problem__art">
+      <%= image_tag "shape-29.svg", alt: "" %>
+    </div>
+  </section>
+
+  <div class="grid grid--wide">
+    <div class="benefits__title">
+      <%= image_tag "shape-38.svg", alt: "" %>
+      <h2>Наши преимущества</h2>
+    </div>
+
+    <div class="benefits__list">
+      <% @benefits.each do |benefit| %>
+        <div class="benefit">
+          <%= image_tag benefit.icon, alt: "" %>
+          <p><%= benefit.text %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <section class="banner">
+    <h2 class="banner__title" style="max-width: 1100px; font-size: clamp(26px, 3.4vw, 64px);">
+      Хотите знать больше о ценностях компании?
+    </h2>
+    <a href="#stats" class="round-btn" title="К статистике">
+      <%= image_tag "shape-36.svg", alt: "" %>
+    </a>
+  </section>
+
+  <div class="stats" id="stats">
+    <div class="stats__pie">
+      <h3 class="stat__title">Почему нас выбирают?</h3>
+      <div class="pie">
+        <span class="pie__minor">37.2%</span>
+        <span class="pie__major">62.8%</span>
+      </div>
+      <p>
+        37.2% пока не пользуются услугами передержки, но смогут начать с PERPET.
+        Остальные уже пользуются — и всегда могут обратиться к нам в экстренный момент.
+      </p>
+    </div>
+
+    <div class="stats__cards">
+      <div class="fact">
+        <%= image_tag "shape-42.svg", alt: "", style: "right: -6%; top: 14%; width: 40%;" %>
+        <p class="fact__number">66%</p>
+        <p class="fact__text">Российских семей имеют хотя бы одного пушистого члена семьи.</p>
+      </div>
+
+      <div class="fact">
+        <%= image_tag "shape-43.svg", alt: "", style: "right: 8%; bottom: -18%; width: 26%;" %>
+        <p class="fact__number">93%</p>
+        <p class="fact__text">
+          Владельцев заявляют, что считают питомца полноценным членом семьи, а не просто животным.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <section class="banner">
+    <h2 class="banner__title">Передержка с Perpet</h2>
+    <a href="#flow" class="round-btn" title="Как это работает">
+      <%= image_tag "shape-37.svg", alt: "" %>
+    </a>
+  </section>
+
+  <div class="flow" id="flow">
+    <% @steps.each do |step| %>
+      <article class="step">
+        <%= image_tag step.icon, alt: "", style: "left: #{step.offset_x}; width: #{step.width};" %>
+        <h3 class="step__title"><%= step.title %></h3>
+        <p class="step__text"><%= step.text %></p>
+        <% if step.route %>
+          <%= link_to step.cta, send(step.route), class: "btn" %>
+        <% else %>
+          <%= modal_button step.cta %>
+        <% end %>
+      </article>
+    <% end %>
+  </div>
+
+  <section class="quote">
+    <%= image_tag "shape-31.svg", alt: "" %>
+    <p>Питомцы — наше отражение, которое должно быть передано в хорошие руки.</p>
+  </section>
+</main>

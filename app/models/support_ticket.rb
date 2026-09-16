@@ -1,5 +1,5 @@
 class SupportTicket < ApplicationRecord
-  TOPICS = [ "Передержка", "Обьявление", "Оплата", "Документы", "Другое" ].freeze
+  TOPICS = [ "Передержка", "Объявление", "Оплата", "Документы", "Другое" ].freeze
   EMAIL = /\A[^@\s]+@[^@\s]+\.[a-zа-я]{2,}\z/i
 
   validates :name, presence: { message: "Укажите имя" }, length: { minimum: 2, message: "Укажите имя" }

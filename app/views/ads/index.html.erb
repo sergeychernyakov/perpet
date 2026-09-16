@@ -1,0 +1,35 @@
+<% content_for :title, "Объявления — PERPET" %>
+
+<main class="main">
+  <section class="banner ads__head">
+    <h1 class="banner__title" style="font-size: clamp(32px, 4vw, 64px);">Объявления</h1>
+    <p class="ads__found">Найдено: <%= @pager.total %> из <%= @total %></p>
+  </section>
+
+  <%= form_with url: ads_path, method: :get, data: { turbo_frame: "_top" }, class: "filters" do %>
+    <label class="search">
+      <span class="search__label">Поиск</span>
+      <%= text_field_tag :q, @query, class: "form__input search__input", placeholder: "кошка, Москва, июнь…" %>
+      <%= hidden_field_tag :kind, @kind %>
+    </label>
+
+    <% ([ Ad::ALL_KINDS ] + Ad::KINDS).each do |kind| %>
+      <%= link_to kind, ads_path(kind: kind, q: @query.presence),
+                  class: class_names("chip", "chip--current" => kind == @kind) %>
+    <% end %>
+  <% end %>
+
+  <div class="grid grid--cards" id="ads-top">
+    <%= render partial: "ads/ad", collection: @ads, as: :ad %>
+  </div>
+
+  <%= render "shared/pager", pager: @pager, anchor: "ads-top" %>
+
+  <% if @ads.empty? %>
+    <section class="empty">
+      <h3 class="empty__title">Ничего не нашлось</h3>
+      <p>Попробуйте другой вид питомца или очистите поиск.</p>
+      <%= link_to "Сбросить фильтры", ads_path, class: "btn" %>
+    </section>
+  <% end %>
+</main>

@@ -1,0 +1,219 @@
+/* Страница поддержки. */
+
+.support__head {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  align-items: center;
+  padding: clamp(28px, 3.4vw, 60px) clamp(22px, 3.6vw, 60px);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--ink);
+  background: var(--wine);
+  overflow: hidden;
+  animation: pop-in 0.8s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+}
+
+.support__title {
+  font-size: clamp(36px, 5vw, 96px);
+  line-height: 1;
+  color: var(--cream);
+}
+
+.support__lead {
+  margin-top: 20px;
+  max-width: 620px;
+  font-size: var(--text);
+  color: var(--cream);
+}
+
+.support__contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-self: end;
+}
+
+.support__contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 210px;
+  height: 52px;
+  padding: 0 24px;
+  border-radius: 26px;
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  font-family: var(--font-mono);
+  font-size: 17.3px;
+  color: var(--ink);
+  transition: background 0.2s;
+}
+
+.support__contact:hover {
+  background: var(--blue);
+  color: var(--ink);
+}
+
+.channel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(22px, 2.2vw, 36px);
+  border-radius: var(--radius-card-sm);
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  color: var(--ink);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.channel:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 10px 10px 0 var(--blue);
+  color: var(--ink);
+}
+
+.channel__title {
+  font-size: var(--title-sm);
+  line-height: 1.15;
+}
+
+.channel__text {
+  font-size: var(--text-sm);
+  color: var(--gray);
+}
+
+.channel__value {
+  margin-top: auto;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--wine);
+}
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.4vw, 20px);
+  padding: var(--pad-card);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--ink);
+  background: var(--blue);
+}
+
+.faq__title {
+  font-size: clamp(26px, 3vw, 48px);
+  line-height: 1;
+}
+
+.faq__item {
+  border-radius: clamp(20px, 1.8vw, 32px);
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.faq__item:hover {
+  transform: translateX(6px);
+  box-shadow: -6px 0 0 var(--wine);
+}
+
+.faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  min-height: 64px;
+  padding: 16px clamp(20px, 2vw, 32px);
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.3vw, 22px);
+  line-height: 1.25;
+  list-style: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.faq__question::-webkit-details-marker {
+  display: none;
+}
+
+.faq__question:hover {
+  background: var(--blue);
+}
+
+.faq__sign {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 20px;
+}
+
+.faq__item[open] .faq__sign::before {
+  content: "–";
+}
+
+.faq__item:not([open]) .faq__sign::before {
+  content: "+";
+}
+
+.faq__answer {
+  padding: 0 clamp(20px, 2vw, 32px) 24px;
+  max-width: 900px;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--gray);
+}
+
+.ticket {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(20px, 2.4vw, 48px);
+  padding: var(--pad-card);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--ink);
+  background: var(--cream);
+}
+
+.ticket__title {
+  font-size: clamp(26px, 3vw, 48px);
+  line-height: 1;
+}
+
+.ticket__lead {
+  margin-top: 18px;
+  max-width: 460px;
+  font-size: var(--text);
+  color: var(--gray);
+}
+
+.ticket__time {
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--wine);
+}
+
+.ticket__sent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  padding: clamp(24px, 2.4vw, 40px);
+  border-radius: clamp(24px, 2.2vw, 40px);
+  border: 2px solid var(--ink);
+  background: var(--blue);
+  animation: pop-in 0.4s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+}
+
+.ticket__sent h3 {
+  font-size: clamp(24px, 2.2vw, 36px);
+  line-height: 1.15;
+}

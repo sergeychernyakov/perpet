@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_16_062245) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_16_062320) do
   create_table "ads", force: :cascade do |t|
     t.string "city"
     t.datetime "created_at", null: false
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_062245) do
     t.string "price"
     t.integer "profile_id"
     t.date "published_on"
+    t.string "search_text"
     t.string "status"
     t.string "title"
     t.datetime "updated_at", null: false

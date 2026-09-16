@@ -1,0 +1,5 @@
+<div class="ticket__sent">
+  <h3>Обращение <%= ticket.reference %> принято</h3>
+  <p>Ответ придёт на <%= ticket.email %>. Тема: <%= ticket.topic %>.</p>
+  <%= link_to "Написать ещё", support_path, class: "btn" %>
+</div>

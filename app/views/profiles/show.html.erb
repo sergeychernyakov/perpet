@@ -1,0 +1,57 @@
+<% content_for :title, "Профиль — PERPET" %>
+
+<main class="main">
+  <section class="profile">
+    <div class="profile__photo">
+      <%= image_tag "profile-photo.png", alt: "Фото питомца" %>
+      <span class="profile__caption"><%= @profile.pet_caption %></span>
+    </div>
+
+    <div>
+      <h1 class="profile__title">Ваш профиль</h1>
+
+      <%= form_with model: @profile, url: profile_path, method: :patch, class: "profile__form" do |f| %>
+        <label class="profile__field">
+          <span>Имя</span>
+          <%= f.text_field :name, placeholder: "Анна Петрова" %>
+        </label>
+
+        <label class="profile__field">
+          <span>Город</span>
+          <%= f.text_field :city, placeholder: "Москва" %>
+        </label>
+
+        <label class="profile__field">
+          <span>Контакт для связи</span>
+          <%= f.text_field :email, placeholder: "anna@mail.ru" %>
+        </label>
+
+        <%= f.submit "Сохранить", class: "btn profile__save" %>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="my-ads">
+    <h2 class="my-ads__title">Мои объявления</h2>
+    <%= link_to "Смотреть все", ads_path, class: "my-ads__all" %>
+    <%= button_to ads_path, class: "my-ads__add", form_class: "contents", title: "Добавить карточку" do %>
+      <%= image_tag "shape-54.svg", alt: "" %>
+    <% end %>
+  </section>
+
+  <div class="grid grid--cards grid--my-ads">
+    <%= button_to ads_path, class: "my-ad--new", form_class: "contents" do %>
+      <span>Добавить карточку</span>
+      <%= image_tag "shape-55.svg", alt: "" %>
+    <% end %>
+
+    <% @ads.each do |ad| %>
+      <article class="my-ad">
+        <span class="tag"><%= ad.status_label %></span>
+        <h3 class="my-ad__title"><%= ad.title %></h3>
+        <p class="my-ad__text"><%= ad.description %></p>
+        <p class="my-ad__meta"><%= ad.published_label %></p>
+      </article>
+    <% end %>
+  </div>
+</main>

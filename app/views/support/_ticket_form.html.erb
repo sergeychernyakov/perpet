@@ -1,0 +1,36 @@
+<%= form_with model: ticket, url: support_tickets_path, class: "form", data: { controller: "counter" } do |f| %>
+  <div>
+    <span class="form__label">Тема обращения</span>
+    <div class="chips">
+      <% SupportTicket::TOPICS.each do |topic| %>
+        <label class="chip">
+          <%= f.radio_button :topic, topic, class: "visually-hidden" %>
+          <%= topic %>
+        </label>
+      <% end %>
+    </div>
+  </div>
+
+  <label>
+    <span class="form__label">Имя</span>
+    <%= f.text_field :name, class: "form__input", placeholder: "Анна" %>
+  </label>
+
+  <label>
+    <span class="form__label">E-mail для ответа</span>
+    <%= f.email_field :email, class: "form__input", placeholder: "you@mail.ru" %>
+  </label>
+
+  <label>
+    <span class="form__label">Сообщение</span>
+    <%= f.text_area :message, rows: 5, class: "form__textarea", placeholder: "Что случилось?",
+                    data: { counter_target: "input", action: "input->counter#update" } %>
+    <span class="form__hint" data-counter-target="output"></span>
+  </label>
+
+  <% if (message = error_message_for(ticket)) %>
+    <p class="form__error"><%= message %></p>
+  <% end %>
+
+  <%= f.submit "Отправить обращение", class: "btn btn--wine" %>
+<% end %>
