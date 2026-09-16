@@ -539,11 +539,13 @@ body.vk-dark {
   opacity: 0;
 }
 
-/* Фотография в карточке объявления */
+/* Фотография в карточке объявления. Пропорция вместо жёсткой высоты:
+   при 180 px вертикальные снимки резались в полоску без головы. */
 .card__photo {
   width: calc(100% + 36px);
   margin: -18px -18px 4px;
-  height: 180px;
+  aspect-ratio: 4 / 3;
+  height: auto;
   object-fit: cover;
   border-radius: var(--radius-card) var(--radius-card) 0 0;
   border-bottom: 2px solid var(--ink);
