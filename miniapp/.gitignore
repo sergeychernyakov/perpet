@@ -1,3 +1,4 @@
 build/
 node_modules/
 .vk-hosting-config.local.json
+build.zip
