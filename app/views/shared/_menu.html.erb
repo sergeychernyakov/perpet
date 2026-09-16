@@ -2,10 +2,10 @@
   <%= link_to "Статьи", articles_path, class: "menu__link" %>
   <%= link_to "Объявления", ads_path, class: "menu__link" %>
   <%= link_to "О нас", about_path, class: "menu__link" %>
-  <%= link_to "Профиль", profile_path, class: "menu__link" %>
   <%= link_to "Поддержка", support_path, class: "menu__link" %>
 
   <% if user_signed_in? %>
+    <%= link_to "Профиль", profile_path, class: "menu__link" %>
     <% if current_user.admin? %>
       <%= link_to "Админка", admin_root_path, class: "menu__link" %>
     <% end %>

@@ -11,6 +11,9 @@
     <%= nav_link "Объявления", ads_path %>
     <%= nav_link "О нас", about_path %>
     <%= nav_link "Поддержка", support_path %>
+    <% if current_user&.admin? %>
+      <%= nav_link "Админка", admin_root_path %>
+    <% end %>
   </nav>
 
   <button class="burger" type="button" title="Меню" aria-label="Меню" data-action="menu#toggle">
@@ -19,7 +22,10 @@
     <span></span>
   </button>
 
-  <%= link_to profile_path, class: "icon-btn", title: "Профиль" do %>
+  <%# Гостю кнопка ведёт на вход, а не на профиль, откуда его всё равно развернёт. %>
+  <% signed_in = user_signed_in? %>
+  <%= link_to (signed_in ? profile_path : new_user_session_path),
+              class: "icon-btn", title: (signed_in ? "Профиль" : "Войти") do %>
     <%= image_tag "shape-25.svg", alt: "", class: "icon-btn__shape" %>
     <span class="icon-btn__eye icon-btn__eye--left"></span>
     <span class="icon-btn__eye icon-btn__eye--right"></span>
