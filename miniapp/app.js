@@ -264,7 +264,8 @@ async function loadArticles(list, { append = false } = {}) {
 
     const cards = articles.map((article) =>
       el("button", { class: "card", type: "button", onClick: () => go(`article/${article.id}`) }, [
-        article.tag && el("span", { class: "tag", text: article.tag }),
+        ...(article.tags || (article.tag ? [ article.tag ] : []))
+          .map((tag) => el("span", { class: "tag", text: tag })),
         el("h3", { text: article.title }),
         article.excerpt && el("p", { text: article.excerpt }),
         article.read_time && el("p", { class: "card__meta", text: article.read_time })
@@ -292,7 +293,7 @@ async function articleScreen(id) {
 
     render(
       backButton("articles"),
-      banner(article.title, [ article.tag, article.read_time ].filter(Boolean).join(" · ")),
+      banner(article.title, [ (article.tags || []).join(" · ") || article.tag, article.read_time ].filter(Boolean).join(" · ")),
       el("section", { class: "card article-body" },
         article.paragraphs.length
           ? article.paragraphs.map((text) => el("p", { text }))

@@ -62,7 +62,7 @@
 .article__title {
   max-width: 56%;
   font-size: clamp(22px, 2.95vw, 58px);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.25;
   color: var(--ink);
 }
@@ -116,10 +116,10 @@
 /* Кот выглядывает из-за верхнего края блока — как в макете. */
 .article__cat {
   position: absolute;
-  left: 50%;
+  left: 30%;
   bottom: 0;
-  width: clamp(120px, 11vw, 190px);
-  height: 104%;
+  width: clamp(130px, 13.6%, 230px);
+  height: 100%;
   transform: translateX(-50%);
   pointer-events: none;
 }
@@ -159,11 +159,11 @@
 
 .article__meow {
   position: absolute;
-  left: 106%;
-  top: 0;
+  left: 104%;
+  top: 11%;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(18px, 1.7vw, 30px);
+  font-weight: 800;
+  font-size: clamp(26px, 2.6vw, 50px);
   color: var(--ink);
 }
 
