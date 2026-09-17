@@ -1,17 +1,32 @@
-<%# В макете статья — блок во всю ширину, и соседние зеркальны друг другу:
-    у нечётных текст слева и кнопка справа, у чётных наоборот. %>
-<article class="article <%= article_index.odd? ? "article--mirror" : "" %>">
-  <div class="article__head">
+<%# В макете статья — блок во всю ширину, соседние зеркальны: у нечётных
+    заголовок слева и кнопка справа, у чётных наоборот, и фон через один.
+    У второго блока на странице в макете сидит кот. %>
+<article class="article <%= "article--mirror" if article_index.odd? %>">
+  <% if article_index == 1 %>
+    <div class="article__cat" aria-hidden="true">
+      <%= image_tag "hero-21.svg", alt: "", class: "article__cat-art" %>
+      <span class="article__whisker article__whisker--l1"></span>
+      <span class="article__whisker article__whisker--l2"></span>
+      <span class="article__whisker article__whisker--l3"></span>
+      <span class="article__whisker article__whisker--r1"></span>
+      <span class="article__whisker article__whisker--r2"></span>
+      <span class="article__whisker article__whisker--r3"></span>
+      <span class="article__meow">мяу</span>
+    </div>
+  <% end %>
+
+  <div class="article__top">
     <h3 class="article__title"><%= article.title %></h3>
     <%= modal_button "", css: "article__arrow", title: "Читать «#{article.title}»" do %>
       <%= image_tag "shape-11.svg", alt: "" %>
     <% end %>
   </div>
 
-  <p class="article__text"><%= article.excerpt %></p>
-
-  <div class="article__tags">
-    <span class="tag tag--cream"><%= article.tag %></span>
-    <span class="tag tag--cream"><%= article.read_time %></span>
+  <div class="article__bottom">
+    <p class="article__text"><%= article.excerpt %></p>
+    <div class="article__tags">
+      <span class="tag tag--outline"><%= article.tag %></span>
+      <span class="tag tag--outline"><%= article.read_time %></span>
+    </div>
   </div>
 </article>

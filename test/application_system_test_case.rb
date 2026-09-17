@@ -5,18 +5,23 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   include Devise::Test::IntegrationHelpers
 
+  # Turbo подменяет страницу асинхронно, а тесты идут в десять процессов —
+  # двух секунд ожидания под нагрузкой иногда не хватает.
+  Capybara.default_max_wait_time = 5
+
   # Пока едут веб-шрифты и отыгрывают анимации появления, блоки на странице
-  # ещё переезжают, и клик успевает промахнуться мимо кнопки. Ждём и то и другое.
-  # Анимации по прокрутке ждать нельзя — они не заканчиваются никогда.
-  SETTLED = <<~JS.freeze
-    return document.fonts.status === 'loaded' &&
-      document.getAnimations().every(a =>
-        !(a.timeline instanceof DocumentTimeline) || a.playState !== 'running');
+  # переезжают, и клик успевает промахнуться мимо кнопки. Шрифты ждём,
+  # анимации глушим — проверяем содержимое, а не эффекты.
+  CALM = <<~JS.freeze
+    const s = document.createElement('style');
+    s.textContent = '*,*::before,*::after{animation:none !important;transition:none !important}';
+    document.head.appendChild(s);
+    return document.fonts.status === 'loaded';
   JS
 
   def visit(*)
     super
-    Timeout.timeout(5) { sleep 0.05 until page.evaluate_script(SETTLED) }
+    Timeout.timeout(5) { sleep 0.05 until page.evaluate_script(CALM) }
   rescue Timeout::Error, Selenium::WebDriver::Error::JavascriptError
     nil
   end

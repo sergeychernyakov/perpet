@@ -114,6 +114,14 @@
 
 .tag--cream { background: var(--cream); }
 
+.tag--outline {
+  padding: 8px clamp(18px, 1.8vw, 30px);
+  border: 2px solid var(--line);
+  background: none;
+  font-family: var(--font-hand);
+  font-size: clamp(11.7px, 1.17vw, 18px);
+}
+
 .grid {
   display: grid;
   gap: var(--gap);
