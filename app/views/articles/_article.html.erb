@@ -1,10 +1,17 @@
-<article class="article">
-  <span class="tag"><%= article.tag %></span>
-  <h3 class="article__title"><%= article.title %></h3>
+<%# В макете статья — блок во всю ширину, и соседние зеркальны друг другу:
+    у нечётных текст слева и кнопка справа, у чётных наоборот. %>
+<article class="article <%= article_index.odd? ? "article--mirror" : "" %>">
+  <div class="article__head">
+    <h3 class="article__title"><%= article.title %></h3>
+    <%= modal_button "", css: "article__arrow", title: "Читать «#{article.title}»" do %>
+      <%= image_tag "shape-11.svg", alt: "" %>
+    <% end %>
+  </div>
+
   <p class="article__text"><%= article.excerpt %></p>
 
-  <div class="article__footer">
-    <span class="article__read"><%= article.read_time %></span>
-    <%= modal_button "Читать", css: "btn" %>
+  <div class="article__tags">
+    <span class="tag tag--cream"><%= article.tag %></span>
+    <span class="tag tag--cream"><%= article.read_time %></span>
   </div>
 </article>
