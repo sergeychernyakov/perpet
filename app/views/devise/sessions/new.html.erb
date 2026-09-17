@@ -1,35 +1,37 @@
 <% content_for :title, "Вход — PERPET" %>
 
-<main class="main auth">
-  <div class="auth__card">
-    <h1 class="auth__title">Вход</h1>
-    <p class="auth__lead">Войдите, чтобы вести профиль питомца и свои объявления.</p>
+<main class="main">
+  <section class="reg">
+    <%= image_tag "tb-logo-ear.svg", alt: "", class: "reg__hand" %>
+    <%= image_tag "tb-profile-hand.svg", alt: "", class: "reg__rabbit" %>
+    <span class="reg__eye reg__eye--left"></span>
+    <span class="reg__eye reg__eye--right"></span>
 
-    <%= form_with model: resource, as: resource_name, url: session_path(resource_name), class: "form" do |f| %>
-      <label class="auth__field">
-        <span class="form__label">E-mail</span>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form__input", placeholder: "you@mail.ru", required: true %>
-      </label>
+    <div class="reg__body">
+      <h1 class="reg__title">Вход</h1>
 
-      <label class="auth__field">
-        <span class="form__label">Пароль</span>
-        <%= f.password_field :password, autocomplete: "current-password", class: "form__input", placeholder: "••••••", required: true %>
-      </label>
+      <%= form_with model: resource, as: resource_name, url: session_path(resource_name), class: "reg__form" do |f| %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "reg__field",
+                          placeholder: "E-mail", required: true, "aria-label": "E-mail" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "reg__field",
+                             placeholder: "Пароль", required: true, "aria-label": "Пароль" %>
 
-      <% if devise_mapping.rememberable? %>
-        <label class="auth__remember">
-          <%= f.check_box :remember_me %>
-          <span>Запомнить меня</span>
-        </label>
+        <% if devise_mapping.rememberable? %>
+          <label class="reg__remember">
+            <%= f.check_box :remember_me %>
+            <span>Запомнить меня</span>
+          </label>
+        <% end %>
+
+        <button type="submit" class="reg__submit" title="Войти">
+          <%= image_tag "shape-11.svg", alt: "Войти" %>
+        </button>
       <% end %>
+    </div>
+  </section>
 
-      <div class="auth__actions">
-        <%= f.submit "Войти", class: "btn btn--coral btn--wide" %>
-      </div>
-    <% end %>
-
+  <div class="reg__aside">
     <%= render "shared/vk_button", label: "Войти через ВКонтакте" %>
-
     <%= render "devise/shared/links" %>
   </div>
 </main>

@@ -236,3 +236,16 @@
     height: 48px;
   }
 }
+
+.reg__remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: max(11px, 1.2cqw);
+  color: var(--gray);
+}
+
+@media (max-width: 860px) {
+  .reg__remember { font-size: 15px; }
+}
