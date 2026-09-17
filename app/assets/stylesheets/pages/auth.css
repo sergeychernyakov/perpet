@@ -83,9 +83,9 @@
 }
 
 .reg__hand {
-  left: 0.7%;
-  top: 33.4%;
-  width: 32.9%;
+  left: 0;
+  top: 48.1%;
+  width: 16.6%;
   height: auto;
   transform: scaleX(-1);
   animation: fly-in-left 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.15s both;
@@ -96,12 +96,13 @@
   top: 1.5%;
   width: 38.3%;
   height: auto;
+  transform: scaleX(-1);
   animation: fly-in-right 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.1s both;
 }
 
 .reg__eye {
   position: absolute;
-  width: 5%;
+  width: 5.3%;
   aspect-ratio: 1;
   border-radius: 50%;
   box-shadow: inset 0 0 0 0.62cqw var(--white);
@@ -109,8 +110,8 @@
   animation: appear 0.6s ease 0.7s both;
 }
 
-.reg__eye--left { left: 67.5%; top: 49.8%; }
-.reg__eye--right { left: 80.4%; top: 49.8%; }
+.reg__eye--left { left: 67.7%; top: 47%; }
+.reg__eye--right { left: 80.1%; top: 47%; }
 
 .reg__body {
   position: relative;
