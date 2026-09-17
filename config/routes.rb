@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get "auth/vk/callback", to: "vk_auth#callback", as: :auth_vk_callback
 
   get "about", to: "pages#about", as: :about
+  get "brand", to: "pages#brand", as: :brand
   get "support", to: "support#show", as: :support
 
   resources :ads, only: %i[index create]

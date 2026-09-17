@@ -9,7 +9,7 @@
   margin: 0;
   font-family: var(--font-mono);
   font-size: clamp(14px, 1.1vw, 17.3px);
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .filters {
@@ -28,14 +28,14 @@
   height: 56px;
   padding: 0 24px;
   border-radius: var(--radius-pill);
-  border: 2px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
 }
 
 .search__label {
   font-family: var(--font-mono);
   font-size: 15px;
-  color: var(--wine);
+  color: var(--gray);
 }
 
 .search__input {
@@ -56,15 +56,15 @@
 }
 
 .chip--search {
-  background: var(--wine);
-  color: var(--cream);
+  background: var(--coral);
+  color: var(--ink);
 }
 
 .ad {
   display: flex;
   flex-direction: column;
   border-radius: var(--radius-card-sm);
-  border: 2px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
   overflow: hidden;
   transition: transform 0.25s, box-shadow 0.25s;
@@ -75,14 +75,14 @@
 
 .ad:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 10px 10px 0 var(--wine);
+  box-shadow: 10px 10px 0 var(--coral);
 }
 
 .ad__cover {
   position: relative;
   height: 220px;
-  background: var(--blue);
-  border-bottom: 2px solid var(--ink);
+  background: var(--lime);
+  border-bottom: 2px solid var(--line);
   overflow: hidden;
 }
 
@@ -101,7 +101,7 @@
   top: 18px;
   padding: 6px 16px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--ink);
+  border: 1px solid var(--line);
   background: var(--cream);
   font-family: var(--font-mono);
   font-size: 14px;
@@ -122,7 +122,7 @@
 .ad__meta {
   font-family: var(--font-mono);
   font-size: 15px;
-  color: var(--wine);
+  color: var(--gray);
 }
 
 .ad__text {
@@ -151,8 +151,8 @@
   gap: 18px;
   padding: clamp(28px, 3vw, 56px);
   border-radius: var(--radius-card);
-  border: 2px solid var(--ink);
-  background: var(--blue);
+  border: 2px solid var(--line);
+  background: var(--lime);
 }
 
 .empty__title {

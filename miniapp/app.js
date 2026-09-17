@@ -63,7 +63,7 @@ async function adsScreen() {
   const search = el("form", {
     class: "search",
     onSubmit: (event) => { event.preventDefault(); state.query = input.value.trim(); state.page = 1; adsScreen() }
-  }, [ input, el("button", { class: "btn btn--wine", type: "submit" }, "Найти") ])
+  }, [ input, el("button", { class: "btn btn--coral", type: "submit" }, "Найти") ])
 
   const list = el("div", { class: "form" })
 
@@ -112,7 +112,7 @@ function adCard(ad) {
       el("span", { class: "price", text: ad.price || "цена по договорённости" }),
       el("div", { class: "card__buttons" }, [
         vk.bridge() && el("button", { class: "btn", type: "button", onClick: (event) => share(event, ad) }, "Поделиться"),
-        el("button", { class: "btn btn--wine", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
+        el("button", { class: "btn btn--coral", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
       ])
     ])
   ])
@@ -153,7 +153,7 @@ async function adScreen(id) {
           el("span", { class: "price", text: ad.price || "цена по договорённости" }),
           el("div", { class: "card__buttons" }, [
             vk.bridge() && el("button", { class: "btn", type: "button", onClick: (event) => share(event, ad) }, "Поделиться"),
-            el("button", { class: "btn btn--wine", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
+            el("button", { class: "btn btn--coral", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
           ])
         ])
       ])
@@ -179,7 +179,7 @@ function respondSheet(ad) {
     field("E-mail", "email", { type: "email", placeholder: "you@mail.ru" }),
     fillEmail,
     field("Город", "city", { value: fromVk?.city, placeholder: "Москва" }),
-    el("button", { class: "btn btn--wine btn--block", type: "submit" }, "Отправить")
+    el("button", { class: "btn btn--coral btn--block", type: "submit" }, "Отправить")
   ])
 
   openSheet(form)
@@ -225,7 +225,7 @@ function respondSheet(ad) {
       openSheet([
         el("h2", { id: "sheet-title", text: "Готово" }),
         notice(message),
-        el("button", { class: "btn btn--wine btn--block", type: "button", onClick: closeSheet }, "Закрыть")
+        el("button", { class: "btn btn--coral btn--block", type: "button", onClick: closeSheet }, "Закрыть")
       ])
     } catch (failure) {
       button.disabled = false
@@ -322,7 +322,7 @@ async function profileScreen() {
       field("Питомец", "pet_name", { value: profile.pet_name, placeholder: "Барсик" }),
       field("Возраст питомца", "pet_age", { value: profile.pet_age, placeholder: "3 года" }),
       prefilled && el("p", { class: "muted", text: "Имя и город подставлены из вашей страницы ВКонтакте — поправьте, если нужно." }),
-      el("button", { class: "btn btn--wine", type: "submit" }, "Сохранить")
+      el("button", { class: "btn btn--coral", type: "submit" }, "Сохранить")
     ])
 
     render(
@@ -419,7 +419,7 @@ function newAdSheet() {
     field("Цена", "price", { placeholder: "700 ₽ / день" }),
     field("Описание", "description", { rows: 4, placeholder: "Спокойный, привит, ест сухой корм." }),
     photo.field,
-    el("button", { class: "btn btn--wine btn--block", type: "submit" }, "Сохранить черновик")
+    el("button", { class: "btn btn--coral btn--block", type: "submit" }, "Сохранить черновик")
   ])
 
   openSheet(form)
@@ -468,7 +468,7 @@ async function supportScreen() {
           el("p", { class: "card__meta", text: [ channel.value, channel.availability ].filter(Boolean).join(" · ") })
         ])
       ),
-      el("button", { class: "btn btn--wine btn--block", type: "button", onClick: () => ticketSheet(topics) }, "Написать нам"),
+      el("button", { class: "btn btn--coral btn--block", type: "button", onClick: () => ticketSheet(topics) }, "Написать нам"),
       el("section", { class: "banner" }, [ el("h1", { text: "Частые вопросы" }) ]),
       ...faq.map((item) => {
         const answer = el("p", { text: item.answer, hidden: true })
@@ -504,7 +504,7 @@ function ticketSheet(topics) {
     field("E-mail для ответа", "email", { type: "email", placeholder: "you@mail.ru" }),
     message,
     counter,
-    el("button", { class: "btn btn--wine btn--block", type: "submit" }, "Отправить обращение")
+    el("button", { class: "btn btn--coral btn--block", type: "submit" }, "Отправить обращение")
   ])
 
   openSheet(form)
@@ -527,7 +527,7 @@ function ticketSheet(topics) {
       openSheet([
         el("h2", { id: "sheet-title", text: `Обращение ${ticket.reference} принято` }),
         notice(`Ответ придёт на ${ticket.email}. Тема: ${ticket.topic}.`),
-        el("button", { class: "btn btn--wine btn--block", type: "button", onClick: closeSheet }, "Закрыть")
+        el("button", { class: "btn btn--coral btn--block", type: "button", onClick: closeSheet }, "Закрыть")
       ])
     } catch (failure) {
       button.disabled = false

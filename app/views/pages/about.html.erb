@@ -6,33 +6,39 @@
   </section>
 
   <section class="problem">
+    <%= image_tag "ab-cat-big.svg", alt: "", class: "problem__cat" %>
+    <%= image_tag "ab-cat-inner.svg", alt: "", class: "problem__cat-inner" %>
+
     <div class="problem__body">
       <h2 class="problem__title">Проблема</h2>
       <p class="problem__text">
-        Людей, которые берут домой питомцев, становится всё больше. К сожалению, призыв ответственно подходить
-        к вопросу — особенно в плане финансов — выполняется не всегда. Это не должно становиться проблемой
-        ни для питомцев, ни для их хозяев: каждый может попасть в трудную ситуацию, когда питомца приходится
-        оставить на время (отъезд, командировка и прочее). А самое трудное — организовать его комфортное
-        пребывание в чужих руках, не боясь финансовых трудностей.
+        Сейчас людей, которые берут себе домой питомцев становится все больше. К сожалению, часто
+        несмотря на призыв ответственно подходить к вопросу в особенности в плане финансов может
+        не всегда выполняться. Это не должно стать проблемой ни для питомцев ни для их хозяев,
+        так как каждый из нас может попасть в трудную ситуацию, когда питомца приходится оставлять
+        на некоторое время (отьезд, командировка и прочее). А самое трудное — это организовать его
+        комфортное прибывание в чужих руках, не боясь финансовых трудностей.
       </p>
-      <%= modal_button "присоединиться" %>
-    </div>
 
-    <div class="problem__art">
-      <%= image_tag "shape-29.svg", alt: "" %>
+      <div class="problem__actions">
+        <%= modal_button "", css: "problem__arrow", title: "Присоединиться" do %>
+          <%= image_tag "shape-11.svg", alt: "" %>
+        <% end %>
+        <%= modal_button "Присоединиться", css: "problem__cta" %>
+      </div>
     </div>
   </section>
 
-  <div class="grid grid--wide">
+  <div class="benefits">
     <div class="benefits__title">
-      <%= image_tag "shape-38.svg", alt: "" %>
+      <%= image_tag "ab-paw-wide2.svg", alt: "" %>
       <h2>Наши преимущества</h2>
     </div>
 
     <div class="benefits__list">
       <% @benefits.each do |benefit| %>
         <div class="benefit">
-          <%= image_tag benefit.icon, alt: "" %>
+          <%= image_tag benefit.icon, alt: "", style: "aspect-ratio: #{benefit.ratio};" %>
           <p><%= benefit.text %></p>
         </div>
       <% end %>
@@ -40,36 +46,40 @@
   </div>
 
   <section class="banner">
-    <h2 class="banner__title" style="max-width: 1100px; font-size: clamp(26px, 3.4vw, 64px);">
-      Хотите знать больше о ценностях компании?
-    </h2>
+    <h2 class="banner__title banner__title--long">Хотите знать больше о ценностях компании?</h2>
     <a href="#stats" class="round-btn" title="К статистике">
       <%= image_tag "shape-36.svg", alt: "" %>
     </a>
   </section>
 
-  <div class="stats" id="stats">
-    <div class="stats__pie">
-      <h3 class="stat__title">Почему нас выбирают?</h3>
-      <div class="pie">
-        <span class="pie__minor">37.2%</span>
-        <span class="pie__major">62.8%</span>
+  <div class="why" id="stats">
+    <div class="stat">
+      <div class="stat__plate">
+        <h3 class="stat__title">Почему нас выбирают?</h3>
+        <%= image_tag "pie-pink.svg", alt: "", class: "stat__pie stat__pie--minor" %>
+        <%= image_tag "pie-cream.svg", alt: "", class: "stat__pie stat__pie--major" %>
+        <span class="stat__value stat__value--minor">37.2%</span>
+        <span class="stat__value stat__value--major">62.8%</span>
+        <span class="stat__leader stat__leader--minor"></span>
+        <span class="stat__leader stat__leader--major"></span>
+        <p class="stat__note stat__note--minor">
+          Столько людей не пользуются услугами передержки, но смогут начать с PERPET.
+        </p>
+        <p class="stat__note stat__note--major">
+          А столько уже пользуются, но всегда могут обратиться к PERPET в экстренный момент.
+        </p>
       </div>
-      <p>
-        37.2% пока не пользуются услугами передержки, но смогут начать с PERPET.
-        Остальные уже пользуются — и всегда могут обратиться к нам в экстренный момент.
-      </p>
     </div>
 
-    <div class="stats__cards">
+    <div class="facts">
       <div class="fact">
-        <%= image_tag "shape-42.svg", alt: "", style: "right: -6%; top: 14%; width: 40%;" %>
+        <%= image_tag "shape-42.svg", alt: "", class: "fact__art fact__art--first" %>
         <p class="fact__number">66%</p>
         <p class="fact__text">Российских семей имеют хотя бы одного пушистого члена семьи.</p>
       </div>
 
       <div class="fact">
-        <%= image_tag "shape-43.svg", alt: "", style: "right: 8%; bottom: -18%; width: 26%;" %>
+        <%= image_tag "shape-43.svg", alt: "", class: "fact__art fact__art--second" %>
         <p class="fact__number">93%</p>
         <p class="fact__text">
           Владельцев заявляют, что считают питомца полноценным членом семьи, а не просто животным.
@@ -87,23 +97,15 @@
 
   <div class="flow" id="flow">
     <% @steps.each do |step| %>
-      <article class="step">
-        <h3 class="step__title"><%= step.title %></h3>
-        <p class="step__text"><%= step.text %></p>
-        <span class="step__art">
-          <%= image_tag step.icon, alt: "", style: "left: #{step.offset_x}; width: #{step.width};" %>
-        </span>
-        <% if step.route %>
-          <%= link_to step.cta, send(step.route), class: "btn" %>
-        <% else %>
-          <%= modal_button step.cta %>
-        <% end %>
-      </article>
+      <%= render "pages/promo_card", promo: step, css: "promo step", justify: step.justify %>
     <% end %>
   </div>
 
   <section class="quote">
-    <%= image_tag "shape-31.svg", alt: "" %>
+    <%= image_tag "ab-paw-wide.svg", alt: "", class: "quote__paw" %>
+    <%= image_tag "ab-paw-cream.svg", alt: "", class: "quote__paw-cream" %>
+    <span class="quote__eye quote__eye--top"></span>
+    <span class="quote__eye quote__eye--bottom"></span>
     <p>Питомцы — наше отражение, которое должно быть передано в хорошие руки.</p>
   </section>
 </main>

@@ -1,6 +1,7 @@
 <header class="header">
   <%= link_to root_path, class: "logo", title: "На главную" do %>
-    <%= image_tag "shape-26.svg", alt: "", class: "logo__shape" %>
+    <%= image_tag "tb-logo-hand.svg", alt: "", class: "logo__shape" %>
+    <%= image_tag "tb-logo-ear.svg", alt: "", class: "logo__ear" %>
     <span class="logo__eye logo__eye--left"></span>
     <span class="logo__eye logo__eye--right"></span>
     <span class="logo__name">PERPET</span>
@@ -8,7 +9,7 @@
 
   <nav class="nav">
     <%= nav_link "Статьи", articles_path %>
-    <%= nav_link "Объявления", ads_path %>
+    <%= nav_link "Обьявления", ads_path %>
     <%= nav_link "О нас", about_path %>
     <%= nav_link "Поддержка", support_path %>
     <% if current_user&.admin? %>
@@ -26,7 +27,7 @@
   <% signed_in = user_signed_in? %>
   <%= link_to (signed_in ? profile_path : new_user_session_path),
               class: "icon-btn", title: (signed_in ? "Профиль" : "Войти") do %>
-    <%= image_tag "shape-25.svg", alt: "", class: "icon-btn__shape" %>
+    <%= image_tag "tb-profile-hand.svg", alt: "", class: "icon-btn__shape" %>
     <span class="icon-btn__eye icon-btn__eye--left"></span>
     <span class="icon-btn__eye icon-btn__eye--right"></span>
   <% end %>

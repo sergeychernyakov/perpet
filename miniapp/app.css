@@ -1,17 +1,19 @@
 /* Мини-приложение PERPET: те же цвета и формы, что на сайте, но под телефон. */
 
 :root {
-  --cream: #fcf4f1;
-  --wine: #6e0001;
+  --cream: #f8f3e0;
+  --coral: #ff8282;
   --ink: #000;
-  --blue: #bed2f9;
-  /* Голубой не меняется в тёмной теме, значит текст на нём всегда тёмный. */
-  --on-blue: #17100f;
+  --gray: #434343;
+  --lime: #bce29b;
+  /* Салатовый не меняется в тёмной теме, значит текст на нём всегда тёмный. */
+  --on-lime: #17100f;
   --white: #fff;
   --radius-card: 28px;
   --radius-pill: 999px;
-  --font-display: "Comfortaa", system-ui, sans-serif;
-  --font-body: "Comfortaa", system-ui, sans-serif;
+  /* OvalCyr из макета в вебе нет — подставляем ближайший Nunito. */
+  --font-display: OvalCyr, "Nunito", system-ui, sans-serif;
+  --font-body: "Comic Relief", system-ui, sans-serif;
   --font-mono: "Anonymous Pro", ui-monospace, monospace;
   --gutter: 14px;
 }
@@ -85,19 +87,19 @@ textarea {
   padding: 8px 16px;
   border-radius: var(--radius-pill);
   border: 2px solid var(--ink);
-  background: var(--wine);
+  background: var(--coral);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 15px;
   letter-spacing: 0.06em;
-  color: var(--cream);
+  color: var(--white);
 }
 
 .topbar__note {
   flex: 1;
   font-family: var(--font-mono);
   font-size: 13px;
-  color: var(--wine);
+  color: var(--gray);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -117,8 +119,8 @@ textarea {
   padding: 18px 20px;
   border-radius: var(--radius-card);
   border: 2px solid var(--ink);
-  background: var(--wine);
-  color: var(--cream);
+  background: var(--coral);
+  color: var(--ink);
 }
 
 .banner h1 {
@@ -158,8 +160,8 @@ textarea {
 }
 
 .chip[aria-pressed="true"] {
-  background: var(--wine);
-  color: var(--cream);
+  background: var(--coral);
+  color: var(--ink);
 }
 
 .search {
@@ -211,7 +213,7 @@ textarea {
 .card__meta {
   font-family: var(--font-mono);
   font-size: 13px;
-  color: var(--wine);
+  color: var(--gray);
 }
 
 .card__foot {
@@ -255,9 +257,9 @@ textarea {
   transform: scale(0.97);
 }
 
-.btn--wine {
-  background: var(--wine);
-  color: var(--cream);
+.btn--coral {
+  background: var(--coral);
+  color: var(--ink);
 }
 
 .btn--block {
@@ -282,7 +284,7 @@ textarea {
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--wine);
+  color: var(--gray);
 }
 
 .field input,
@@ -306,23 +308,23 @@ textarea {
   margin: 0;
   font-family: var(--font-mono);
   font-size: 14px;
-  color: var(--wine);
+  color: var(--coral);
 }
 
 .notice {
   padding: 14px 18px;
   border-radius: 22px;
   border: 2px solid var(--ink);
-  background: var(--blue);
+  background: var(--lime);
   font-family: var(--font-mono);
   font-size: 14px;
-  color: var(--on-blue);
+  color: var(--on-lime);
 }
 
 .muted {
   font-family: var(--font-mono);
   font-size: 14px;
-  color: var(--wine);
+  color: var(--gray);
 }
 
 .article-body p {
@@ -364,8 +366,8 @@ textarea {
 }
 
 .tab[aria-current="page"] {
-  background: var(--wine);
-  color: var(--cream);
+  background: var(--coral);
+  color: var(--ink);
 }
 
 /* ---------- всплывающая карточка ---------- */
@@ -441,10 +443,11 @@ textarea {
 
 /* Тёмная тема VK. */
 body.vk-dark {
-  --cream: #1a1113;
-  --white: #221618;
-  --ink: #f4e6e2;
-  --wine: #e8b3ae;
+  --cream: #191613;
+  --white: #231f1a;
+  --ink: #f6efdd;
+  --gray: #c9c2b4;
+  --coral: #ff9a9a;
   color: var(--ink);
 }
 
@@ -482,10 +485,10 @@ body.vk-dark {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--wine);
+  background: var(--coral);
   font-family: var(--font-display);
   font-size: 19px;
-  color: var(--cream);
+  color: var(--ink);
 }
 
 /* Кнопка «Показать ещё», пока едут данные. */
@@ -529,7 +532,7 @@ body.vk-dark {
   border-radius: 18px;
   border: 2px solid var(--ink);
   object-fit: cover;
-  background: var(--blue);
+  background: var(--lime);
 }
 
 .photo__input {

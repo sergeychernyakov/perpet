@@ -1,0 +1,28 @@
+<%# Карточка промо на главной и шага на «Знакомстве с нами»: в макете это один
+    и тот же блок — рисунок выложен в долях от ширины карточки, текст поверх. %>
+<article class="<%= css %>">
+  <%= image_tag promo.icon, alt: "", class: "promo__art",
+                style: "left: #{promo.art_left}; top: #{promo.art_top}; " \
+                       "width: #{promo.art_width}; aspect-ratio: #{promo.art_ratio}; " \
+                       "transform: #{promo.art_transform};" %>
+
+  <div class="promo__body"
+       style="left: <%= promo.text_left %>; width: <%= promo.text_width %>; text-align: <%= promo.align %>;">
+    <h3 class="promo__title"><%= promo.title %></h3>
+    <p class="promo__text"><%= promo.text %></p>
+
+    <div class="promo__actions" style="justify-content: <%= local_assigns[:justify] || "flex-start" %>;">
+      <% if promo.route %>
+        <%= link_to send(promo.route), class: "promo__arrow", title: promo.cta do %>
+          <%= image_tag "shape-11.svg", alt: "" %>
+        <% end %>
+        <%= link_to promo.cta, send(promo.route), class: "promo__cta" %>
+      <% else %>
+        <%= modal_button "", css: "promo__arrow", title: promo.cta do %>
+          <%= image_tag "shape-11.svg", alt: "" %>
+        <% end %>
+        <%= modal_button promo.cta, css: "promo__cta" %>
+      <% end %>
+    </div>
+  </div>
+</article>

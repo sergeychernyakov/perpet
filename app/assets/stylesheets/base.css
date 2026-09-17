@@ -15,7 +15,8 @@ body {
 }
 
 body {
-  font-family: var(--font-body);
+  /* В макете основной текст набран Comic Relief, Arsenal SC — запасной. */
+  font-family: var(--font-hand), var(--font-body);
   color: var(--ink);
   font-size: var(--text);
   line-height: 1.3;
@@ -26,7 +27,7 @@ h2,
 h3 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 800;
   line-height: 1.1;
 }
 
@@ -36,7 +37,7 @@ p {
 }
 
 a {
-  color: var(--wine);
+  color: var(--gray);
   text-decoration: none;
   transition: color 0.2s, transform 0.2s;
 }
@@ -64,12 +65,12 @@ img {
 }
 
 :focus-visible {
-  outline: 3px solid var(--wine);
+  outline: 3px solid var(--coral);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: var(--blue);
+  background: var(--lime);
 }
 
 .visually-hidden {

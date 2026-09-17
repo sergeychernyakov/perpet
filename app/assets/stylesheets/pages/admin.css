@@ -14,14 +14,14 @@
   gap: 16px;
   padding: var(--pad-banner);
   border-radius: var(--radius-card);
-  border: 2px solid var(--ink);
-  background: var(--wine);
-  color: var(--cream);
+  border: 2px solid var(--line);
+  background: var(--coral);
+  color: var(--ink);
 }
 
 .admin__head h1 {
   font-size: clamp(26px, 3vw, 48px);
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .admin__nav {
@@ -36,7 +36,7 @@
   height: 44px;
   padding: 0 20px;
   border-radius: var(--radius-pill);
-  border: 2px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
   font-family: var(--font-display);
   font-size: 17px;
@@ -45,14 +45,14 @@
 }
 
 .admin__nav a:hover {
-  background: var(--blue);
+  background: var(--lime);
   color: var(--ink);
   transform: translateY(-2px);
 }
 
 .admin__nav a[aria-current="page"] {
-  background: var(--wine);
-  color: var(--cream);
+  background: var(--coral);
+  color: var(--ink);
 }
 
 .admin__cards {
@@ -64,7 +64,7 @@
 .admin__card {
   padding: 22px 26px;
   border-radius: var(--radius-card-sm);
-  border: 2px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
 }
 
@@ -73,7 +73,7 @@
   font-size: 14px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--wine);
+  color: var(--coral);
 }
 
 .admin__card dd {
@@ -86,7 +86,7 @@
 .admin__panel {
   padding: var(--pad-card);
   border-radius: var(--radius-card);
-  border: 2px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
   overflow-x: auto;
 }
@@ -115,7 +115,7 @@
   font-size: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--wine);
+  color: var(--coral);
   white-space: nowrap;
 }
 
@@ -151,7 +151,7 @@
   height: 50px;
   padding: 0 16px;
   border-radius: 25px;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--line);
   background: var(--white);
   font-family: var(--font-body);
   font-size: 18px;

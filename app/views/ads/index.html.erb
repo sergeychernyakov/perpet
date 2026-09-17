@@ -1,8 +1,8 @@
-<% content_for :title, "Объявления — PERPET" %>
+<% content_for :title, "Обьявления — PERPET" %>
 
 <main class="main">
   <section class="banner ads__head">
-    <h1 class="banner__title" style="font-size: clamp(32px, 4vw, 64px);">Объявления</h1>
+    <h1 class="banner__title">Обьявления</h1>
     <p class="ads__found">Найдено: <%= @pager.total %> из <%= @total %></p>
   </section>
 
@@ -13,11 +13,11 @@
       <%= hidden_field_tag :kind, @kind %>
     </label>
 
-    <%= submit_tag "Найти", name: nil, class: "chip chip--search", data: { disable_with: false } %>
+    <%= submit_tag "Найти", name: nil, class: "chip chip--filter chip--search", data: { disable_with: false } %>
 
     <% ([ Ad::ALL_KINDS ] + Ad::KINDS).each do |kind| %>
       <%= link_to kind, ads_path(kind: kind, q: @query.presence),
-                  class: class_names("chip", "chip--current" => kind == @kind) %>
+                  class: class_names("chip", "chip--filter", "chip--current" => kind == @kind) %>
     <% end %>
   <% end %>
 

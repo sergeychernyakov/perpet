@@ -1,37 +1,56 @@
 <% content_for :title, "Регистрация — PERPET" %>
 
-<main class="main auth">
-  <div class="auth__card">
-    <h1 class="auth__title">Регистрация</h1>
-    <p class="auth__lead">Создайте профиль, чтобы размещать объявления о передержке.</p>
+<main class="main">
+  <section class="reg__head">
+    <div>
+      <h1 class="reg__title">Регистрация</h1>
+      <p class="reg__lead">
+        Создайте профиль, чтобы публиковать обьявления и откликаться на чужие.
+        Понадобится имя, город и контакт для связи.
+      </p>
+    </div>
 
-    <%= form_with model: resource, as: resource_name, url: registration_path(resource_name), class: "form" do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+    <div class="reg__art">
+      <%= image_tag "shape-04.svg", alt: "" %>
+    </div>
+  </section>
 
-      <label class="auth__field">
-        <span class="form__label">E-mail</span>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form__input", placeholder: "you@mail.ru", required: true %>
-      </label>
+  <section class="reg__card">
+    <div>
+      <h2 class="reg__subtitle">Новый профиль</h2>
+      <p class="reg__note">
+        После регистрации карточка питомца появится в вашем профиле,
+        а отклики придут на указанный контакт.
+      </p>
+    </div>
 
-      <label class="auth__field">
-        <span class="form__label">Пароль</span>
-        <%= f.password_field :password, autocomplete: "new-password", class: "form__input",
-                             placeholder: "минимум #{@minimum_password_length} символов",
-                             required: true, minlength: @minimum_password_length %>
-      </label>
+    <div class="reg__form">
+      <%= form_with model: resource, as: resource_name, url: registration_path(resource_name), class: "form" do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
 
-      <label class="auth__field">
-        <span class="form__label">Пароль ещё раз</span>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form__input", required: true %>
-      </label>
+        <label class="auth__field">
+          <span class="form__label">E-mail</span>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form__input", placeholder: "you@mail.ru", required: true %>
+        </label>
 
-      <div class="auth__actions">
-        <%= f.submit "Зарегистрироваться", class: "btn btn--wine btn--wide" %>
-      </div>
-    <% end %>
+        <label class="auth__field">
+          <span class="form__label">Пароль</span>
+          <%= f.password_field :password, autocomplete: "new-password", class: "form__input",
+                               placeholder: "минимум #{@minimum_password_length} символов",
+                               required: true, minlength: @minimum_password_length %>
+        </label>
 
-    <%= render "shared/vk_button", label: "Продолжить через ВКонтакте" %>
+        <label class="auth__field">
+          <span class="form__label">Пароль ещё раз</span>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form__input", required: true %>
+        </label>
 
-    <%= render "devise/shared/links" %>
-  </div>
+        <%= f.submit "Зарегистрироваться", class: "btn btn--coral btn--block" %>
+      <% end %>
+
+      <%= render "shared/vk_button", label: "Продолжить через ВКонтакте" %>
+
+      <%= render "devise/shared/links" %>
+    </div>
+  </section>
 </main>

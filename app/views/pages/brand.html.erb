@@ -1,0 +1,86 @@
+<% content_for :title, "Brand book — PERPET" %>
+<% content_for :description, "Логотип, суть, ценности и палитра PERPET." %>
+
+<main class="main">
+  <section class="brand__head">
+    <div class="brand__head-body">
+      <p class="brand__kicker">Логотип</p>
+      <h1 class="brand__title">PERPET</h1>
+      <p class="brand__lead"><%= Brand::SUMMARY %></p>
+      <%= modal_button "Присоединиться", css: "btn btn--wide brand__cta" %>
+    </div>
+
+    <div class="brand__logo">
+      <%= image_tag "main-logo-1.svg", alt: "Логотип PERPET", class: "brand__logo-hand" %>
+      <%= image_tag "main-logo-2.svg", alt: "", class: "brand__logo-ear" %>
+    </div>
+  </section>
+
+  <div class="brand__facets">
+    <% @facets.each do |facet| %>
+      <article class="brand__facet">
+        <h2><%= facet.title %></h2>
+        <p><%= facet.text %></p>
+      </article>
+    <% end %>
+  </div>
+
+  <section class="banner">
+    <h2 class="banner__title">Ценности</h2>
+  </section>
+
+  <div class="brand__values">
+    <% @values.each do |value| %>
+      <article class="brand__value">
+        <h3><%= value.title %></h3>
+        <p><%= value.text %></p>
+      </article>
+    <% end %>
+  </div>
+
+  <section class="banner">
+    <h2 class="banner__title">Стиль бренда</h2>
+  </section>
+
+  <section class="brand__palette">
+    <% Brand::SWATCHES.each do |hex| %>
+      <div class="brand__swatch">
+        <span class="brand__chip" style="background: <%= hex %>;"></span>
+        <span class="brand__hex"><%= hex %></span>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="brand__essence">
+    <h2>Суть бренда</h2>
+    <p><%= Brand::ESSENCE %></p>
+  </section>
+
+  <section class="brand__merch">
+    <div>
+      <h2>Наш мерч</h2>
+      <p><%= Brand::MERCH %></p>
+      <%= modal_button "Хочу мерч", subject: "Мерч PERPET", css: "btn btn--wide brand__cta" %>
+    </div>
+
+    <div class="brand__merch-art">
+      <%= image_tag "shape-18.svg", alt: "" %>
+    </div>
+  </section>
+
+  <div class="brand__promos">
+    <% @promos.each do |promo| %>
+      <article class="brand__promo">
+        <h3><%= promo.title %></h3>
+        <p><%= promo.text %></p>
+        <%= link_to promo.cta, send(promo.route), class: "btn btn--wide" %>
+      </article>
+    <% end %>
+  </div>
+
+  <nav class="brand__links">
+    <%= link_to "Регистрация", new_user_registration_path, class: "btn" %>
+    <%= link_to "Профиль", profile_path, class: "btn" %>
+    <%= link_to "Поддержка", support_path, class: "btn" %>
+  </nav>
+</main>

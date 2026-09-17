@@ -32,11 +32,12 @@
 .logo {
   position: relative;
   flex: none;
-  width: clamp(152px, 11vw, 165px);
+  width: auto;
   height: 53px;
+  aspect-ratio: 165 / 53;
   border-radius: var(--radius-pill);
   border: 2px solid var(--ink);
-  background: var(--wine);
+  background: var(--coral);
   overflow: hidden;
   transition: background 0.2s, transform 0.2s;
 }
@@ -57,13 +58,24 @@
   pointer-events: none;
 }
 
+.logo__ear {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 31.35px;
+  height: 56.75px;
+  transform-origin: 0 0;
+  transform: matrix(0.992, -0.128, 0.128, 0.992, 4.672, 9.407);
+  pointer-events: none;
+}
+
 .logo__eye {
   position: absolute;
   top: 37.8px;
   width: 5.2px;
   height: 5.8px;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px var(--wine);
+  box-shadow: inset 0 0 0 1px var(--white);
 }
 
 .logo__eye--left { left: 38.1px; }
@@ -74,24 +86,28 @@
   left: 68px;
   top: 17px;
   font-family: var(--font-display);
-  font-size: 17px;
-  letter-spacing: 0.01em;
+  font-size: 20px;
+  font-weight: 900;
   line-height: 1;
-  color: var(--cream);
+  text-align: center;
+  color: var(--white);
 }
 
 .nav {
   display: flex;
-  flex: 1;
+  flex: none;
+  width: 52.448%;
+  margin: 0 auto;
   align-items: center;
   justify-content: space-between;
   gap: clamp(10px, 1.6vw, 40px);
   height: 53px;
-  padding: 0 clamp(20px, 5vw, 120px);
+  padding: 0 clamp(16px, 6.25%, 120px);
   border-radius: var(--radius-pill);
   border: 2px solid var(--ink);
-  background: var(--wine);
+  background: var(--coral);
   font-family: var(--font-display);
+  font-weight: 800;
   font-size: clamp(15px, 1.35vw, 24px);
 }
 
@@ -103,7 +119,7 @@
 }
 
 .nav__link:hover {
-  color: var(--blue);
+  color: var(--lime);
   transform: translateY(-2px);
 }
 
@@ -114,17 +130,18 @@
   right: 0;
   bottom: -1px;
   height: 2px;
-  background: var(--blue);
+  background: var(--lime);
 }
 
 .icon-btn {
   position: relative;
   flex: none;
-  width: 62px;
+  width: auto;
   height: 53px;
+  aspect-ratio: 79 / 53;
   border-radius: var(--radius-pill);
   border: 2px solid var(--ink);
-  background: var(--wine);
+  background: var(--coral);
   overflow: hidden;
   transition: background 0.2s, transform 0.2s;
 }
@@ -136,7 +153,7 @@
 
 .icon-btn__shape {
   position: absolute;
-  left: -4px;
+  left: 0;
   top: 0;
   width: 56.15px;
   height: 97.74px;
@@ -151,11 +168,11 @@
   width: 5.4px;
   height: 6px;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px var(--wine);
+  box-shadow: inset 0 0 0 1px var(--white);
 }
 
-.icon-btn__eye--left { left: 29.6px; }
-.icon-btn__eye--right { left: 41.9px; }
+.icon-btn__eye--left { left: 33.6px; }
+.icon-btn__eye--right { left: 45.9px; }
 
 .burger {
   display: none;
@@ -168,7 +185,7 @@
   padding: 0 18px;
   border-radius: var(--radius-pill);
   border: 2px solid var(--ink);
-  background: var(--wine);
+  background: var(--coral);
 }
 
 .burger span {
@@ -188,8 +205,9 @@
   padding: 14px;
   border-radius: 28px;
   border: 2px solid var(--ink);
-  background: var(--wine);
+  background: var(--coral);
   font-family: var(--font-display);
+  font-weight: 900;
   font-size: 20px;
 }
 
@@ -202,13 +220,13 @@
   padding: 12px 16px;
   border-radius: 20px;
   text-align: left;
-  color: var(--cream);
+  color: var(--ink);
   transition: background 0.2s, transform 0.2s;
 }
 
 .menu__link:hover {
-  background: rgb(252 244 241 / 14%);
-  color: var(--cream);
+  background: rgb(0 0 0 / 12%);
+  color: var(--ink);
   transform: translateX(6px);
 }
 
@@ -233,51 +251,55 @@
 
 .footer__contacts {
   display: flex;
-  flex: 1;
+  flex: none;
+  width: 66.288%;
   flex-wrap: wrap;
   align-items: center;
-  gap: clamp(16px, 6vw, 120px);
+  justify-content: space-between;
+  gap: clamp(12px, 2vw, 40px);
   min-height: 93px;
   padding: 18px clamp(22px, 2.4vw, 43px);
   border-radius: var(--radius-card);
-  border: 2px solid var(--ink);
-  background: var(--wine);
+  border: 2px solid var(--line);
+  background: var(--coral);
   font-family: var(--font-ui);
   font-weight: 700;
   font-size: var(--text);
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .footer__contacts span,
 .footer__contacts a {
   white-space: nowrap;
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .footer__contacts a:hover {
-  color: var(--blue);
+  color: var(--cream);
   transform: translateY(-2px);
 }
 
 .footer__socials {
   display: flex;
-  gap: clamp(10px, 1.2vw, 18px);
+  margin-left: auto;
+  gap: 0.974%;
 }
 
 .footer__social {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: clamp(90px, 8vw, 150px);
-  min-height: 93px;
+  width: 8.117%;
+  min-width: 74px;
+  aspect-ratio: 150 / 93;
   border-radius: var(--radius-card);
-  border: 2px solid var(--ink);
-  background: var(--wine);
+  border: 2px solid var(--line);
+  background: var(--coral);
   transition: background 0.2s, transform 0.2s;
 }
 
 .footer__social:hover {
-  background: var(--ink);
+  background: var(--lime);
   transform: translateY(-4px) scale(1.04);
 }
 
@@ -285,14 +307,14 @@
   margin: 0 var(--gutter) var(--gap);
   padding: 16px clamp(22px, 2.4vw, 40px);
   border-radius: var(--radius-card-sm);
-  border: 2px solid var(--ink);
-  background: var(--blue);
+  border: 2px solid var(--line);
+  background: var(--lime);
   font-family: var(--font-mono);
   font-size: 17.3px;
   animation: pop-in 0.4s cubic-bezier(0.22, 0.7, 0.2, 1) both;
 }
 
 .flash--alert {
-  background: var(--wine);
+  background: var(--coral);
   color: var(--cream);
 }

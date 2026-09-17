@@ -1,7 +1,8 @@
 <nav class="menu" data-menu-target="panel" data-open="false">
   <%= link_to "Статьи", articles_path, class: "menu__link" %>
-  <%= link_to "Объявления", ads_path, class: "menu__link" %>
+  <%= link_to "Обьявления", ads_path, class: "menu__link" %>
   <%= link_to "О нас", about_path, class: "menu__link" %>
+  <%= link_to "Brand book", brand_path, class: "menu__link" %>
   <%= link_to "Поддержка", support_path, class: "menu__link" %>
 
   <% if user_signed_in? %>

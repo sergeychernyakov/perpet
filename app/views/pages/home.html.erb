@@ -1,32 +1,60 @@
 <% content_for :title, "PERPET — передержка питомцев" %>
 
 <main class="main">
-  <section class="hero">
-    <div class="hero__art">
-      <%= image_tag "shape-03.svg", alt: "", class: "hero__art-cat" %>
-      <%= image_tag "shape-04.svg", alt: "", class: "hero__art-paw" %>
-      <%= image_tag "shape-01.svg", alt: "", class: "hero__art-dog" %>
-    </div>
+  <%# Обложка выложена по макету: доли от ширины блока, поэтому композиция
+      не разъезжается ни на ноутбуке, ни на большом мониторе. На узком экране
+      у макета своя раскладка — она ниже. %>
+  <section class="hero hero--wide">
+    <%= image_tag "hero-21.svg", alt: "", class: "hero__cat" %>
+    <%= image_tag "hero-22.svg", alt: "", class: "hero__paw" %>
+    <%= image_tag "hero-19.svg", alt: "", class: "hero__hand" %>
+    <%= image_tag "hero-20.svg", alt: "", class: "hero__hand-back" %>
+    <%= image_tag "hero-23.svg", alt: "", class: "hero__whisker hero__whisker--r1" %>
+    <%= image_tag "hero-24.svg", alt: "", class: "hero__whisker hero__whisker--r2" %>
+    <%= image_tag "hero-25.svg", alt: "", class: "hero__whisker hero__whisker--r3" %>
+    <%= image_tag "hero-26.svg", alt: "", class: "hero__whisker hero__whisker--l1" %>
+    <%= image_tag "hero-27.svg", alt: "", class: "hero__whisker hero__whisker--l2" %>
+    <%= image_tag "hero-28.svg", alt: "", class: "hero__whisker hero__whisker--l3" %>
+    <span class="hero__eye hero__eye--top"></span>
+    <span class="hero__eye hero__eye--bottom"></span>
 
     <div class="hero__body">
       <h1 class="hero__title">PERPET</h1>
       <p class="hero__text">
         Команда PERPET уже долгое время работает над преобразованием системы передержки животных.
-        Мы — первые на рынке, кто сможет помочь вам в трудную минуту с наименьшими затратами.
-        Perpet — не просто компания, а целая система, которая объединяет людей вокруг общей проблемы
-        и помогает её решить без лишнего беспокойства.
+        Мы — первые на рынке, кто сможет помочь Вам в трудную минуту с наименьшими затратами.
+        Perpet — не просто компания, а целая система, которая обьединяет людей вокруг общей
+        проблемы, а также помогает ее решить без лишнего беспокойства.
       </p>
       <p class="hero__text hero__text--right">
         Если вы хотите узнать больше о передержке с нашей помощью, то присоединяйтесь.
       </p>
 
       <div class="hero__actions">
-        <%= link_to about_path, class: "hero__arrow", title: "Узнать больше" do %>
+        <%= modal_button "", css: "hero__arrow", title: "Присоединиться" do %>
           <%= image_tag "shape-11.svg", alt: "" %>
         <% end %>
-        <%= modal_button "присоединиться", css: "btn btn--wide" %>
+        <%= modal_button "Присоединиться", css: "hero__cta" %>
       </div>
     </div>
+  </section>
+
+  <section class="hero hero--narrow">
+    <h1 class="hero__title">PERPET</h1>
+    <p class="hero__text">
+      Команда PERPET уже долгое время работает над преобразованием системы передержки животных.
+      Мы — первые на рынке, кто сможет помочь Вам в трудную минуту с наименьшими затратами.
+      Perpet — не просто компания, а целая система, которая обьединяет людей вокруг общей
+      проблемы, а также помогает ее решить без лишнего беспокойства.
+    </p>
+    <div class="hero__strip">
+      <%= image_tag "hero-21.svg", alt: "", class: "hero__strip-cat" %>
+      <%= image_tag "hero-19.svg", alt: "", class: "hero__strip-hand" %>
+    </div>
+    <p class="hero__text">
+      Если вы хотите узнать больше о передержке с нашей помощью, то присоединяйтесь.
+    </p>
+    <%= modal_button "Присоединиться", css: "btn btn--block" %>
   </section>
 
   <section class="banner">
@@ -47,12 +75,21 @@
     </div>
 
     <div class="stat">
-      <h3 class="stat__title">Почему нас выбирают?</h3>
-      <div class="pie">
-        <span class="pie__minor">37.2%</span>
-        <span class="pie__major">62.8%</span>
+      <div class="stat__plate">
+        <h3 class="stat__title">Почему нас выбирают?</h3>
+        <%= image_tag "pie-pink.svg", alt: "", class: "stat__pie stat__pie--minor" %>
+        <%= image_tag "pie-cream.svg", alt: "", class: "stat__pie stat__pie--major" %>
+        <span class="stat__value stat__value--minor">37.2%</span>
+        <span class="stat__value stat__value--major">62.8%</span>
+        <span class="stat__leader stat__leader--minor"></span>
+        <span class="stat__leader stat__leader--major"></span>
+        <p class="stat__note stat__note--minor">
+          Столько людей не пользуются услугами передержки, но смогут начать с PERPET.
+        </p>
+        <p class="stat__note stat__note--major">
+          А столько уже пользуются, но всегда могут обратиться к PERPET в экстренный момент.
+        </p>
       </div>
-      <p>62.8% хозяев уже искали передержку хотя бы раз. Остальные 37.2% пока не пользовались — и начнут с PERPET.</p>
     </div>
   </div>
 
@@ -72,36 +109,33 @@
 
   <div class="promos">
     <% @promos.each do |promo| %>
-      <article class="promo">
-        <%= image_tag promo.icon, alt: "", style: "left: #{promo.offset_x}; width: #{promo.width};" %>
-        <h3 class="promo__title"><%= promo.title %></h3>
-        <p class="promo__text"><%= promo.text %></p>
-        <%= link_to promo.cta, send(promo.route), class: "btn" %>
-      </article>
+      <%= render "pages/promo_card", promo: promo, css: "promo" %>
     <% end %>
   </div>
 
   <section class="important">
+    <%= image_tag "vazhno-pink.svg", alt: "", class: "important__art important__art--pink" %>
+    <%= image_tag "vazhno-cream.svg", alt: "", class: "important__art important__art--cream" %>
+
     <div class="important__body">
       <h2 class="important__title">ВАЖНО</h2>
       <p>
         Перед использованием наших услуг и перед регистрацией на сайте и в приложении настоятельно просим
-        ознакомиться с нашей документацией. Это обезопасит вас и ваших питомцев и поможет нам в открытом
-        и доверительном сотрудничестве с любимыми пользователями.
+        ознакомиться с нашей документацией. Это обезопасит вас и ваших питомцев и поможет нам для открытого
+        и доверительного сотрудничества с нашими любимыми пользователями.
       </p>
       <p>
-        Перед началом пользования ознакомьтесь с информацией ниже: она содержит правила содержания
-        и передачи животных, которые помогут в спорной ситуации и обезопасят вас и других пользователей.
+        Ознакомьтесь с информацией ниже, которая содержит правила содержания и передачи животных,
+        которые помогут в спорной ситуации и обезопасят вас и других пользователей.
       </p>
 
       <div class="important__actions">
-        <a class="btn" href="/perpet-pravila.txt" download="perpet-pravila.txt">Скачать файл с информацией</a>
-        <%= link_to "Поддержка", support_path, class: "btn" %>
+        <a class="btn important__download" href="/perpet-pravila.txt" download="perpet-pravila.txt">Скачать PDF</a>
+        <%= link_to support_path, class: "important__arrow", title: "Поддержка" do %>
+          <%= image_tag "shape-11.svg", alt: "" %>
+        <% end %>
+        <%= link_to "Поддержка", support_path, class: "btn important__support" %>
       </div>
-    </div>
-
-    <div class="important__art">
-      <%= image_tag "shape-23.svg", alt: "" %>
     </div>
   </section>
 </main>

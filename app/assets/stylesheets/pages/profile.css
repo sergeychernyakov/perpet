@@ -7,8 +7,8 @@
   gap: clamp(24px, 3vw, 64px);
   padding: clamp(28px, 3vw, 60px) clamp(24px, 3vw, 70px);
   border-radius: clamp(28px, 2.6vw, 48px);
-  border: 4px solid var(--ink);
-  background: var(--wine);
+  border: 4px solid var(--line);
+  background: var(--coral);
   overflow: hidden;
 }
 
@@ -17,7 +17,7 @@
   width: min(100%, 324px);
   aspect-ratio: 324 / 498;
   border-radius: var(--radius-card);
-  border: 5px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
   overflow: hidden;
   transition: transform 0.3s;
@@ -42,8 +42,13 @@
   left: 50%;
   bottom: 24px;
   max-width: calc(100% - 32px);
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  /* Подпись лежит поверх фотографии — без подложки она на ней теряется. */
+  background: rgb(248 243 224 / 88%);
   transform: translateX(-50%);
   font-family: var(--font-display);
+  font-weight: 900;
   font-size: clamp(17px, 5vw, 24px);
   text-align: center;
   text-wrap: balance;
@@ -51,9 +56,10 @@
 
 .profile__title {
   margin-bottom: clamp(20px, 2.4vw, 40px);
-  font-size: clamp(30px, 3vw, 48px);
+  font-size: clamp(18px, 2.9vw, 64px);
+  font-weight: 900;
   line-height: 1;
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .profile__form {
@@ -67,7 +73,7 @@
   display: block;
   padding: clamp(18px, 2vw, 28px) clamp(22px, 2.2vw, 32px);
   border-radius: var(--radius-card);
-  border: 2px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
 }
 
@@ -77,7 +83,7 @@
   font-size: 15px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--wine);
+  color: var(--gray);
 }
 
 .profile__field input {
@@ -88,13 +94,13 @@
   border: 0;
   border-radius: 0;
   background: none;
-  font-family: var(--font-body);
-  font-size: clamp(18px, 1.4vw, 24px);
+  font-family: var(--font-hand), var(--font-body);
+  font-size: clamp(13px, 1.3vw, 20px);
   outline: none;
 }
 
 .profile__form .form__error {
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .profile__save {
@@ -108,16 +114,17 @@
   gap: 20px;
   padding: clamp(24px, 2.6vw, 40px) clamp(24px, 3vw, 79px);
   border-radius: clamp(28px, 2.6vw, 48px);
-  border: 5px solid var(--ink);
-  background: var(--wine);
+  border: 2px solid var(--line);
+  background: var(--coral);
 }
 
 .my-ads__title {
   flex: 1;
   min-width: 260px;
-  font-size: clamp(26px, 3vw, 48px);
+  font-size: clamp(18px, 2.9vw, 64px);
+  font-weight: 900;
   line-height: 1;
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .my-ads__all {
@@ -127,7 +134,7 @@
   min-width: 260px;
   height: 62px;
   border-radius: 48px;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
   font-family: var(--font-mono);
   font-size: clamp(18px, 1.8vw, 28px);
@@ -136,7 +143,7 @@
 }
 
 .my-ads__all:hover {
-  background: var(--blue);
+  background: var(--lime);
   color: var(--ink);
   transform: scale(1.03);
 }
@@ -146,14 +153,14 @@
   width: 120px;
   height: 62px;
   border-radius: var(--radius-pill);
-  border: 3px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
   overflow: hidden;
   transition: background 0.2s, transform 0.2s;
 }
 
 .my-ads__add:hover {
-  background: var(--blue);
+  background: var(--lime);
   transform: scale(1.03);
 }
 
@@ -178,7 +185,7 @@
   min-height: clamp(280px, 24vw, 530px);
   padding: var(--pad-card);
   border-radius: clamp(28px, 2.6vw, 48px);
-  border: 5px solid var(--ink);
+  border: 2px solid var(--line);
   background: var(--cream);
   transition: transform 0.25s, box-shadow 0.25s;
   animation: zoom-in 0.7s cubic-bezier(0.22, 0.7, 0.2, 1) both;
@@ -188,7 +195,7 @@
 
 .my-ad:hover {
   transform: translateY(-8px) scale(1.01);
-  box-shadow: 10px 10px 0 var(--blue);
+  box-shadow: 10px 10px 0 var(--lime);
 }
 
 .my-ad__title {
@@ -205,7 +212,7 @@
   margin: auto 0 0;
   font-family: var(--font-mono);
   font-size: 15px;
-  color: var(--wine);
+  color: var(--gray);
 }
 
 .my-ad--new {
@@ -215,8 +222,8 @@
   min-height: clamp(280px, 24vw, 530px);
   padding: clamp(24px, 3vw, 58px);
   border-radius: clamp(28px, 2.6vw, 48px);
-  border: 5px solid var(--ink);
-  background: var(--wine);
+  border: 2px solid var(--line);
+  background: var(--coral);
   overflow: hidden;
   text-align: left;
   transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
@@ -225,15 +232,16 @@
 .my-ad--new:hover {
   background: var(--ink);
   transform: translateY(-8px) scale(1.01);
-  box-shadow: 10px 10px 0 var(--blue);
+  box-shadow: 10px 10px 0 var(--lime);
 }
 
 .my-ad--new span {
   position: relative;
   font-family: var(--font-display);
-  font-size: clamp(26px, 3vw, 48px);
+  font-weight: 900;
+  font-size: clamp(18px, 2.9vw, 64px);
   line-height: 1.1;
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .my-ad--new img {
@@ -251,17 +259,17 @@
   gap: 12px;
   margin-top: var(--gap);
   padding-top: var(--gap);
-  border-top: 2px solid rgb(252 244 241 / 25%);
+  border-top: 2px solid rgb(0 0 0 / 20%);
   font-family: var(--font-mono);
   font-size: 15px;
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .profile__vk {
   font-family: var(--font-mono);
   font-size: 15px;
-  color: var(--cream);
-  opacity: 0.85;
+  color: var(--ink);
+  opacity: 0.8;
 }
 
 /* Загруженное фото заполняет рамку целиком, в отличие от картинки из макета. */

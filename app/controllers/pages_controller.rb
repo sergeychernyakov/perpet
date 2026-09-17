@@ -8,4 +8,10 @@ class PagesController < ApplicationController
     @benefits = Benefit.all
     @steps = Step.all
   end
+
+  def brand
+    @facets = Brand.facets
+    @values = Brand.values
+    @promos = Promo.all
+  end
 end

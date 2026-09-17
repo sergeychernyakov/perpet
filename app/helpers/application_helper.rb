@@ -9,8 +9,13 @@ module ApplicationHelper
   end
 
   # Кнопка, открывающая форму заявки: join — «присоединиться», respond — отклик на объявление.
-  def modal_button(label, kind: "join", subject: nil, css: "btn")
-    button_tag(label, type: "button", class: css,
-               data: { action: "modal#open", modal_kind_param: kind, modal_subject_param: subject })
+  # С блоком внутрь кнопки попадает разметка — так сделаны круглые кнопки со стрелкой.
+  def modal_button(label = nil, kind: "join", subject: nil, css: "btn", title: nil, &block)
+    options = { type: "button", class: css, title: title,
+                data: { action: "modal#open", modal_kind_param: kind, modal_subject_param: subject } }
+
+    return button_tag(options, &block) if block
+
+    button_tag(label, options)
   end
 end

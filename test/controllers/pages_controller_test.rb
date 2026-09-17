@@ -41,4 +41,21 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", "Знакомство с нами"
     assert_select ".step", 3
   end
+
+  test "бренд-бук показывает ценности и палитру" do
+    get brand_path
+
+    assert_response :success
+    assert_select "h1", "PERPET"
+    assert_select ".brand__facet", 3
+    assert_select ".brand__value", 3
+    assert_select ".brand__swatch", Brand::SWATCHES.size
+    assert_select ".brand__hex", text: "#FF8282"
+  end
+
+  test "бренд-бук есть в мобильном меню" do
+    get root_path
+
+    assert_select ".menu__link[href=?]", brand_path, text: "Brand book"
+  end
 end

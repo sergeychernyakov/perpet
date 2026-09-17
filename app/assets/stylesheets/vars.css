@@ -1,15 +1,18 @@
 /* Токены дизайна PERPET: цвета, шрифты, размеры и анимации из макета. */
 
 :root {
-  --cream: #fcf4f1;
-  --wine: #6e0001;
-  --blue: #c0d6ff;
+  /* Палитра макета: кремовый фон, коралловые акценты, салатовые подложки. */
+  --cream: #f8f3e0;
+  --coral: #ff8282;
+  --lime: #bce29b;
   --ink: #000;
   --gray: #434343;
+  --line: #434343;
   --white: #fff;
 
   --font-body: "Arsenal SC", Georgia, serif;
-  --font-display: Comfortaa, system-ui, sans-serif;
+  /* OvalCyr — шрифт макета, его нет в вебе; ближайший общедоступный — Nunito. */
+  --font-display: OvalCyr, Nunito, system-ui, sans-serif;
   --font-mono: "Anonymous Pro", ui-monospace, monospace;
   --font-hand: "Comic Relief", system-ui, sans-serif;
   --font-ui: Inter, system-ui, sans-serif;
@@ -49,6 +52,11 @@
 @keyframes drift-right {
   from { opacity: 0; transform: translateX(56px) rotate(5deg); }
   to { opacity: 1; transform: none; }
+}
+
+@keyframes appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes pop-in {
