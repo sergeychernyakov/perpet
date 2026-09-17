@@ -83,50 +83,47 @@
 }
 
 .reg__hand {
-  left: 1.5%;
-  bottom: -8%;
-  height: 46%;
-  width: auto;
+  left: 0.7%;
+  top: 33.4%;
+  width: 32.9%;
+  height: auto;
+  transform: scaleX(-1);
   animation: fly-in-left 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.15s both;
 }
 
 .reg__rabbit {
-  right: -2%;
-  bottom: -12%;
-  height: 112%;
-  width: auto;
+  left: 61%;
+  top: 1.5%;
+  width: 38.3%;
+  height: auto;
   animation: fly-in-right 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.1s both;
 }
 
 .reg__eye {
   position: absolute;
-  width: 4.6%;
+  width: 5%;
   aspect-ratio: 1;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 0.55cqw var(--white);
+  box-shadow: inset 0 0 0 0.62cqw var(--white);
   pointer-events: none;
   animation: appear 0.6s ease 0.7s both;
 }
 
-.reg__eye {
-  width: 3.4%;
-}
-
-.reg__eye--left { left: 69%; top: 56%; }
-.reg__eye--right { left: 81.2%; top: 56%; }
+.reg__eye--left { left: 67.5%; top: 49.8%; }
+.reg__eye--right { left: 80.4%; top: 49.8%; }
 
 .reg__body {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2.4cqw;
-  padding: 21.6% 0 0 7.3%;
+  gap: 2.2cqw;
+  padding: 6.6% 0 0 4.3%;
   max-width: 62%;
 }
 
 .reg__title {
-  font-size: 5.3cqw;
+  font-size: 7.8cqw;
   line-height: 1;
   color: var(--cream);
 }
@@ -134,14 +131,14 @@
 .reg__form {
   display: flex;
   flex-direction: column;
-  gap: 1.55cqw;
-  width: 23.3cqw;
-  margin-left: 14.3cqw;
+  gap: 1.7cqw;
+  width: 23.8cqw;
+  margin-left: 14.5cqw;
 }
 
 .reg__field {
   width: 100%;
-  height: max(34px, 3.8cqw);
+  height: max(34px, 3.7cqw);
   padding: 0 1.8cqw;
   border-radius: var(--radius-pill);
   border: 2px solid var(--line);
@@ -162,9 +159,10 @@
   align-self: flex-end;
   align-items: center;
   justify-content: center;
-  width: 9.7cqw;
-  min-width: 70px;
-  height: max(34px, 3.8cqw);
+  width: 9.8cqw;
+  min-width: 64px;
+  height: max(30px, 2.9cqw);
+  margin-top: 1.2cqw;
   border-radius: var(--radius-pill);
   border: 2px solid var(--line);
   background: var(--cream);
