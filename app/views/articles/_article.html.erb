@@ -1,8 +1,8 @@
 <%# В макете статья — блок во всю ширину, соседние зеркальны: у нечётных
-    заголовок слева и кнопка справа, у чётных наоборот, и фон через один.
-    У второго блока на странице в макете сидит кот. %>
+    заголовок слева и кнопка справа, у чётных наоборот, фон через один,
+    и через один же из-за блока выглядывает кот. %>
 <article class="article <%= "article--mirror" if article_index.odd? %>">
-  <% if article_index == 1 %>
+  <% if article_index.odd? %>
     <div class="article__cat" aria-hidden="true">
       <%= image_tag "hero-21.svg", alt: "", class: "article__cat-art" %>
       <span class="article__whisker article__whisker--l1"></span>
@@ -22,12 +22,11 @@
     <% end %>
   </div>
 
-  <div class="article__bottom">
-    <p class="article__text"><%= article.excerpt %></p>
-    <div class="article__tags">
-      <% article.tag_list.each do |tag| %>
-        <span class="tag tag--outline"><%= tag %></span>
-      <% end %>
-    </div>
+  <p class="article__text"><%= article.excerpt %></p>
+
+  <div class="article__tags">
+    <% article.tag_list.each do |tag| %>
+      <span class="tag tag--outline"><%= tag %></span>
+    <% end %>
   </div>
 </article>

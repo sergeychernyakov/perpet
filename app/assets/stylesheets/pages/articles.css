@@ -30,9 +30,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(18px, 2vw, 32px);
-  min-height: clamp(200px, 19vw, 280px);
+  gap: clamp(10px, 1.1vw, 18px);
+  min-height: clamp(190px, 17vw, 260px);
   padding: clamp(22px, 2.2vw, 34px) clamp(24px, 3vw, 52px);
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
@@ -48,16 +47,13 @@
 
 .article:hover { transform: translateY(-4px); }
 
-.article__top,
-.article__bottom {
+.article__top {
   position: relative;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: clamp(16px, 2vw, 40px);
 }
-
-.article__bottom { align-items: flex-end; }
 
 .article__title {
   max-width: 56%;
@@ -93,6 +89,7 @@
 }
 
 .article__text {
+  position: relative;
   max-width: 44%;
   font-family: var(--font-hand);
   font-size: clamp(11.7px, 1.17vw, 18px);
@@ -101,14 +98,19 @@
 }
 
 .article__tags {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: clamp(10px, 1vw, 18px);
+  margin-top: auto;
 }
 
 /* Зеркальный блок: кнопка слева, заголовок и текст прижаты вправо. */
-.article--mirror .article__top,
-.article--mirror .article__bottom { flex-direction: row-reverse; }
+.article--mirror .article__top { flex-direction: row-reverse; }
+
+.article--mirror .article__text { margin-left: auto; }
+
+.article--mirror .article__tags { justify-content: flex-start; }
 
 .article--mirror .article__title,
 .article--mirror .article__text { text-align: right; }
@@ -171,12 +173,12 @@
   .article__cat { display: none; }
 
   .article__top,
-  .article__bottom,
-  .article--mirror .article__top,
-  .article--mirror .article__bottom {
+  .article--mirror .article__top {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .article--mirror .article__text { margin-left: 0; }
 
   .article__title,
   .article__text,
