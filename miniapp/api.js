@@ -71,6 +71,7 @@ async function upload(path, method, form) {
 }
 
 export const api = {
+  content: () => request("/api/v1/content"),
   ads: (params) => request("/api/v1/ads?" + new URLSearchParams(params)),
   ad: (id) => request(`/api/v1/ads/${id}`),
   myAds: () => request("/api/v1/ads/mine"),

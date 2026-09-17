@@ -45,6 +45,189 @@ document.getElementById("sheet-close").addEventListener("click", closeSheet)
 sheet.addEventListener("click", (event) => { if (event.target === sheet) closeSheet() })
 document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeSheet() })
 
+// ---------- главная ----------
+
+// Оформление главной приходит из того же источника, что и на сайте,
+// чтобы тексты и картинки не расходились.
+let content = null
+
+async function loadContent() {
+  if (!content) content = await api.content()
+  return content
+}
+
+function heading(title, onClick) {
+  return el("section", { class: "headline" }, [
+    el("h2", { text: title }),
+    onClick && el("button", { class: "headline__go", type: "button", onClick, title: title }, [
+      el("img", { src: "assets/shape-12.svg", alt: "" })
+    ])
+  ])
+}
+
+function promoCard(promo) {
+  return el("article", { class: "promo" }, [
+    el("img", { class: "promo__art", src: promo.icon, alt: "" }),
+    el("h3", { class: "promo__title", text: promo.title }),
+    el("p", { class: "promo__text", text: promo.text }),
+    el("button", {
+      class: "btn btn--block", type: "button", onClick: () => go(promo.route)
+    }, promo.cta)
+  ])
+}
+
+async function homeScreen() {
+  render(...skeletons(3))
+
+  let data
+  try {
+    data = await loadContent()
+  } catch (failure) {
+    return render(banner("PERPET"), error(failure.messages || "Не удалось загрузить"))
+  }
+
+  const hero = el("section", { class: "hero" }, [
+    el("h1", { class: "hero__title", text: "PERPET" }),
+    el("p", { class: "hero__text", text: "Команда PERPET уже долгое время работает над преобразованием системы передержки животных. Мы — первые на рынке, кто сможет помочь Вам в трудную минуту с наименьшими затратами." }),
+    el("div", { class: "hero__art" }, [
+      el("img", { class: "hero__cat", src: "assets/hero-21.svg", alt: "" }),
+      el("img", { class: "hero__hand", src: "assets/hero-19.svg", alt: "" })
+    ]),
+    el("p", { class: "hero__text", text: "Если вы хотите узнать больше о передержке с нашей помощью, то присоединяйтесь." }),
+    el("button", { class: "btn btn--block", type: "button", onClick: () => go("ads") }, "Присоединиться")
+  ])
+
+  const advantages = el("div", { class: "advantages" }, data.advantages.map((item) =>
+    el("div", { class: "advantage" }, [
+      el("img", { src: item.icon, alt: "" }),
+      el("p", { text: item.text })
+    ])
+  ))
+
+  const pie = el("section", { class: "stat" }, [
+    el("h3", { class: "stat__title", text: "Почему нас выбирают?" }),
+    el("div", { class: "stat__plate" }, [
+      el("img", { class: "stat__pie stat__pie--minor", src: "assets/pie-pink.svg", alt: "" }),
+      el("img", { class: "stat__pie stat__pie--major", src: "assets/pie-cream.svg", alt: "" }),
+      el("span", { class: "stat__value stat__value--minor", text: "37.2%" }),
+      el("span", { class: "stat__value stat__value--major", text: "62.8%" })
+    ]),
+    el("p", { class: "stat__note", text: "Столько людей не пользуются услугами передержки, но смогут начать с PERPET." }),
+    el("p", { class: "stat__note", text: "А столько уже пользуются, но всегда могут обратиться к PERPET в экстренный момент." })
+  ])
+
+  const note = el("section", { class: "note" }, [
+    el("p", { text: "Оставьте питомцев в надежных руках, не откладывайте важное и доверьте нам помощь о мохнатых друзьях. Вы всегда можете обратиться за помощью или с отзывом или вопросом о нашей работе." })
+  ])
+
+  const important = el("section", { class: "important" }, [
+    el("img", { class: "important__art", src: "assets/vazhno-pink.svg", alt: "" }),
+    el("h2", { class: "important__title", text: "ВАЖНО" }),
+    el("p", { text: "Перед использованием наших услуг и перед регистрацией на сайте и в приложении настоятельно просим ознакомиться с нашей документацией. Это обезопасит вас и ваших питомцев и поможет нам для открытого и доверительного сотрудничества с нашими любимыми пользователями." }),
+    el("button", { class: "btn btn--block", type: "button", onClick: () => go("support") }, "Поддержка")
+  ])
+
+  const more = el("nav", { class: "more" }, [
+    el("button", { class: "btn", type: "button", onClick: () => go("about") }, "О нас"),
+    el("button", { class: "btn", type: "button", onClick: () => go("brand") }, "Brand book")
+  ])
+
+  render(hero,
+         heading("Нам доверяют, узнай почему"),
+         advantages, pie,
+         heading("О чем мы?", () => go("about")),
+         note,
+         el("div", { class: "promos" }, data.promos.map(promoCard)),
+         important, more)
+}
+
+// ---------- о нас ----------
+
+async function aboutScreen() {
+  render(...skeletons(3))
+
+  let data
+  try {
+    data = await loadContent()
+  } catch (failure) {
+    return render(banner("Знакомство с нами"), error(failure.messages || "Не удалось загрузить"))
+  }
+
+  const problem = el("section", { class: "note note--lime" }, [
+    el("h2", { class: "problem__title", text: "Проблема" }),
+    el("p", { text: "Сейчас людей, которые берут себе домой питомцев становится все больше. К сожалению, часто несмотря на призыв ответственно подходить к вопросу в особенности в плане финансов может не всегда выполняться. Это не должно стать проблемой ни для питомцев ни для их хозяев, так как каждый из нас может попасть в трудную ситуацию, когда питомца приходится оставлять на некоторое время." })
+  ])
+
+  const benefits = el("div", { class: "advantages" }, data.benefits.map((item) =>
+    el("div", { class: "advantage" }, [
+      el("img", { src: item.icon, alt: "" }),
+      el("p", { text: item.text })
+    ])
+  ))
+
+  const quote = el("section", { class: "quote" }, [
+    el("p", { text: "Питомцы — наше отражение, которое должно быть передано в хорошие руки." })
+  ])
+
+  render(banner("Знакомство с нами"),
+         problem,
+         heading("Наши преимущества"),
+         benefits,
+         heading("Передержка с Perpet"),
+         el("div", { class: "promos" }, data.steps.map(promoCard)),
+         quote,
+         el("nav", { class: "more" }, [
+           el("button", { class: "btn", type: "button", onClick: () => go("home") }, "На главную")
+         ]))
+}
+
+// ---------- бренд-бук ----------
+
+async function brandScreen() {
+  render(...skeletons(3))
+
+  let data
+  try {
+    data = await loadContent()
+  } catch (failure) {
+    return render(banner("Brand book"), error(failure.messages || "Не удалось загрузить"))
+  }
+
+  const brand = data.brand
+
+  const palette = el("section", { class: "palette" }, brand.swatches.map((hex) =>
+    el("div", { class: "palette__chip", style: `background: ${hex}` },
+      el("span", { class: `palette__hex${[ "#BCE29B", "#F8F3E0" ].includes(hex) ? " palette__hex--dark" : ""}`, text: hex }))
+  ))
+
+  const facets = el("section", { class: "facets" }, brand.facets.flatMap((facet) => [
+    el("h3", { class: "facets__title", text: facet.title }),
+    el("p", { class: "facets__text", text: facet.text })
+  ]))
+
+  const values = el("section", { class: "values" }, [
+    el("h2", { class: "values__title", text: "Ценности" }),
+    ...brand.values.map((value) => el("p", { class: "values__item" }, [
+      el("span", { class: "values__name", text: `${value.title}: ` }),
+      document.createTextNode(value.text)
+    ]))
+  ])
+
+  const merch = el("section", { class: "note" }, [
+    el("h2", { class: "problem__title", text: "Наш мерч" }),
+    el("p", { text: brand.merch })
+  ])
+
+  render(banner("Стиль бренда"),
+         palette,
+         heading("Суть бренда"),
+         facets, values,
+         merch,
+         el("nav", { class: "more" }, [
+           el("button", { class: "btn", type: "button", onClick: () => go("home") }, "На главную")
+         ]))
+}
+
 // ---------- объявления ----------
 
 async function adsScreen() {
@@ -264,8 +447,8 @@ async function loadArticles(list, { append = false } = {}) {
 
     const cards = articles.map((article) =>
       el("button", { class: "card", type: "button", onClick: () => go(`article/${article.id}`) }, [
-        ...(article.tags || (article.tag ? [ article.tag ] : []))
-          .map((tag) => el("span", { class: "tag", text: tag })),
+        el("div", { class: "tags" }, (article.tags || (article.tag ? [ article.tag ] : []))
+          .map((tag) => el("span", { class: "tag", text: tag }))),
         el("h3", { text: article.title }),
         article.excerpt && el("p", { text: article.excerpt }),
         article.read_time && el("p", { class: "card__meta", text: article.read_time })
@@ -540,6 +723,9 @@ function ticketSheet(topics) {
 // ---------- маршруты ----------
 
 const ROUTES = {
+  home: homeScreen,
+  about: aboutScreen,
+  brand: brandScreen,
   ads: adsScreen,
   articles: articlesScreen,
   profile: profileScreen,
@@ -569,7 +755,7 @@ function open() {
   if (name === "ad" && id) return adScreen(id)
 
   state.page = 1
-  ;(ROUTES[name] || adsScreen)()
+  ;(ROUTES[name] || homeScreen)()
 }
 
 tabbar.addEventListener("click", (event) => {

@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       resources :support_tickets, only: %i[create]
       resource :profile, only: %i[show update], controller: "profiles"
       resource :support, only: %i[show], controller: "support"
+      resource :content, only: %i[show], controller: "content"
     end
   end
 

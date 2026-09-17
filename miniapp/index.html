@@ -19,14 +19,21 @@
   <body>
     <div class="app">
       <header class="topbar">
-        <span class="logo">PERPET</span>
+        <span class="logo">
+          <img class="logo__shape" src="assets/tb-logo-hand.svg" alt="">
+          <img class="logo__ear" src="assets/tb-logo-ear.svg" alt="">
+          <span class="logo__eye logo__eye--left"></span>
+          <span class="logo__eye logo__eye--right"></span>
+          <span class="logo__name">PERPET</span>
+        </span>
         <span class="topbar__note" id="topbar-note">передержка питомцев</span>
       </header>
 
       <main class="screen" id="screen" aria-live="polite"></main>
 
       <nav class="tabbar" id="tabbar">
-        <button class="tab" type="button" data-route="ads">Объявления</button>
+        <button class="tab" type="button" data-route="home">Главная</button>
+        <button class="tab" type="button" data-route="ads">Обьявления</button>
         <button class="tab" type="button" data-route="articles">Статьи</button>
         <button class="tab" type="button" data-route="profile">Профиль</button>
         <button class="tab" type="button" data-route="support">Поддержка</button>

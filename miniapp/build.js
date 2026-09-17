@@ -23,6 +23,12 @@ const copied = fs.readdirSync(__dirname).filter((name) => {
 
 copied.forEach((name) => fs.copyFileSync(path.join(__dirname, name), path.join(out, name)))
 
+// Картинки лежат отдельной папкой — копируем её целиком.
+const assets = path.join(__dirname, "assets")
+if (fs.existsSync(assets)) {
+  fs.cpSync(assets, path.join(out, "assets"), { recursive: true })
+}
+
 // index.html — точка входа, без неё выкладывать нечего.
 if (!copied.includes("index.html")) {
   throw new Error("В build/ не попал index.html")
