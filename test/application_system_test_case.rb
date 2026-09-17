@@ -5,13 +5,18 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   include Devise::Test::IntegrationHelpers
 
-  # Заголовки набраны веб-шрифтами: пока они едут, блоки на странице ещё
-  # переезжают, и клик успевает промахнуться мимо кнопки. Ждём загрузки.
+  # Пока едут веб-шрифты и отыгрывают анимации появления, блоки на странице
+  # ещё переезжают, и клик успевает промахнуться мимо кнопки. Ждём и то и другое.
+  # Анимации по прокрутке ждать нельзя — они не заканчиваются никогда.
+  SETTLED = <<~JS.freeze
+    return document.fonts.status === 'loaded' &&
+      document.getAnimations().every(a =>
+        !(a.timeline instanceof DocumentTimeline) || a.playState !== 'running');
+  JS
+
   def visit(*)
     super
-    Timeout.timeout(5) do
-      sleep 0.05 until page.evaluate_script("document.fonts.status") == "loaded"
-    end
+    Timeout.timeout(5) { sleep 0.05 until page.evaluate_script(SETTLED) }
   rescue Timeout::Error, Selenium::WebDriver::Error::JavascriptError
     nil
   end
