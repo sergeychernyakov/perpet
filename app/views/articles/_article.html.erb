@@ -16,8 +16,8 @@
   <% end %>
 
   <div class="article__top">
-    <h3 class="article__title"><%= article.title %></h3>
-    <%= modal_button "", css: "article__arrow", title: "Читать «#{article.title}»" do %>
+    <h3 class="article__title"><%= link_to article.title, article %></h3>
+    <%= link_to article, class: "article__arrow", title: "Читать «#{article.title}»" do %>
       <%= image_tag "shape-11.svg", alt: "" %>
     <% end %>
   </div>

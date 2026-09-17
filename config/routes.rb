@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get "support", to: "support#show", as: :support
 
   resources :ads, only: %i[index create]
-  resources :articles, only: %i[index]
+  resources :articles, only: %i[index show]
   resources :support_tickets, only: %i[create]
   resources :leads, only: %i[create]
 

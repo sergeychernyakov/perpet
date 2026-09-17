@@ -1,0 +1,42 @@
+<% content_for :title, "#{@article.title} — PERPET" %>
+<% content_for :description, @article.excerpt %>
+
+<main class="main">
+  <section class="reading__head">
+    <h1 class="reading__title"><%= @article.title %></h1>
+  </section>
+
+  <article class="reading">
+    <div class="reading__tags">
+      <% @article.tag_list.each do |tag| %>
+        <span class="tag tag--outline"><%= tag %></span>
+      <% end %>
+      <% if @article.read_time.present? %>
+        <span class="tag tag--outline"><%= @article.read_time %></span>
+      <% end %>
+    </div>
+
+    <p class="reading__lead"><%= @article.excerpt %></p>
+
+    <% @article.body_paragraphs.each do |paragraph| %>
+      <p class="reading__text"><%= paragraph %></p>
+    <% end %>
+
+    <div class="reading__actions">
+      <%= link_to "Все статьи", articles_path, class: "btn" %>
+      <%= modal_button "Присоединиться", css: "btn btn--coral btn--wide" %>
+    </div>
+  </article>
+
+  <% if @more.any? %>
+    <section class="banner">
+      <h2 class="banner__title">Читать дальше</h2>
+    </section>
+
+    <div class="articles">
+      <% @more.each_with_index do |article, index| %>
+        <%= render "articles/article", article: article, article_index: index %>
+      <% end %>
+    </div>
+  <% end %>
+</main>

@@ -24,4 +24,10 @@ class Article < ApplicationRecord
   def paragraphs
     body.to_s.split(/\n{2,}/).map(&:strip).reject(&:blank?)
   end
+
+  # На странице статьи лид — это excerpt, поэтому первый абзац текста,
+  # если он его повторяет, показывать второй раз незачем.
+  def body_paragraphs
+    paragraphs.reject { |paragraph| paragraph == excerpt.to_s.strip }
+  end
 end

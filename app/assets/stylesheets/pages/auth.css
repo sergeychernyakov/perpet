@@ -59,76 +59,180 @@
   font-size: 13.5px;
 }
 
-/* Регистрация: в макете это салатовая обложка и карточка с формой. */
+/* Регистрация. В макете это один салатовый блок: заголовок и поля слева,
+   чёрный заяц справа и белая лапа снизу — обе фигуры выходят за нижний край. */
 
-.reg__head {
+.reg {
+  container-type: inline-size;
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: clamp(20px, 3vw, 48px);
-  align-items: center;
-  min-height: clamp(380px, 32vw, 620px);
-  padding: clamp(28px, 3.4vw, 60px);
+  width: 100%;
+  aspect-ratio: 1030 / 555;
+  min-height: 420px;
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
   background: var(--lime);
   overflow: hidden;
   animation: pop-in 0.8s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+  animation-timeline: auto;
+}
+
+.reg__hand,
+.reg__rabbit {
+  position: absolute;
+  pointer-events: none;
+}
+
+.reg__hand {
+  left: 1.5%;
+  bottom: -8%;
+  height: 46%;
+  width: auto;
+  animation: fly-in-left 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.15s both;
+}
+
+.reg__rabbit {
+  right: -2%;
+  bottom: -12%;
+  height: 112%;
+  width: auto;
+  animation: fly-in-right 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.1s both;
+}
+
+.reg__eye {
+  position: absolute;
+  width: 4.6%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.55cqw var(--white);
+  pointer-events: none;
+  animation: appear 0.6s ease 0.7s both;
+}
+
+.reg__eye {
+  width: 3.4%;
+}
+
+.reg__eye--left { left: 69%; top: 56%; }
+.reg__eye--right { left: 81.2%; top: 56%; }
+
+.reg__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.4cqw;
+  padding: 21.6% 0 0 7.3%;
+  max-width: 62%;
 }
 
 .reg__title {
-  font-size: clamp(43.2px, 6.3vw, 110.7px);
-  line-height: 0.96;
-  color: var(--ink);
+  font-size: 5.3cqw;
+  line-height: 1;
+  color: var(--cream);
 }
 
-.reg__lead {
-  margin-top: clamp(20px, 2.4vw, 36px);
-  max-width: 560px;
-  font-family: var(--font-body);
-  font-size: clamp(11.7px, 1.17vw, 18px);
-  line-height: 1.25;
-  color: var(--ink);
+.reg__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.55cqw;
+  width: 23.3cqw;
+  margin-left: 14.3cqw;
 }
 
-.reg__art {
-  position: relative;
-  min-height: clamp(200px, 18vw, 340px);
+.reg__field {
+  width: 100%;
+  height: max(34px, 3.8cqw);
+  padding: 0 1.8cqw;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--line);
+  background: var(--white);
+  font-family: var(--font-mono);
+  font-size: max(12px, 1.4cqw);
+  color: var(--gray);
+  text-align: center;
+  outline: none;
 }
 
-.reg__art img {
-  position: absolute;
-  right: 8%;
-  top: -8%;
-  width: 40%;
-  pointer-events: none;
-  animation: drift-right 1.1s cubic-bezier(0.22, 0.7, 0.2, 1) both;
-}
+.reg__field::placeholder { color: var(--gray); opacity: 0.75; }
 
-.reg__card {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: clamp(20px, 2.4vw, 48px);
-  padding: clamp(24px, 2.6vw, 50px);
-  border-radius: var(--radius-card);
+.reg__field:focus-visible { border-color: var(--coral); }
+
+.reg__submit {
+  display: flex;
+  align-self: flex-end;
+  align-items: center;
+  justify-content: center;
+  width: 9.7cqw;
+  min-width: 70px;
+  height: max(34px, 3.8cqw);
+  border-radius: var(--radius-pill);
   border: 2px solid var(--line);
   background: var(--cream);
+  transition: background 0.2s, transform 0.2s;
 }
 
-.reg__subtitle {
-  font-size: clamp(16.2px, 2.61vw, 57.6px);
-  font-weight: 900;
-  line-height: 1;
-  color: var(--ink);
+.reg__submit:hover {
+  background: var(--coral);
+  transform: scale(1.04);
 }
 
-.reg__note {
-  margin-top: 18px;
-  max-width: 460px;
-  font-family: var(--font-body);
-  font-size: clamp(11.7px, 1.17vw, 18px);
-  line-height: 1.25;
-  color: var(--gray);
+.reg__submit img {
+  width: max(14px, 1.8cqw);
+  aspect-ratio: 19.244 / 17;
+  pointer-events: none;
 }
 
-.reg__form .btn--block { margin-top: 12px; }
+.reg__body .errors {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* Вход через ВКонтакте и ссылки в макете не нарисованы — держим их
+   под блоком, чтобы не спорить с композицией. */
+.reg__aside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+/* На узком экране блок разворачивается в обычную колонку. */
+@media (max-width: 860px) {
+  .reg {
+    aspect-ratio: auto;
+    padding: 28px 22px 32px;
+  }
+
+  .reg__hand,
+  .reg__rabbit,
+  .reg__eye { display: none; }
+
+  .reg__body {
+    max-width: 100%;
+    padding: 0;
+    gap: 18px;
+  }
+
+  .reg__title { font-size: clamp(36px, 11vw, 64px); }
+
+  .reg__form {
+    width: 100%;
+    margin-left: 0;
+    gap: 12px;
+  }
+
+  .reg__field {
+    width: 100%;
+    height: 48px;
+    padding: 0 20px;
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .reg__submit {
+    align-self: stretch;
+    width: 100%;
+    height: 48px;
+  }
+}
