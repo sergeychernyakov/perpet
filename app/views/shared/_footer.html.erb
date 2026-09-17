@@ -5,10 +5,10 @@
     <a href="mailto:perpet@mail.ru">perpet@mail.ru</a>
   </div>
 
+  <%# «О нас» и «Поддержка» есть в верхнем меню, а бренд-бука там нет —
+      на широком экране бургера тоже нет, поэтому ссылка живёт в подвале. %>
   <nav class="footer__links">
     <%= link_to "Brand book", brand_path %>
-    <%= link_to "О нас", about_path %>
-    <%= link_to "Поддержка", support_path %>
   </nav>
 
   <div class="footer__socials">
