@@ -20,7 +20,7 @@
 }
 
 .admin__head h1 {
-  font-size: clamp(26px, 3vw, 48px);
+  font-size: clamp(23.4px, 2.7vw, 43.2px);
   color: var(--ink);
 }
 
@@ -39,7 +39,7 @@
   border: 2px solid var(--line);
   background: var(--cream);
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: 15.3px;
   color: var(--ink);
   transition: background 0.2s, transform 0.2s;
 }
@@ -70,7 +70,7 @@
 
 .admin__card dt {
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 12.6px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--coral);
@@ -79,7 +79,7 @@
 .admin__card dd {
   margin: 8px 0 0;
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: 32.4px;
   line-height: 1;
 }
 
@@ -93,13 +93,13 @@
 
 .admin__panel h2 {
   margin-bottom: 18px;
-  font-size: clamp(22px, 2vw, 32px);
+  font-size: clamp(19.8px, 1.8vw, 28.8px);
 }
 
 .admin__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 16px;
+  font-size: 14.4px;
 }
 
 .admin__table th,
@@ -112,7 +112,7 @@
 
 .admin__table th {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 11.7px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--coral);
@@ -132,7 +132,7 @@
 .admin__actions .btn {
   min-height: 36px;
   padding: 0 16px;
-  font-size: 15px;
+  font-size: 13.5px;
 }
 
 .admin__form {
@@ -154,12 +154,12 @@
   border: 1px solid var(--line);
   background: var(--white);
   font-family: var(--font-body);
-  font-size: 18px;
+  font-size: 16.2px;
 }
 
 .admin__empty {
   font-family: var(--font-mono);
-  font-size: 16px;
+  font-size: 14.4px;
   color: var(--gray);
 }
 

@@ -16,7 +16,7 @@
 }
 
 .support__title {
-  font-size: clamp(18px, 2.9vw, 64px);
+  font-size: clamp(16.2px, 2.61vw, 57.6px);
   font-weight: 900;
   line-height: 1;
   color: var(--ink);
@@ -26,7 +26,7 @@
   margin-top: 20px;
   max-width: 620px;
   font-family: var(--font-body);
-  font-size: clamp(13px, 1.3vw, 20px);
+  font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.3;
   color: var(--ink);
 }
@@ -49,7 +49,7 @@
   border: 2px solid var(--line);
   background: var(--cream);
   font-family: var(--font-mono);
-  font-size: 17.3px;
+  font-size: 15.57px;
   color: var(--ink);
   transition: background 0.2s;
 }
@@ -93,7 +93,7 @@
 .channel__value {
   margin-top: auto;
   font-family: var(--font-mono);
-  font-size: 15px;
+  font-size: 13.5px;
   color: var(--gray);
 }
 
@@ -111,7 +111,7 @@
 }
 
 .faq__title {
-  font-size: clamp(26px, 3vw, 48px);
+  font-size: clamp(23.4px, 2.7vw, 43.2px);
   line-height: 1;
 }
 
@@ -141,7 +141,7 @@
   padding: 16px clamp(20px, 2vw, 32px);
   text-align: left;
   font-family: var(--font-display);
-  font-size: clamp(17px, 1.3vw, 22px);
+  font-size: clamp(15.3px, 1.17vw, 19.8px);
   line-height: 1.25;
   list-style: none;
   cursor: pointer;
@@ -166,7 +166,7 @@
   border-radius: 50%;
   border: 1px solid var(--line);
   font-family: var(--font-mono);
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .faq__item[open] .faq__sign::before {
@@ -199,7 +199,7 @@
 }
 
 .ticket__title {
-  font-size: clamp(26px, 3vw, 48px);
+  font-size: clamp(23.4px, 2.7vw, 43.2px);
   line-height: 1;
 }
 
@@ -213,7 +213,7 @@
 .ticket__time {
   margin-top: 24px;
   font-family: var(--font-mono);
-  font-size: 15px;
+  font-size: 13.5px;
   color: var(--gray);
 }
 
@@ -230,6 +230,6 @@
 }
 
 .ticket__sent h3 {
-  font-size: clamp(24px, 2.2vw, 36px);
+  font-size: clamp(21.6px, 1.98vw, 32.4px);
   line-height: 1.15;
 }

@@ -112,7 +112,7 @@
 
 .hero--wide .hero__title {
   width: 51.767%;
-  font-size: 6.602cqw;
+  font-size: 5.9418cqw;
   line-height: 1;
   text-align: right;
   white-space: nowrap;
@@ -122,7 +122,7 @@
 .hero--wide .hero__text {
   width: 73.803%;
   font-family: var(--font-hand);
-  font-size: max(13px, 1.082cqw);
+  font-size: max(11.7px, 0.9738cqw);
   line-height: 1.3;
   color: var(--gray);
 }
@@ -172,7 +172,7 @@
   border: 0.068cqw solid var(--line);
   background: var(--cream);
   font-family: var(--font-hand);
-  font-size: max(12px, 1.06cqw);
+  font-size: max(10.8px, 0.954cqw);
   color: var(--gray);
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
@@ -194,14 +194,14 @@
 }
 
 .hero--narrow .hero__title {
-  font-size: clamp(56px, 15vw, 96px);
+  font-size: clamp(50.4px, 13.5vw, 86.4px);
   line-height: 0.96;
   color: var(--ink);
 }
 
 .hero--narrow .hero__text {
   font-family: var(--font-hand);
-  font-size: 17px;
+  font-size: 15.3px;
   line-height: 1.35;
   color: var(--gray);
 }
@@ -331,7 +331,7 @@
   position: absolute;
   left: 5.102%;
   top: 5.556%;
-  font-size: 4.898cqw;
+  font-size: 4.4082cqw;
   line-height: 1;
   white-space: nowrap;
   color: var(--cream);
@@ -367,7 +367,7 @@
   width: 10.714%;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 4.082cqw;
+  font-size: 3.6738cqw;
   line-height: 1;
   text-align: right;
   animation: pie-label 1s both;
@@ -392,7 +392,7 @@
   left: 65.8%;
   width: 29.2%;
   font-family: var(--font-hand);
-  font-size: clamp(13px, 1.3vw, 20px);
+  font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.25;
   color: var(--gray);
 }
@@ -417,7 +417,7 @@
 .note p {
   max-width: 100%;
   font-family: var(--font-hand);
-  font-size: clamp(13px, 1.3vw, 20px);
+  font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.3;
   color: var(--gray);
   text-align: right;
@@ -477,14 +477,14 @@
 }
 
 .promo__title {
-  font-size: 6.171cqw;
+  font-size: 5.5539cqw;
   line-height: 1.2;
   color: var(--ink);
 }
 
 .promo__text {
   font-family: var(--font-body);
-  font-size: clamp(13px, 1.3vw, 20px);
+  font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.3;
   color: var(--gray);
 }
@@ -532,7 +532,7 @@
   border: 0.171cqw solid var(--line);
   background: var(--cream);
   font-family: var(--font-mono);
-  font-size: max(12px, 2.966cqw);
+  font-size: max(10.8px, 2.6694cqw);
   color: var(--gray);
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
@@ -600,7 +600,7 @@
 }
 
 .important__title {
-  font-size: 6.667cqw;
+  font-size: 6.0003cqw;
   font-weight: 900;
   line-height: 1;
   color: var(--ink);
@@ -608,7 +608,7 @@
 
 .important__body p {
   font-family: var(--font-body);
-  font-size: clamp(13px, 1.3vw, 20px);
+  font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.3;
   color: var(--gray);
 }
@@ -628,7 +628,7 @@
   padding: 0;
   border-radius: 1.353cqw;
   border-width: 0.054cqw;
-  font-size: max(12px, 0.936cqw);
+  font-size: max(10.8px, 0.8424cqw);
 }
 
 .important__download { background: var(--lime); }
@@ -673,7 +673,7 @@
     gap: 18px;
   }
 
-  .important__title { font-size: clamp(48px, 14vw, 96px); }
+  .important__title { font-size: clamp(43.2px, 12.6vw, 86.4px); }
 
   .important__actions { gap: 12px; }
 
@@ -684,7 +684,7 @@
     padding: 0 22px;
     border-radius: 25px;
     border-width: 1px;
-    font-size: 17.3px;
+    font-size: 15.57px;
   }
 
   .important__arrow { display: none; }

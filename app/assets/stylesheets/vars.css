@@ -26,12 +26,12 @@
   --pad-card: clamp(24px, 2.6vw, 50px);
   --pad-banner: clamp(22px, 2.4vw, 40px) clamp(22px, 3.6vw, 50px);
 
-  --text: clamp(16px, 1.35vw, 24px);
-  --text-sm: clamp(16px, 1.2vw, 20px);
-  --title-xl: clamp(56px, 8vw, 123px);
-  --title-lg: clamp(32px, 4vw, 64px);
-  --title-md: clamp(26px, 3vw, 48px);
-  --title-sm: clamp(22px, 1.9vw, 30px);
+  --text: clamp(14.4px, 1.215vw, 21.6px);
+  --text-sm: clamp(14.4px, 1.08vw, 18px);
+  --title-xl: clamp(50.4px, 7.2vw, 110.7px);
+  --title-lg: clamp(28.8px, 3.6vw, 57.6px);
+  --title-md: clamp(23.4px, 2.7vw, 43.2px);
+  --title-sm: clamp(19.8px, 1.71vw, 27px);
 }
 
 @keyframes rise {

@@ -11,7 +11,7 @@
 }
 
 .about__head h1 {
-  font-size: clamp(18px, 2.9vw, 64px);
+  font-size: clamp(16.2px, 2.61vw, 57.6px);
   font-weight: 900;
   line-height: 1;
   color: var(--ink);
@@ -78,7 +78,7 @@
 .problem__title {
   width: 12.121%;
   min-width: 120px;
-  font-size: 2.597cqw;
+  font-size: 2.3373cqw;
   font-weight: 900;
   line-height: 1;
   text-align: center;
@@ -87,7 +87,7 @@
 
 .problem__text {
   font-family: var(--font-hand);
-  font-size: clamp(13px, 1.3vw, 20px);
+  font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.3;
   color: var(--gray);
 }
@@ -131,7 +131,7 @@
   border: 0.054cqw solid var(--line);
   background: var(--cream);
   font-family: var(--font-hand);
-  font-size: max(12px, 0.936cqw);
+  font-size: max(10.8px, 0.8424cqw);
   color: var(--gray);
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
@@ -188,7 +188,7 @@
   left: 28.453%;
   top: 6.988cqw;
   width: 63.228%;
-  font-size: 6.8cqw;
+  font-size: 6.12cqw;
   font-weight: 900;
   line-height: 1.2;
   text-align: right;
@@ -240,14 +240,14 @@
   position: relative;
   width: 70%;
   font-family: var(--font-hand);
-  font-size: clamp(13px, 1.3vw, 20px);
+  font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.25;
   color: var(--gray);
 }
 
 .banner__title--long {
   max-width: 1100px;
-  font-size: min(2.7vw, 64px);
+  font-size: min(2.43vw, 57.6px);
   line-height: 1.1;
   white-space: nowrap;
 }
@@ -305,7 +305,7 @@
   position: relative;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(30px, 2.6vw, 40px);
+  font-size: clamp(27px, 2.34vw, 36px);
   line-height: 1;
   color: var(--gray);
 }
@@ -314,7 +314,7 @@
   position: relative;
   max-width: 369px;
   font-family: var(--font-hand);
-  font-size: clamp(13px, 1.3vw, 20px);
+  font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.45;
   color: var(--gray);
 }
@@ -348,7 +348,7 @@
 }
 
 .step .promo__title {
-  font-size: 6.164cqw;
+  font-size: 5.5476cqw;
   font-weight: 900;
   line-height: 1.15;
 }
@@ -366,7 +366,7 @@
 .step .promo__cta {
   width: 55%;
   border-radius: 4.281cqw;
-  font-size: max(12px, 2.962cqw);
+  font-size: max(10.8px, 2.6658cqw);
 }
 
 .step .promo__arrow img { width: max(11px, 3.295cqw); }
@@ -438,7 +438,7 @@
   width: 60.065%;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 2.15cqw;
+  font-size: 1.935cqw;
   line-height: 1.3;
   text-align: right;
   color: var(--cream);
@@ -463,7 +463,7 @@
 
   .problem__title {
     width: auto;
-    font-size: clamp(28px, 8vw, 44px);
+    font-size: clamp(25.2px, 7.2vw, 39.6px);
     text-align: left;
   }
 
@@ -474,7 +474,7 @@
     height: 48px;
     border-radius: 25px;
     border-width: 1px;
-    font-size: 17.3px;
+    font-size: 15.57px;
   }
 
   .problem__arrow { display: none; }
@@ -496,7 +496,7 @@
   .benefit p { width: 100%; }
 
   .banner__title--long {
-    font-size: clamp(22px, 6vw, 40px);
+    font-size: clamp(19.8px, 5.4vw, 36px);
     white-space: normal;
   }
 
@@ -512,7 +512,7 @@
   .quote p {
     margin: 0;
     width: 100%;
-    font-size: clamp(20px, 5.4vw, 30px);
+    font-size: clamp(18px, 4.86vw, 27px);
     text-align: left;
   }
 }
