@@ -59,20 +59,39 @@
   to { opacity: 1; }
 }
 
+/* Рисунки из макета выложены матрицей в transform, и обычная анимация
+   с кадром `transform: none` стирает саму раскладку. Поэтому они ездят
+   отдельными свойствами translate и rotate: те складываются с transform. */
+
+@keyframes fly-in-right {
+  from { opacity: 0; translate: 9% 0; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes fly-in-left {
+  from { opacity: 0; translate: -9% 0; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes fly-in-up {
+  from { opacity: 0; translate: 0 14%; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+/* Дольки диаграммы разворачиваются вокруг центра — как прежняя развёртка. */
+@keyframes wedge-in {
+  from { opacity: 0; rotate: -26deg; }
+  to { opacity: 1; rotate: 0deg; }
+}
+
+@keyframes wedge-in-back {
+  from { opacity: 0; rotate: 18deg; }
+  to { opacity: 1; rotate: 0deg; }
+}
+
 @keyframes pop-in {
   from { opacity: 0; transform: translateY(18px) scale(0.97); }
   to { opacity: 1; transform: none; }
-}
-
-@property --pie {
-  syntax: "<percentage>";
-  initial-value: 0%;
-  inherits: false;
-}
-
-@keyframes pie-sweep {
-  from { --pie: 0%; }
-  to { --pie: 62.8%; }
 }
 
 @keyframes pie-label {
@@ -87,8 +106,6 @@
     animation: none !important;
     transition: none !important;
   }
-
-  .pie { --pie: 62.8%; }
 
   /* Тень шапки анимацией не рисуется — оставляем её постоянной. */
   .header { box-shadow: 0 8px 20px rgb(0 0 0 / 12%); }

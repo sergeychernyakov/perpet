@@ -55,6 +55,7 @@
   width: 20.68%;
   aspect-ratio: 382.168 / 665.219;
   transform: matrix(-0.881, 0.474, 0.474, 0.881, 0, 0);
+  animation: fly-in-right 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.1s both;
 }
 
 .hero__hand-back {
@@ -63,11 +64,13 @@
   width: 15.195%;
   aspect-ratio: 280.807 / 508.438;
   transform: matrix(-0.757, 0.653, 0.653, 0.757, 0, 0);
+  animation: fly-in-right 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.22s both;
 }
 
 .hero__whisker {
   top: 46.72%;
   aspect-ratio: 125.763 / 2.466;
+  animation: appear 0.5s ease 0.55s both;
 }
 
 .hero__whisker--r1,
@@ -90,6 +93,7 @@
   aspect-ratio: 1;
   border-radius: 50%;
   box-shadow: inset 0 0 0 0.284cqw var(--cream);
+  animation: appear 0.5s ease 0.7s both;
 }
 
 .hero__eye--top { left: 89.488%; top: 41.435%; }
@@ -167,7 +171,7 @@
   border-radius: 1.65cqw;
   border: 0.068cqw solid var(--line);
   background: var(--cream);
-  font-family: var(--font-mono);
+  font-family: var(--font-hand);
   font-size: max(12px, 1.06cqw);
   color: var(--gray);
   transition: background 0.2s, color 0.2s, transform 0.2s;
@@ -291,7 +295,7 @@
 }
 
 .advantage p {
-  font-family: var(--font-body);
+  font-family: var(--font-hand);
   font-size: var(--text);
   line-height: 1.25;
   color: var(--gray);
@@ -337,13 +341,25 @@
   width: 55.714%;
   aspect-ratio: 1;
   pointer-events: none;
-  animation: zoom-in 0.9s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+  animation-timing-function: cubic-bezier(0.22, 0.7, 0.2, 1);
+  animation-fill-mode: both;
   animation-timeline: view();
   animation-range: entry 8% cover 34%;
 }
 
-.stat__pie--minor { left: 7.653%; top: 18.385%; }
-.stat__pie--major { left: 6.735%; top: 21.429%; }
+.stat__pie--minor {
+  left: 7.653%;
+  top: 18.385%;
+  animation-name: wedge-in;
+  animation-duration: 1s;
+}
+
+.stat__pie--major {
+  left: 6.735%;
+  top: 21.429%;
+  animation-name: wedge-in-back;
+  animation-duration: 1s;
+}
 
 .stat__value {
   position: absolute;
@@ -374,7 +390,7 @@
   position: absolute;
   left: 65.8%;
   width: 29.2%;
-  font-family: var(--font-body);
+  font-family: var(--font-hand);
   font-size: clamp(13px, 1.3vw, 20px);
   line-height: 1.25;
   color: var(--gray);
@@ -399,7 +415,7 @@
 
 .note p {
   max-width: 100%;
-  font-family: var(--font-body);
+  font-family: var(--font-hand);
   font-size: clamp(13px, 1.3vw, 20px);
   line-height: 1.3;
   color: var(--gray);
@@ -506,7 +522,8 @@
 
 .promo__cta {
   display: inline-flex;
-  flex: 1;
+  flex: none;
+  width: 55%;
   align-items: center;
   justify-content: center;
   height: max(30px, 7.2cqw);
@@ -531,7 +548,7 @@
   container-type: inline-size;
   position: relative;
   width: 100%;
-  min-height: 45.888cqw;
+  min-height: 43.594cqw;
   border-radius: clamp(20px, 2.706vw, 50px);
   background: var(--lime);
   overflow: hidden;
@@ -551,7 +568,7 @@
   transform-origin: 0 0;
   transform: matrix(-0.933, 0.36, 0.36, 0.933, 0, 0);
   pointer-events: none;
-  animation: appear 1.2s ease both;
+  animation: fly-in-right 1.2s cubic-bezier(0.22, 0.7, 0.2, 1) both;
   animation-timeline: view();
   animation-range: entry 0% cover 30%;
 }
@@ -564,6 +581,7 @@
 }
 
 .important__art--cream {
+  animation-delay: 0.12s;
   left: 89.481%;
   top: 7.63cqw;
   width: 43.878%;

@@ -11,7 +11,8 @@
     <h3 class="promo__title"><%= promo.title %></h3>
     <p class="promo__text"><%= promo.text %></p>
 
-    <div class="promo__actions" style="justify-content: <%= local_assigns[:justify] || "flex-start" %>;">
+    <% justify = local_assigns[:justify] || { "center" => "center", "right" => "flex-end" }.fetch(promo.align, "flex-start") %>
+    <div class="promo__actions" style="justify-content: <%= justify %>;">
       <% if promo.route %>
         <%= link_to send(promo.route), class: "promo__arrow", title: promo.cta do %>
           <%= image_tag "shape-11.svg", alt: "" %>

@@ -5,8 +5,10 @@ import { Controller } from "@hotwired/stimulus"
 // отыгрывают сразу при загрузке, и при прокрутке ничего не происходит.
 // В таких браузерах ставим их на паузу и включаем, когда блок входит в экран.
 const REVEALED = [
-  ".banner", ".advantage", ".note", ".promo", ".pie", ".pie span",
-  ".benefit", ".fact", ".step", ".benefits__title img", ".quote img", ".important__art img",
+  ".banner", ".advantage", ".note", ".promo", ".stat__pie", ".stat__value",
+  ".benefit", ".fact", ".step", ".benefits__title img",
+  ".problem__cat", ".problem__cat-inner", ".quote__paw", ".quote__paw-cream", ".important__art",
+  ".brand__facet", ".brand__value",
   ".ad", ".article", ".my-ad", ".channel", ".faq", ".faq__item", ".ticket"
 ].join(", ")
 

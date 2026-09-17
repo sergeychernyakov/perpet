@@ -39,7 +39,10 @@
   color: var(--ink);
 }
 
-.brand__cta { margin-top: clamp(22px, 2.6vw, 40px); }
+.brand__cta {
+  margin-top: clamp(22px, 2.6vw, 40px);
+  font-family: var(--font-hand);
+}
 
 .brand__cta:hover {
   background: var(--lime);
