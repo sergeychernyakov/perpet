@@ -58,7 +58,7 @@
 .article__title {
   max-width: 56%;
   font-size: clamp(22px, 2.95vw, 58px);
-  font-weight: 800;
+  font-weight: 900;
   line-height: 1.25;
   color: var(--ink);
 }
