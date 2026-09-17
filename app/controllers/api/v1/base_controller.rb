@@ -38,13 +38,16 @@ module Api
         params[:page].to_i
       end
 
-      def render_page(paginator, key, &block)
+      # all — сколько записей всего, без фильтров: на сайте в шапке списка
+      # стоит «Найдено: N из M», и мини-приложение показывает то же самое.
+      def render_page(paginator, key, all: nil, &block)
         render json: {
           key => paginator.records.map(&block),
           meta: {
             page: paginator.page,
             pages: paginator.pages,
             total: paginator.total,
+            all: all || paginator.total,
             per_page: paginator.per_page
           }
         }

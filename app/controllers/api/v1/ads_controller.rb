@@ -5,7 +5,7 @@ module Api
 
       def index
         scope = Ad.published.of_kind(params[:kind]).search(params[:q]).recent
-        render_page(Paginator.new(scope, page: page), :ads, &:as_api)
+        render_page(Paginator.new(scope, page: page), :ads, all: Ad.published.count, &:as_api)
       end
 
       def show

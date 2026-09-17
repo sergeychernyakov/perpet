@@ -400,7 +400,7 @@ async function loadAds(list, { append = false, found = null } = {}) {
   try {
     const { ads, meta } = await api.ads({ kind: state.kind, q: state.query, page: state.page })
 
-    if (found) found.textContent = `Найдено: ${meta.total}`
+    if (found) found.textContent = `Найдено: ${meta.total} из ${meta.all ?? meta.total}`
 
     if (!ads.length) {
       tail.replaceWith(el("section", { class: "empty" }, [
@@ -468,25 +468,18 @@ async function share(event, ad) {
 
 // Отдельный экран объявления: на него ведёт ссылка из «Поделиться».
 async function adScreen(id) {
-  render(backButton("ads"), ...skeletons(2))
+  render(...skeletons(2))
 
   try {
     const { ad } = await api.ad(id)
 
     render(
-      backButton("ads"),
-      banner(ad.title, [ ad.kind, ad.meta ].filter(Boolean).join(" · ")),
-      el("section", { class: "card" }, [
-        ad.description && el("p", { text: ad.description }),
-        el("p", { class: "card__meta", text: ad.published_label }),
-        el("div", { class: "card__foot" }, [
-          el("span", { class: "price", text: ad.price || "цена по договорённости" }),
-          el("div", { class: "card__buttons" }, [
-            vk.bridge() && el("button", { class: "btn", type: "button", onClick: (event) => share(event, ad) }, "Поделиться"),
-            el("button", { class: "btn btn--coral", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
-          ])
-        ])
-      ])
+      el("section", { class: "banner ads__head" }, [
+        el("h1", { class: "banner__title", text: ad.title }),
+        el("p", { class: "ads__found", text: [ ad.kind, ad.meta ].filter(Boolean).join(" · ") })
+      ]),
+      el("div", { class: "grid grid--cards" }, [ adCard(ad) ]),
+      el("a", { class: "btn", href: "#ads", text: "Все обьявления" })
     )
   } catch (failure) {
     render(backButton("ads"), error(failure.messages))
