@@ -87,7 +87,6 @@
   top: 48.1%;
   width: 16.6%;
   height: auto;
-  transform: scaleX(-1);
   animation: fly-in-left 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.15s both;
 }
 
