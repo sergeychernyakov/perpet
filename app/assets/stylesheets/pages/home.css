@@ -424,9 +424,11 @@
   text-wrap: balance;
 }
 
+/* В макете три карточки стоят в ряд — держим ряд до самого узкого экрана,
+   карточки внутри всё равно свёрстаны долями и ужимаются вместе с ним. */
 .promos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: clamp(16px, 1.8vw, 49px);
 }
 
@@ -660,6 +662,8 @@
 /* На узком экране проценты от ширины оставляют текст в колонке в два слова —
    поэтому блок разворачивается в обычную колонку. */
 @media (max-width: 860px) {
+  .promos { grid-template-columns: 1fr; }
+
   .important {
     min-height: 0;
     padding: 28px 22px 32px;

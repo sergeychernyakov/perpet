@@ -323,7 +323,7 @@
 
 .flow {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: clamp(16px, 2vw, 48px);
   scroll-margin-top: 110px;
 }
@@ -446,6 +446,8 @@
 
 /* На узком экране колонки из процентов становятся нечитаемыми — разворачиваем. */
 @media (max-width: 860px) {
+  .flow { grid-template-columns: 1fr; }
+
   .problem {
     min-height: 0;
     padding: 28px 22px 32px;
