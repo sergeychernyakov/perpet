@@ -7,7 +7,7 @@ module Api
         render json: {
           advantages: Advantage.all.map { |item| { text: item.text, icon: asset(item.icon) } },
           promos: Promo.all.map { |promo| card(promo) },
-          benefits: Benefit.all.map { |item| { text: item.text, icon: asset(item.icon) } },
+          benefits: Benefit.all.map { |item| { text: item.text, icon: asset(item.icon), ratio: item.ratio } },
           steps: Step.all.map { |step| card(step) },
           brand: {
             summary: Brand::SUMMARY, essence: Brand::ESSENCE, merch: Brand::MERCH,
@@ -28,7 +28,8 @@ module Api
           art_left: item.art_left, art_top: item.art_top, art_width: item.art_width,
           art_ratio: item.art_ratio, art_transform: item.art_transform,
           text_left: item.text_left, text_width: item.text_width,
-          align: item.align, title_width: item.title_width }
+          align: item.align, title_width: item.title_width,
+          justify: item.try(:justify) }
       end
 
       # Мини-приложение живёт на хостинге VK, поэтому адреса картинок абсолютные.

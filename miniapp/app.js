@@ -68,6 +68,26 @@ async function loadContent() {
 // Карточка промо и шага: разметка и доли — те же, что в макете сайта.
 const JUSTIFY = { center: "center", right: "flex-end", left: "flex-start" }
 
+function scrollTo_(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+}
+
+function statPlate() {
+  return el("div", { class: "stat" }, [
+    el("div", { class: "stat__plate" }, [
+      el("h3", { class: "stat__title", text: "Почему нас выбирают?" }),
+      el("img", { class: "stat__pie stat__pie--minor", src: "assets/pie-pink.svg", alt: "" }),
+      el("img", { class: "stat__pie stat__pie--major", src: "assets/pie-cream.svg", alt: "" }),
+      el("span", { class: "stat__value stat__value--minor", text: "37.2%" }),
+      el("span", { class: "stat__value stat__value--major", text: "62.8%" }),
+      el("span", { class: "stat__leader stat__leader--minor" }),
+      el("span", { class: "stat__leader stat__leader--major" }),
+      el("p", { class: "stat__note stat__note--minor", text: "Столько людей не пользуются услугами передержки, но смогут начать с PERPET." }),
+      el("p", { class: "stat__note stat__note--major", text: "А столько уже пользуются, но всегда могут обратиться к PERPET в экстренный момент." })
+    ])
+  ])
+}
+
 function promoCard(promo, css = "promo") {
   const art = el("img", { class: "promo__art", src: promo.icon, alt: "" })
   art.style.cssText = `left: ${promo.art_left}; top: ${promo.art_top}; ` +
@@ -87,7 +107,8 @@ function promoCard(promo, css = "promo") {
     ])
   ])
   body.style.cssText = `left: ${promo.text_left}; width: ${promo.text_width}; text-align: ${promo.align};`
-  body.querySelector(".promo__actions").style.justifyContent = JUSTIFY[promo.align] || "flex-start"
+  body.querySelector(".promo__actions").style.justifyContent =
+    promo.justify || JUSTIFY[promo.align] || "flex-start"
 
   return el("article", { class: css }, [ art, body ])
 }
@@ -152,19 +173,7 @@ async function homeScreen() {
     ])
   ))
 
-  const pie = el("div", { class: "stat" }, [
-    el("div", { class: "stat__plate" }, [
-      el("h3", { class: "stat__title", text: "Почему нас выбирают?" }),
-      el("img", { class: "stat__pie stat__pie--minor", src: "assets/pie-pink.svg", alt: "" }),
-      el("img", { class: "stat__pie stat__pie--major", src: "assets/pie-cream.svg", alt: "" }),
-      el("span", { class: "stat__value stat__value--minor", text: "37.2%" }),
-      el("span", { class: "stat__value stat__value--major", text: "62.8%" }),
-      el("span", { class: "stat__leader stat__leader--minor" }),
-      el("span", { class: "stat__leader stat__leader--major" }),
-      el("p", { class: "stat__note stat__note--minor", text: "Столько людей не пользуются услугами передержки, но смогут начать с PERPET." }),
-      el("p", { class: "stat__note stat__note--major", text: "А столько уже пользуются, но всегда могут обратиться к PERPET в экстренный момент." })
-    ])
-  ])
+  const pie = statPlate()
 
   const note = el("section", { class: "note" }, [
     el("p", { text: "Оставьте питомцев в надежных руках, не откладывайте важное и доверьте нам помощь о мохнатых друзьях. Вы всегда можете обратиться за помощью или с отзывом или вопросом о нашей работе." })
@@ -188,7 +197,7 @@ async function homeScreen() {
   ])
 
   render(heroWide, heroNarrow,
-         heading("Нам доверяют, узнай почему", () => document.getElementById("why")?.scrollIntoView({ behavior: "smooth" })),
+         heading("Нам доверяют, узнай почему", () => scrollTo_("why")),
          el("div", { class: "why", id: "why" }, [ advantages, pie ]),
          heading("О чем мы?", () => go("about"), "shape-20.svg"),
          note,
@@ -208,35 +217,66 @@ async function aboutScreen() {
     return render(banner("Знакомство с нами"), error(failure.messages || "Не удалось загрузить"))
   }
 
-  const problem = el("section", { class: "note note--lime" }, [
-    el("h2", { class: "problem__title", text: "Проблема" }),
-    el("p", { text: "Сейчас людей, которые берут себе домой питомцев становится все больше. К сожалению, часто несмотря на призыв ответственно подходить к вопросу в особенности в плане финансов может не всегда выполняться. Это не должно стать проблемой ни для питомцев ни для их хозяев, так как каждый из нас может попасть в трудную ситуацию, когда питомца приходится оставлять на некоторое время." })
+  const join = () => go("ads")
+
+  const head = el("section", { class: "about__head" }, [ el("h1", { text: "Знакомство с нами" }) ])
+
+  const problem = el("section", { class: "problem" }, [
+    el("img", { class: "problem__cat", src: "assets/ab-cat-big.svg", alt: "" }),
+    el("img", { class: "problem__cat-inner", src: "assets/ab-cat-inner.svg", alt: "" }),
+    el("div", { class: "problem__body" }, [
+      el("h2", { class: "problem__title", text: "Проблема" }),
+      el("p", { class: "problem__text", text: "Сейчас людей, которые берут себе домой питомцев становится все больше. К сожалению, часто несмотря на призыв ответственно подходить к вопросу в особенности в плане финансов может не всегда выполняться. Это не должно стать проблемой ни для питомцев ни для их хозяев, так как каждый из нас может попасть в трудную ситуацию, когда питомца приходится оставлять на некоторое время (отьезд, командировка и прочее). А самое трудное — это организовать его комфортное прибывание в чужих руках, не боясь финансовых трудностей." }),
+      el("div", { class: "problem__actions" }, [
+        el("button", { class: "problem__arrow", type: "button", title: "Присоединиться", onClick: join }, [
+          el("img", { src: "assets/shape-11.svg", alt: "" })
+        ]),
+        el("button", { class: "problem__cta", type: "button", onClick: join }, "Присоединиться")
+      ])
+    ])
   ])
 
-  const benefits = el("div", { class: "advantages" }, data.benefits.map((item) =>
-    el("div", { class: "advantage" }, [
-      el("img", { src: item.icon, alt: "" }),
-      el("p", { text: item.text })
+  const benefits = el("div", { class: "benefits" }, [
+    el("div", { class: "benefits__title" }, [
+      el("img", { src: "assets/ab-paw-wide2.svg", alt: "" }),
+      el("h2", { text: "Наши преимущества" })
+    ]),
+    el("div", { class: "benefits__list" }, data.benefits.map((item) => {
+      const icon = el("img", { src: item.icon, alt: "" })
+      if (item.ratio) icon.style.aspectRatio = item.ratio
+
+      return el("div", { class: "benefit" }, [ icon, el("p", { text: item.text }) ])
+    }))
+  ])
+
+  const facts = el("div", { class: "facts" }, [
+    el("div", { class: "fact" }, [
+      el("img", { class: "fact__art fact__art--first", src: "assets/shape-42.svg", alt: "" }),
+      el("p", { class: "fact__number", text: "66%" }),
+      el("p", { class: "fact__text", text: "Российских семей имеют хотя бы одного пушистого члена семьи." })
+    ]),
+    el("div", { class: "fact" }, [
+      el("img", { class: "fact__art fact__art--second", src: "assets/shape-43.svg", alt: "" }),
+      el("p", { class: "fact__number", text: "93%" }),
+      el("p", { class: "fact__text", text: "Владельцев официально заявляют, что считают своего питомца полноценным членом семьи, а не просто животным." })
     ])
-  ))
+  ])
 
   const quote = el("section", { class: "quote" }, [
+    el("img", { class: "quote__paw", src: "assets/ab-paw-wide.svg", alt: "" }),
+    el("img", { class: "quote__paw-cream", src: "assets/ab-paw-cream.svg", alt: "" }),
+    el("span", { class: "quote__eye quote__eye--top" }),
+    el("span", { class: "quote__eye quote__eye--bottom" }),
     el("p", { text: "Питомцы — наше отражение, которое должно быть передано в хорошие руки." })
   ])
 
-  render(banner("Знакомство с нами"),
-         problem,
-         heading("Наши преимущества"),
-         benefits,
-         heading("Передержка с Perpet"),
-         el("div", { class: "promos" }, data.steps.map(promoCard)),
-         quote,
-         el("nav", { class: "more" }, [
-           el("button", { class: "btn", type: "button", onClick: () => go("home") }, "На главную")
-         ]))
+  render(head, problem, benefits,
+         heading("Хотите знать больше о ценностях компании?", () => scrollTo_("stats"), "shape-36.svg"),
+         el("div", { class: "why", id: "stats" }, [ statPlate(), facts ]),
+         heading("Передержка с Perpet", () => scrollTo_("flow"), "shape-37.svg"),
+         el("div", { class: "flow", id: "flow" }, data.steps.map((step) => promoCard(step, "promo step"))),
+         quote)
 }
-
-// ---------- бренд-бук ----------
 
 async function brandScreen() {
   render(...skeletons(3))
@@ -245,42 +285,78 @@ async function brandScreen() {
   try {
     data = await loadContent()
   } catch (failure) {
-    return render(banner("Brand book"), error(failure.messages || "Не удалось загрузить"))
+    return render(banner("Стиль бренда"), error(failure.messages || "Не удалось загрузить"))
   }
 
   const brand = data.brand
+  const LIGHT = [ "#BCE29B", "#F8F3E0" ]
 
-  const palette = el("section", { class: "palette" }, brand.swatches.map((hex) =>
-    el("div", { class: "palette__chip", style: `background: ${hex}` },
-      el("span", { class: `palette__hex${[ "#BCE29B", "#F8F3E0" ].includes(hex) ? " palette__hex--dark" : ""}`, text: hex }))
-  ))
-
-  const facets = el("section", { class: "facets" }, brand.facets.flatMap((facet) => [
-    el("h3", { class: "facets__title", text: facet.title }),
-    el("p", { class: "facets__text", text: facet.text })
-  ]))
-
-  const values = el("section", { class: "values" }, [
-    el("h2", { class: "values__title", text: "Ценности" }),
-    ...brand.values.map((value) => el("p", { class: "values__item" }, [
-      el("span", { class: "values__name", text: `${value.title}: ` }),
-      document.createTextNode(value.text)
-    ]))
+  const logoCard = el("section", { class: "brand__logo-card" }, [
+    el("div", { class: "brand__marks" }, [
+      el("span", { class: "brand__mark brand__mark--wide" }, [
+        el("img", { class: "logo__shape", src: "assets/tb-logo-hand.svg", alt: "" }),
+        el("img", { class: "logo__ear", src: "assets/tb-logo-ear.svg", alt: "" }),
+        el("span", { class: "logo__eye logo__eye--left" }),
+        el("span", { class: "logo__eye logo__eye--right" }),
+        el("span", { class: "logo__name", text: "PERPET" })
+      ]),
+      el("span", { class: "brand__mark brand__mark--square" }, [
+        el("img", { class: "icon-btn__shape", src: "assets/tb-profile-hand.svg", alt: "" }),
+        el("span", { class: "icon-btn__eye icon-btn__eye--left" }),
+        el("span", { class: "icon-btn__eye icon-btn__eye--right" })
+      ])
+    ]),
+    el("p", { class: "brand__mark-label", text: "Логотип" })
   ])
 
-  const merch = el("section", { class: "note" }, [
-    el("h2", { class: "problem__title", text: "Наш мерч" }),
-    el("p", { text: brand.merch })
+  const palette = el("section", { class: "brand__palette" }, brand.swatches.map((hex) => {
+    const swatch = el("div", { class: "brand__swatch" }, [
+      el("span", { class: `brand__hex${LIGHT.includes(hex) ? " brand__hex--dark" : ""}`, text: hex })
+    ])
+    swatch.style.background = hex
+
+    return swatch
+  }))
+
+  const art = el("section", { class: "brand__art" }, [
+    el("img", { class: "brand__art-rabbit", src: "assets/brand-rabbit.svg", alt: "" }),
+    el("span", { class: "brand__art-eye brand__art-eye--left" }),
+    el("span", { class: "brand__art-eye brand__art-eye--right" }),
+    el("img", { class: "brand__art-cat", src: "assets/hero-21.svg", alt: "" }),
+    ...[ "l1", "l2", "l3", "r1", "r2", "r3" ].map((side) =>
+      el("span", { class: `brand__whisker brand__whisker--${side}` })),
+    el("img", { class: "brand__art-hand", src: "assets/promo-hand.svg", alt: "" }),
+    el("img", { class: "brand__art-paw", src: "assets/promo-cat.svg", alt: "" })
+  ])
+
+  const pair = el("div", { class: "brand__pair" }, [
+    el("article", { class: "brand__facets" }, brand.facets.flatMap((facet) => [
+      el("h3", { class: "brand__facet-title", text: facet.title }),
+      el("p", { class: "brand__facet-text", text: facet.text })
+    ])),
+    el("article", { class: "brand__values" }, [
+      el("h2", { class: "brand__values-title", text: "Ценности" }),
+      ...brand.values.map((value) => el("p", { class: "brand__value" }, [
+        el("span", { class: "brand__value-name", text: `${value.title}: ` }),
+        document.createTextNode(value.text)
+      ]))
+    ])
+  ])
+
+  const merch = el("section", { class: "brand__merch" }, [
+    el("div", {}, [
+      el("p", { text: brand.merch }),
+      el("button", { class: "btn btn--wide brand__cta", type: "button", onClick: () => go("support") }, "Хочу мерч")
+    ]),
+    el("div", { class: "brand__merch-art" }, [
+      el("img", { src: "assets/shape-18.svg", alt: "" })
+    ])
   ])
 
   render(banner("Стиль бренда"),
-         palette,
-         heading("Суть бренда"),
-         facets, values,
-         merch,
-         el("nav", { class: "more" }, [
-           el("button", { class: "btn", type: "button", onClick: () => go("home") }, "На главную")
-         ]))
+         logoCard, palette, art,
+         heading("Суть бренда"), pair,
+         heading("Наш мерч"), merch)
 }
 
 // ---------- объявления ----------
