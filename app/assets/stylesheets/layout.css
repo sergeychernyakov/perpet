@@ -279,6 +279,22 @@
   transform: translateY(-2px);
 }
 
+/* Бренд-бук в макете живёт только в бургер-меню, а на широком экране
+   бургера нет — держим ссылку в подвале. */
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 26px);
+  padding: 0 clamp(14px, 1.6vw, 26px);
+  font-family: var(--font-mono);
+  font-size: clamp(12.6px, 1.08vw, 16.2px);
+}
+
+.footer__links a { color: var(--gray); }
+
+.footer__links a:hover { color: var(--ink); }
+
 .footer__socials {
   display: flex;
   margin-left: auto;
