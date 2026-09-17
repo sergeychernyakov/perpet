@@ -1,64 +1,80 @@
 <% content_for :title, "Brand book — PERPET" %>
-<% content_for :description, "Логотип, суть, ценности и палитра PERPET." %>
+<% content_for :description, "Логотип, палитра, суть и ценности PERPET." %>
 
 <main class="main">
-  <section class="brand__head">
-    <div class="brand__head-body">
-      <p class="brand__kicker">Логотип</p>
-      <h1 class="brand__title">PERPET</h1>
-      <p class="brand__lead"><%= Brand::SUMMARY %></p>
-      <%= modal_button "Присоединиться", css: "btn btn--wide brand__cta" %>
-    </div>
-
-    <div class="brand__logo">
-      <%= image_tag "main-logo-1.svg", alt: "Логотип PERPET", class: "brand__logo-hand" %>
-      <%= image_tag "main-logo-2.svg", alt: "", class: "brand__logo-ear" %>
-    </div>
+  <section class="banner">
+    <h1 class="banner__title">Стиль бренда</h1>
   </section>
 
-  <div class="brand__facets">
-    <% @facets.each do |facet| %>
-      <article class="brand__facet">
-        <h2><%= facet.title %></h2>
-        <p><%= facet.text %></p>
-      </article>
-    <% end %>
-  </div>
+  <section class="brand__logo-card">
+    <div class="brand__marks">
+      <span class="brand__mark brand__mark--wide">
+        <%= image_tag "tb-logo-hand.svg", alt: "", class: "logo__shape" %>
+        <%= image_tag "tb-logo-ear.svg", alt: "", class: "logo__ear" %>
+        <span class="logo__eye logo__eye--left"></span>
+        <span class="logo__eye logo__eye--right"></span>
+        <span class="logo__name">PERPET</span>
+      </span>
 
-  <section class="banner">
-    <h2 class="banner__title">Ценности</h2>
-  </section>
+      <span class="brand__mark brand__mark--square">
+        <%= image_tag "tb-profile-hand.svg", alt: "", class: "icon-btn__shape" %>
+        <span class="icon-btn__eye icon-btn__eye--left"></span>
+        <span class="icon-btn__eye icon-btn__eye--right"></span>
+      </span>
+    </div>
 
-  <div class="brand__values">
-    <% @values.each do |value| %>
-      <article class="brand__value">
-        <h3><%= value.title %></h3>
-        <p><%= value.text %></p>
-      </article>
-    <% end %>
-  </div>
-
-  <section class="banner">
-    <h2 class="banner__title">Стиль бренда</h2>
+    <p class="brand__mark-label">Логотип</p>
   </section>
 
   <section class="brand__palette">
     <% Brand::SWATCHES.each do |hex| %>
-      <div class="brand__swatch">
-        <span class="brand__chip" style="background: <%= hex %>;"></span>
-        <span class="brand__hex"><%= hex %></span>
+      <div class="brand__swatch" style="background: <%= hex %>;">
+        <span class="brand__hex <%= "brand__hex--dark" if Brand.light?(hex) %>"><%= hex %></span>
       </div>
     <% end %>
   </section>
 
-  <section class="brand__essence">
-    <h2>Суть бренда</h2>
-    <p><%= Brand::ESSENCE %></p>
+  <section class="brand__art">
+    <%= image_tag "hero-21.svg", alt: "", class: "brand__art-cat" %>
+    <span class="brand__whisker brand__whisker--l1"></span>
+    <span class="brand__whisker brand__whisker--l2"></span>
+    <span class="brand__whisker brand__whisker--r1"></span>
+    <span class="brand__whisker brand__whisker--r2"></span>
+    <%= image_tag "brand-rabbit.svg", alt: "", class: "brand__art-rabbit" %>
+    <span class="brand__art-eye brand__art-eye--left"></span>
+    <span class="brand__art-eye brand__art-eye--right"></span>
+    <%= image_tag "ab-paw-wide.svg", alt: "", class: "brand__art-paw brand__art-paw--one" %>
+    <%= image_tag "promo-hand.svg", alt: "", class: "brand__art-paw brand__art-paw--two" %>
+  </section>
+
+  <section class="banner">
+    <h2 class="banner__title">Суть бренда</h2>
+  </section>
+
+  <div class="brand__pair">
+    <article class="brand__facets">
+      <% @facets.each do |facet| %>
+        <h3 class="brand__facet-title"><%= facet.title %></h3>
+        <p class="brand__facet-text"><%= facet.text %></p>
+      <% end %>
+    </article>
+
+    <article class="brand__values">
+      <h2 class="brand__values-title">Ценности</h2>
+      <% @values.each do |value| %>
+        <p class="brand__value">
+          <span class="brand__value-name"><%= value.title %>:</span> <%= value.text %>
+        </p>
+      <% end %>
+    </article>
+  </div>
+
+  <section class="banner">
+    <h2 class="banner__title">Наш мерч</h2>
   </section>
 
   <section class="brand__merch">
     <div>
-      <h2>Наш мерч</h2>
       <p><%= Brand::MERCH %></p>
       <%= modal_button "Хочу мерч", subject: "Мерч PERPET", css: "btn btn--wide brand__cta" %>
     </div>
@@ -67,20 +83,4 @@
       <%= image_tag "shape-18.svg", alt: "" %>
     </div>
   </section>
-
-  <div class="brand__promos">
-    <% @promos.each do |promo| %>
-      <article class="brand__promo">
-        <h3><%= promo.title %></h3>
-        <p><%= promo.text %></p>
-        <%= link_to promo.cta, send(promo.route), class: "btn btn--wide" %>
-      </article>
-    <% end %>
-  </div>
-
-  <nav class="brand__links">
-    <%= link_to "Регистрация", new_user_registration_path, class: "btn" %>
-    <%= link_to "Профиль", profile_path, class: "btn" %>
-    <%= link_to "Поддержка", support_path, class: "btn" %>
-  </nav>
 </main>

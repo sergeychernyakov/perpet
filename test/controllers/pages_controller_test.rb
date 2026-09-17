@@ -46,11 +46,12 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get brand_path
 
     assert_response :success
-    assert_select "h1", "PERPET"
-    assert_select ".brand__facet", 3
+    assert_select "h1", "Стиль бренда"
+    assert_select ".brand__facet-title", 3
     assert_select ".brand__value", 3
     assert_select ".brand__swatch", Brand::SWATCHES.size
     assert_select ".brand__hex", text: "#FF8282"
+    assert_select ".brand__mark", 2
   end
 
   test "бренд-бук есть в мобильном меню" do
