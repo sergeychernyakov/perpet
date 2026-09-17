@@ -362,42 +362,53 @@ async function brandScreen() {
 // ---------- объявления ----------
 
 async function adsScreen() {
-  const filters = el("div", { class: "filters" }, KINDS.map((kind) =>
-    el("button", {
-      class: "chip",
-      type: "button",
-      "aria-pressed": String(kind === state.kind),
-      onClick: () => { state.kind = kind; state.page = 1; adsScreen() }
-    }, kind)
-  ))
-
-  const input = el("input", { type: "search", placeholder: "кошка, Москва, июнь…", "aria-label": "Поиск" })
+  const input = el("input", {
+    class: "form__input search__input", type: "search",
+    placeholder: "кошка, Москва, июнь…", "aria-label": "Поиск"
+  })
   input.value = state.query
 
-  const search = el("form", {
-    class: "search",
+  const filters = el("form", {
+    class: "filters",
     onSubmit: (event) => { event.preventDefault(); state.query = input.value.trim(); state.page = 1; adsScreen() }
-  }, [ input, el("button", { class: "btn btn--coral", type: "submit" }, "Найти") ])
+  }, [
+    el("label", { class: "search" }, [ el("span", { class: "search__label", text: "Поиск" }), input ]),
+    el("button", { class: "chip chip--filter chip--search", type: "submit" }, "Найти"),
+    ...KINDS.map((kind) => el("button", {
+      class: `chip chip--filter${kind === state.kind ? " chip--current" : ""}`,
+      type: "button",
+      onClick: () => { state.kind = kind; state.page = 1; adsScreen() }
+    }, kind))
+  ])
 
-  const list = el("div", { class: "form" })
+  const list = el("div", { class: "grid grid--cards", id: "ads-top" })
+  const found = el("p", { class: "ads__found" })
 
-  render(banner("Объявления", "Питомцы, которым нужна передержка"), filters, search, list)
-  loadAds(list)
+  render(el("section", { class: "banner ads__head" }, [
+    el("h1", { class: "banner__title", text: "Обьявления" }), found
+  ]), filters, list)
+
+  loadAds(list, { found })
 }
 
 // Страницы не подменяют друг друга, а дописываются в конец списка — так
 // привычнее на телефоне и не теряется то, что человек уже просмотрел.
-async function loadAds(list, { append = false } = {}) {
-  const tail = el("div", { class: "form" }, skeletons(append ? 1 : 3))
+async function loadAds(list, { append = false, found = null } = {}) {
+  const tail = el("div", { class: "grid grid--cards" }, skeletons(append ? 1 : 3))
   append ? list.append(tail) : list.replaceChildren(tail)
 
   try {
     const { ads, meta } = await api.ads({ kind: state.kind, q: state.query, page: state.page })
 
+    if (found) found.textContent = `Найдено: ${meta.total}`
+
     if (!ads.length) {
-      tail.replaceWith(el("section", { class: "card card--flat" }, [
-        el("h3", { text: "Ничего не нашлось" }),
-        el("p", { class: "muted", text: "Попробуйте другой вид питомца или очистите поиск." })
+      tail.replaceWith(el("section", { class: "empty" }, [
+        el("h3", { class: "empty__title", text: "Ничего не нашлось" }),
+        el("p", { text: "Попробуйте другой вид питомца или очистите поиск." }),
+        el("button", { class: "btn", type: "button", onClick: () => {
+          state.kind = KINDS[0]; state.query = ""; state.page = 1; adsScreen()
+        } }, "Сбросить фильтры")
       ]))
       return
     }
@@ -416,17 +427,22 @@ async function loadAds(list, { append = false } = {}) {
 }
 
 function adCard(ad) {
-  return el("article", { class: "card" }, [
-    ad.photo_url && el("img", { class: "card__photo", src: apiBase + ad.photo_url, alt: ad.title, loading: "lazy" }),
-    el("span", { class: "tag", text: ad.kind }),
-    el("h3", { text: ad.title }),
-    ad.meta && el("p", { class: "card__meta", text: ad.meta }),
-    ad.description && el("p", { text: ad.description }),
-    el("div", { class: "card__foot" }, [
-      el("span", { class: "price", text: ad.price || "цена по договорённости" }),
-      el("div", { class: "card__buttons" }, [
-        vk.bridge() && el("button", { class: "btn", type: "button", onClick: (event) => share(event, ad) }, "Поделиться"),
-        el("button", { class: "btn btn--coral", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
+  const cover = ad.photo_url
+    ? el("img", { class: "ad__photo", src: apiBase + ad.photo_url, alt: ad.title, loading: "lazy" })
+    : el("img", { src: `assets/${ad.icon}`, alt: "" })
+
+  return el("article", { class: "ad" }, [
+    el("div", { class: "ad__cover" }, [ cover, el("span", { class: "ad__kind", text: ad.kind }) ]),
+    el("div", { class: "ad__body" }, [
+      el("h3", { class: "ad__title", text: ad.title }),
+      ad.meta && el("p", { class: "ad__meta", text: ad.meta }),
+      ad.description && el("p", { class: "ad__text", text: ad.description }),
+      el("div", { class: "ad__footer" }, [
+        el("span", { class: "ad__price", text: ad.price || "цена по договорённости" }),
+        el("div", { class: "card__buttons" }, [
+          vk.bridge() && el("button", { class: "btn", type: "button", onClick: (event) => share(event, ad) }, "Поделиться"),
+          el("button", { class: "btn btn--coral", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
+        ])
       ])
     ])
   ])
@@ -562,29 +578,53 @@ function showMore(event, load) {
 
 // ---------- статьи ----------
 
-async function articlesScreen() {
-  const list = el("div", { class: "form" })
+// Кот выглядывает из-за каждого второго блока — как в макете.
+function articleCat() {
+  return el("div", { class: "article__cat", "aria-hidden": "true" }, [
+    el("img", { class: "article__cat-art", src: "assets/hero-21.svg", alt: "" }),
+    ...[ "l1", "l2", "l3", "r1", "r2", "r3" ].map((side) =>
+      el("span", { class: `article__whisker article__whisker--${side}` })),
+    el("span", { class: "article__meow", text: "мяу" })
+  ])
+}
 
-  render(banner("Статьи", "Как готовить питомца к передержке"), list)
+function articleCard(article, index) {
+  const href = `#article/${article.id}`
+  const tags = article.tags || (article.tag ? [ article.tag ] : [])
+
+  return el("article", { class: `article${index % 2 ? " article--mirror" : ""}` }, [
+    index % 2 ? articleCat() : null,
+    el("div", { class: "article__top" }, [
+      el("h3", { class: "article__title" }, [ el("a", { href, text: article.title }) ]),
+      el("a", { class: "article__arrow", href, title: `Читать «${article.title}»` }, [
+        el("img", { src: "assets/shape-11.svg", alt: "" })
+      ])
+    ]),
+    article.excerpt && el("p", { class: "article__text", text: article.excerpt }),
+    el("div", { class: "article__tags" }, tags.map((tag) =>
+      el("span", { class: "tag tag--outline", text: tag })))
+  ])
+}
+
+async function articlesScreen() {
+  const list = el("div", { class: "articles", id: "arts-top" })
+
+  render(el("section", { class: "articles__head" }, [
+    el("h1", { class: "articles__title", text: "Статьи" })
+  ]), list)
+
   loadArticles(list)
 }
 
 async function loadArticles(list, { append = false } = {}) {
-  const tail = el("div", { class: "form" }, skeletons(append ? 1 : 3))
+  const tail = el("div", { class: "articles" }, skeletons(append ? 1 : 3))
   append ? list.append(tail) : list.replaceChildren(tail)
 
   try {
     const { articles, meta } = await api.articles({ page: state.page })
 
-    const cards = articles.map((article) =>
-      el("button", { class: "card", type: "button", onClick: () => go(`article/${article.id}`) }, [
-        el("div", { class: "tags" }, (article.tags || (article.tag ? [ article.tag ] : []))
-          .map((tag) => el("span", { class: "tag", text: tag }))),
-        el("h3", { text: article.title }),
-        article.excerpt && el("p", { text: article.excerpt }),
-        article.read_time && el("p", { class: "card__meta", text: article.read_time })
-      ])
-    )
+    const offset = append ? list.querySelectorAll(".article").length : 0
+    const cards = articles.map((article, index) => articleCard(article, offset + index))
 
     const left = meta.total - meta.page * meta.per_page
     const more = left > 0 && el("button", {
@@ -600,123 +640,185 @@ async function loadArticles(list, { append = false } = {}) {
 }
 
 async function articleScreen(id) {
-  render(backButton("articles"), ...skeletons(2))
+  render(...skeletons(2))
 
+  let article
   try {
-    const { article } = await api.article(id)
-
-    render(
-      backButton("articles"),
-      banner(article.title, [ (article.tags || []).join(" · ") || article.tag, article.read_time ].filter(Boolean).join(" · ")),
-      el("section", { class: "card article-body" },
-        article.paragraphs.length
-          ? article.paragraphs.map((text) => el("p", { text }))
-          : [ el("p", { text: article.excerpt || "Текст статьи скоро появится." }) ])
-    )
+    ({ article } = await api.article(id))
   } catch (failure) {
-    render(backButton("articles"), error(failure.messages))
+    return render(backButton("articles"), error(failure.messages))
+  }
+
+  const tags = [ ...(article.tags || (article.tag ? [ article.tag ] : [])) ]
+  if (article.read_time) tags.push(article.read_time)
+
+  // Лид — это excerpt, поэтому повторяющий его первый абзац не показываем дважды.
+  const body = (article.paragraphs || []).filter((text) => text.trim() !== (article.excerpt || "").trim())
+
+  const reading = el("article", { class: "reading" }, [
+    el("div", { class: "reading__tags" }, tags.map((tag) => el("span", { class: "tag tag--outline", text: tag }))),
+    article.excerpt && el("p", { class: "reading__lead", text: article.excerpt }),
+    ...body.map((text) => el("p", { class: "reading__text", text })),
+    el("div", { class: "reading__actions" }, [
+      el("a", { class: "btn", href: "#articles" }, "Все статьи"),
+      el("button", { class: "btn btn--coral btn--wide", type: "button", onClick: () => go("ads") }, "Присоединиться")
+    ])
+  ])
+
+  const more = el("div", { class: "articles" })
+
+  render(el("section", { class: "reading__head" }, [
+    el("h1", { class: "reading__title", text: article.title })
+  ]), reading, more)
+
+  // «Читать дальше» — те же блоки, что и в списке.
+  try {
+    const { articles } = await api.articles({ page: 1 })
+    const rest = articles.filter((one) => String(one.id) !== String(id)).slice(0, 2)
+    if (rest.length) {
+      more.replaceWith(el("section", { class: "banner" }, [
+        el("h2", { class: "banner__title", text: "Читать дальше" })
+      ]), el("div", { class: "articles" }, rest.map(articleCard)))
+    }
+  } catch {
+    more.remove()
   }
 }
 
 // ---------- профиль ----------
 
 async function profileScreen() {
-  render(banner("Профиль", "Данные питомца и ваши объявления"), ...skeletons(2))
+  render(...skeletons(3))
 
+  let profile, ads
   try {
-    const [ { profile }, { ads } ] = await Promise.all([ api.profile(), api.myAds() ])
-
-    // Имя и город подставляем из VK, пока человек не вписал свои.
-    const fromVk = vk.suggestedProfile()
-    const prefilled = fromVk && vk.untouchedName(profile.name)
-
-    const form = el("form", { class: "form", onSubmit: save }, [
-      field("Имя", "name", { value: prefilled ? fromVk.name : profile.name, placeholder: "Анна Петрова" }),
-      field("Город", "city", { value: profile.city || (prefilled ? fromVk.city : ""), placeholder: "Москва" }),
-      field("Контакт для связи", "email", { value: profile.email, placeholder: "anna@mail.ru" }),
-      field("Питомец", "pet_name", { value: profile.pet_name, placeholder: "Барсик" }),
-      field("Возраст питомца", "pet_age", { value: profile.pet_age, placeholder: "3 года" }),
-      prefilled && el("p", { class: "muted", text: "Имя и город подставлены из вашей страницы ВКонтакте — поправьте, если нужно." }),
-      el("button", { class: "btn btn--coral", type: "submit" }, "Сохранить")
-    ])
-
-    render(
-      banner("Профиль", profile.pet_caption || "Расскажите о питомце"),
-      vkCard(),
-      el("section", { class: "card card--flat" }, form),
-      el("section", { class: "banner" }, [
-        el("h1", { text: "Мои объявления" }),
-        el("p", { text: ads.length ? `Всего: ${ads.length}` : "Пока ни одного" })
-      ]),
-      el("button", { class: "btn btn--block", type: "button", onClick: newAdSheet }, "Добавить карточку"),
-      ...ads.map(myAdCard)
-    )
-
-    async function save(event) {
-      event.preventDefault()
-      const button = form.querySelector("button[type=submit]")
-      button.disabled = true
-      form.querySelectorAll(".error, .notice").forEach((node) => node.remove())
-
-      try {
-        await api.updateProfile({
-          name: form.elements.name.value,
-          city: form.elements.city.value,
-          email: form.elements.email.value,
-          pet_name: form.elements.pet_name.value,
-          pet_age: form.elements.pet_age.value
-        })
-        button.before(notice("Профиль сохранён"))
-      } catch (failure) {
-        button.before(error(failure.messages))
-      } finally {
-        button.disabled = false
-      }
-    }
+    ;[ { profile }, { ads } ] = await Promise.all([ api.profile(), api.myAds() ])
   } catch (failure) {
-    render(
+    return render(
       banner("Профиль"),
       error(failure.messages),
       failure.status === 401 && el("p", { class: "muted", text: "Откройте приложение внутри VK — профиль привязан к вашей странице." })
     )
   }
+
+  // Имя и город подставляем из VK, пока человек не вписал свои.
+  const fromVk = vk.suggestedProfile()
+  const prefilled = fromVk && vk.untouchedName(profile.name)
+  const photo = photoField("Фото питомца", { current: profile.photo_url && apiBase + profile.photo_url })
+
+  const row = (label, name, value, placeholder, required = false) =>
+    el("label", { class: "profile__field" }, [
+      el("span", { text: label }),
+      el("input", { name, value: value || "", placeholder, required: required || null })
+    ])
+
+  const form = el("form", { class: "profile__form", onSubmit: save }, [
+    row("Имя", "name", prefilled ? fromVk.name : profile.name, "Анна Петрова", true),
+    row("Город", "city", profile.city || (prefilled ? fromVk.city : ""), "Москва"),
+    row("Контакт для связи", "email", profile.email, "anna@mail.ru"),
+    row("Питомец", "pet_name", profile.pet_name, "Барсик"),
+    row("Возраст питомца", "pet_age", profile.pet_age, "3 года"),
+    el("div", { class: "profile__field" }, photo.field),
+    prefilled && el("p", { class: "muted", text: "Имя и город подставлены из вашей страницы ВКонтакте — поправьте, если нужно." }),
+    el("button", { class: "btn profile__save", type: "submit" }, "Сохранить")
+  ])
+
+  const avatar = profile.photo_url
+    ? el("img", { class: "profile__photo-own", src: apiBase + profile.photo_url, alt: "Фото питомца" })
+    : el("img", { src: "assets/profile-photo.jpg", alt: "Фото питомца" })
+
+  const card = el("section", { class: "profile" }, [
+    el("div", { class: "profile__photo" }, [
+      avatar,
+      el("span", { class: "profile__caption", text: profile.pet_caption || "Расскажите о питомце" })
+    ]),
+    el("div", {}, [
+      el("h1", { class: "profile__title", text: "Ваш профиль" }),
+      form,
+      vkAccount()
+    ])
+  ])
+
+  const head = el("section", { class: "my-ads" }, [
+    el("h2", { class: "my-ads__title", text: "Мои обьявления" }),
+    el("a", { class: "my-ads__all", href: "#ads", text: "Смотреть все" }),
+    el("button", { class: "my-ads__add", type: "button", title: "Добавить карточку", onClick: newAdSheet }, [
+      el("img", { src: "assets/shape-54.svg", alt: "" })
+    ])
+  ])
+
+  const grid = el("div", { class: "grid grid--cards grid--my-ads" }, [
+    el("button", { class: "my-ad--new", type: "button", onClick: newAdSheet }, [
+      el("span", { text: "Добавить карточку" }),
+      el("img", { src: "assets/shape-55.svg", alt: "" })
+    ]),
+    ...ads.map(myAdCard)
+  ])
+
+  render(card, head, grid)
+
+  async function save(event) {
+    event.preventDefault()
+    const button = form.querySelector("button[type=submit]")
+    button.disabled = true
+    form.querySelectorAll(".error, .notice").forEach((node) => node.remove())
+
+    const fields = {
+      name: form.elements.name.value,
+      city: form.elements.city.value,
+      email: form.elements.email.value,
+      pet_name: form.elements.pet_name.value,
+      pet_age: form.elements.pet_age.value
+    }
+
+    try {
+      const file = photo.file()
+
+      if (file) {
+        const data = new FormData()
+        Object.entries(fields).forEach(([ key, value ]) => data.append(`profile[${key}]`, value))
+        data.append("profile[photo]", file)
+        await api.updateProfileWithPhoto(data)
+      } else {
+        await api.updateProfile(fields)
+      }
+
+      button.before(notice("Профиль сохранён"))
+    } catch (failure) {
+      button.before(error(failure.messages))
+    } finally {
+      button.disabled = false
+    }
+  }
 }
 
 // Карточка «кто вошёл»: аватарка и имя берутся у ВКонтакте, вводить их не нужно.
-function vkCard() {
+function vkAccount() {
   const user = vk.vkUser()
   if (!user) return null
 
-  const photo = vk.avatarUrl()
+  const url = vk.avatarUrl()
   const letters = el("span", { class: "who__photo who__photo--letters", text: vk.initials() })
-
-  // Картинку показываем сразу, а инициалы — только если она не загрузилась.
-  const avatar = photo
-    ? el("img", { class: "who__photo", src: photo, alt: "", onError: () => avatar.replaceWith(letters) })
+  const avatar = url
+    ? el("img", { class: "who__photo", src: url, alt: "", onError: () => avatar.replaceWith(letters) })
     : letters
 
-  return el("section", { class: "card card--who" }, [
+  return el("div", { class: "profile__account" }, [
     avatar,
-    el("div", {}, [
-      el("h3", { text: [ user.first_name, user.last_name ].filter(Boolean).join(" ") }),
-      el("p", { class: "card__meta", text: "Вход через ВКонтакте — пароль не нужен" })
-    ])
+    el("span", { text: [ user.first_name, user.last_name ].filter(Boolean).join(" ") }),
+    el("span", { class: "profile__vk", text: "ВКонтакте привязан" })
   ])
 }
 
 function myAdCard(ad) {
-  return el("article", { class: "card" }, [
+  return el("article", { class: "my-ad" }, [
     el("span", { class: "tag", text: ad.status_label }),
-    el("h3", { text: ad.title }),
-    ad.description && el("p", { text: ad.description }),
-    el("p", { class: "card__meta", text: ad.published_label }),
+    el("h3", { class: "my-ad__title", text: ad.title }),
+    ad.description && el("p", { class: "my-ad__text", text: ad.description }),
+    el("p", { class: "my-ad__meta", text: ad.published_label }),
     el("button", {
-      class: "btn",
-      type: "button",
-      onClick: async () => {
-        await api.deleteAd(ad.id)
-        profileScreen()
-      }
+      class: "btn", type: "button",
+      onClick: async () => { await api.deleteAd(ad.id); profileScreen() }
     }, "Удалить")
   ])
 }
@@ -769,87 +871,130 @@ function newAdSheet() {
 // ---------- поддержка ----------
 
 async function supportScreen() {
-  render(banner("Поддержка", "Отвечаем в среднем за 15 минут"), ...skeletons(2))
+  render(...skeletons(3))
 
+  let data
   try {
-    const { channels, faq, topics } = await api.support()
-
-    render(
-      banner("Поддержка", "Отвечаем в среднем за 15 минут"),
-      ...channels.map((channel) =>
-        el("article", { class: "card" }, [
-          el("h3", { text: channel.title }),
-          channel.description && el("p", { text: channel.description }),
-          el("p", { class: "card__meta", text: [ channel.value, channel.availability ].filter(Boolean).join(" · ") })
-        ])
-      ),
-      el("button", { class: "btn btn--coral btn--block", type: "button", onClick: () => ticketSheet(topics) }, "Написать нам"),
-      el("section", { class: "banner" }, [ el("h1", { text: "Частые вопросы" }) ]),
-      ...faq.map((item) => {
-        const answer = el("p", { text: item.answer, hidden: true })
-        return el("article", { class: "card card--flat" }, [
-          el("button", {
-            class: "btn btn--block",
-            type: "button",
-            onClick: () => { answer.hidden = !answer.hidden }
-          }, item.question),
-          answer
-        ])
-      })
-    )
+    data = await api.support()
   } catch (failure) {
-    render(banner("Поддержка"), error(failure.messages))
+    return render(banner("Поддержка"), error(failure.messages))
   }
+
+  const head = el("section", { class: "support__head" }, [
+    el("div", {}, [
+      el("h1", { class: "support__title", text: "Поддержка" }),
+      el("p", { class: "support__lead", text: "Отвечаем 24/7 по любым вопросам о передержке, объявлениях и документах. Обычно отвечаем за 15 минут." })
+    ]),
+    el("div", { class: "support__contacts" }, [
+      el("a", { class: "support__contact", href: "tel:+79635747920", text: "+7 963 574-79-20" }),
+      el("a", { class: "support__contact", href: "mailto:perpet@mail.ru", text: "perpet@mail.ru" })
+    ])
+  ])
+
+  const channels = el("div", { class: "grid grid--cards" }, data.channels.map((channel) =>
+    el("a", { class: "channel", href: channel.href, target: "_blank", rel: "noreferrer" }, [
+      el("span", { class: "tag", text: channel.availability }),
+      el("h3", { class: "channel__title", text: channel.title }),
+      el("p", { class: "channel__text", text: channel.description }),
+      el("span", { class: "channel__value", text: channel.value })
+    ])
+  ))
+
+  const faq = el("section", { class: "faq" }, [
+    el("h2", { class: "faq__title", text: "Частые вопросы" }),
+    ...data.faq.map((item, index) => el("details", { class: "faq__item", open: index === 0 }, [
+      el("summary", { class: "faq__question" }, [
+        el("span", { text: item.question }),
+        el("span", { class: "faq__sign" })
+      ]),
+      el("p", { class: "faq__answer", text: item.answer })
+    ]))
+  ])
+
+  render(head, channels, faq, ticketSection(data.topics))
 }
 
-function ticketSheet(topics) {
-  const select = el("select", { name: "topic" }, topics.map((topic) => el("option", { value: topic }, topic)))
-  const counter = el("p", { class: "muted", text: "Ещё 20 символов" })
+// Форма обращения — как на сайте, прямо на странице, а не карточкой поверх.
+function ticketSection(topics) {
+  const slot = el("div", { id: "ticket" })
+  slot.append(ticketForm(topics, slot))
 
-  const message = field("Сообщение", "message", { rows: 5, placeholder: "Что случилось?" })
-  message.querySelector("textarea").addEventListener("input", (event) => {
-    const length = event.target.value.trim().length
-    counter.textContent = length >= 20 ? `${length} символов` : `Ещё ${20 - length} символов`
+  return el("section", { class: "ticket" }, [
+    el("div", {}, [
+      el("h2", { class: "ticket__title", text: "Написать нам" }),
+      el("p", { class: "ticket__lead", text: "Опишите ситуацию — чем подробнее, тем быстрее разберёмся. Если вопрос по конкретному объявлению, укажите его название." }),
+      el("p", { class: "ticket__time", text: "Среднее время ответа — 15 минут, ночью до 2 часов." })
+    ]),
+    slot
+  ])
+}
+
+function ticketForm(topics, slot) {
+  const chips = topics.map((topic, index) => {
+    const radio = el("input", { class: "visually-hidden", type: "radio", name: "topic", value: topic })
+    radio.checked = index === 0
+
+    return el("label", { class: "chip" }, [ radio, document.createTextNode(topic) ])
+  })
+
+  const hint = el("span", { class: "form__hint", text: "Ещё 20 символов" })
+  const message = el("textarea", {
+    class: "form__textarea", name: "message", rows: 5,
+    placeholder: "Что случилось?", required: true, minlength: 20,
+    onInput: (event) => {
+      const length = event.target.value.trim().length
+      hint.textContent = length >= 20 ? `${length} символов` : `Ещё ${20 - length} символов`
+    }
   })
 
   const form = el("form", { class: "form", onSubmit: submit }, [
-    el("h2", { id: "sheet-title", text: "Написать нам" }),
-    el("label", { class: "field" }, [ el("span", { text: "Тема обращения" }), select ]),
-    field("Имя", "name", { placeholder: "Анна" }),
-    field("E-mail для ответа", "email", { type: "email", placeholder: "you@mail.ru" }),
-    message,
-    counter,
-    el("button", { class: "btn btn--coral btn--block", type: "submit" }, "Отправить обращение")
+    el("div", {}, [
+      el("span", { class: "form__label", text: "Тема обращения" }),
+      el("div", { class: "chips" }, chips)
+    ]),
+    el("label", {}, [
+      el("span", { class: "form__label", text: "Имя" }),
+      el("input", { class: "form__input", name: "name", placeholder: "Анна", required: true, minlength: 2 })
+    ]),
+    el("label", {}, [
+      el("span", { class: "form__label", text: "E-mail для ответа" }),
+      el("input", { class: "form__input", type: "email", name: "email", placeholder: "you@mail.ru", required: true })
+    ]),
+    el("label", {}, [
+      el("span", { class: "form__label", text: "Сообщение" }),
+      message,
+      hint
+    ]),
+    el("button", { class: "btn btn--coral", type: "submit" }, "Отправить обращение")
   ])
 
-  openSheet(form)
-  form.elements.name.focus()
+  return form
 
   async function submit(event) {
     event.preventDefault()
     const button = form.querySelector("button[type=submit]")
     button.disabled = true
-    form.querySelectorAll(".error").forEach((node) => node.remove())
+    form.querySelectorAll(".form__error").forEach((node) => node.remove())
 
     try {
       const ticket = await api.createTicket({
         name: form.elements.name.value,
         email: form.elements.email.value,
-        topic: select.value,
+        topic: form.querySelector("input[name=topic]:checked")?.value,
         message: form.elements.message.value
       })
 
-      openSheet([
-        el("h2", { id: "sheet-title", text: `Обращение ${ticket.reference} принято` }),
-        notice(`Ответ придёт на ${ticket.email}. Тема: ${ticket.topic}.`),
-        el("button", { class: "btn btn--coral btn--block", type: "button", onClick: closeSheet }, "Закрыть")
-      ])
+      slot.replaceChildren(
+        el("p", { class: "ticket__sent", text: `Обращение ${ticket.reference} принято` }),
+        el("p", { class: "ticket__time", text: `Ответ придёт на ${ticket.email}. Тема: ${ticket.topic}.` })
+      )
     } catch (failure) {
       button.disabled = false
-      button.before(error(failure.messages))
+      button.before(el("p", { class: "form__error", text: [].concat(failure.messages).join(". ") }))
     }
   }
 }
+
 
 // ---------- маршруты ----------
 
