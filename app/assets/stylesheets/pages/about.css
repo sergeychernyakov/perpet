@@ -304,7 +304,7 @@
 .fact__number {
   position: relative;
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   font-size: clamp(27px, 2.34vw, 36px);
   line-height: 1;
   color: var(--gray);
@@ -343,7 +343,7 @@
 
 .step .promo__body {
   top: 7.192cqw;
-  bottom: 11.301cqw;
+  bottom: 4.5cqw;
   gap: 2.5cqw;
 }
 

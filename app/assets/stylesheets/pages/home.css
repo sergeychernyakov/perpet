@@ -366,7 +366,7 @@
   position: absolute;
   width: 10.714%;
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 700;
   font-size: 3.6738cqw;
   line-height: 1;
   text-align: right;
@@ -375,7 +375,7 @@
   animation-range: entry 10% cover 40%;
 }
 
-.stat__value--minor { left: 35.14%; top: 35%; color: var(--white); }
+.stat__value--minor { left: 35.14%; top: 35%; color: var(--gray); }
 .stat__value--major { left: 24.25%; top: 71.74%; color: var(--gray); }
 
 .stat__leader {
@@ -470,7 +470,7 @@
 .promo__body {
   position: absolute;
   top: 6.371%;
-  bottom: 7.08%;
+  bottom: 4%;
   display: flex;
   flex-direction: column;
   gap: 3.429cqw;

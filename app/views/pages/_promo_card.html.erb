@@ -8,7 +8,7 @@
 
   <div class="promo__body"
        style="left: <%= promo.text_left %>; width: <%= promo.text_width %>; text-align: <%= promo.align %>;">
-    <h3 class="promo__title"><%= promo.title %></h3>
+    <h3 class="promo__title" style="<%= "width: #{promo.title_width};" if promo.title_width %>"><%= promo.title %></h3>
     <p class="promo__text"><%= promo.text %></p>
 
     <% justify = local_assigns[:justify] || { "center" => "center", "right" => "flex-end" }.fetch(promo.align, "flex-start") %>
