@@ -3,15 +3,18 @@
 /* Карточка с логотипом */
 
 .brand__logo-card {
+  container-type: inline-size;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: clamp(20px, 3vw, 48px);
-  padding: clamp(24px, 2.6vw, 44px) clamp(24px, 3vw, 52px);
+  aspect-ratio: 1848 / 380;
+  min-height: 140px;
+  padding: 0 8.55%;
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
-  background: var(--cream);
+  background: var(--lime);
   animation: pop-in 0.7s cubic-bezier(0.22, 0.7, 0.2, 1) both;
   animation-timeline: auto;
 }
@@ -20,49 +23,93 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: clamp(14px, 1.6vw, 26px);
+  gap: 1.732cqw;
 }
 
 .brand__mark {
   position: relative;
   display: block;
-  height: 53px;
   border-radius: var(--radius-pill);
-  border: 2px solid var(--ink);
+  border: calc(2 * var(--u)) solid var(--ink);
   background: var(--coral);
   overflow: hidden;
 }
 
-.brand__mark--wide { width: auto; aspect-ratio: 165 / 53; }
-.brand__mark--square { width: auto; aspect-ratio: 79 / 53; }
+/* --u — «пиксель» исходного знака (он нарисован на высоту 53px), пересчитанный
+   в долю ширины карточки: так начинка растёт вместе с плашкой. Обе плашки
+   во фрейме одной высоты — 159 из 1848, поэтому единица у них общая. */
+.brand__mark { --u: 0.16234cqw; }
+
+.brand__mark--wide { width: 26.786cqw; aspect-ratio: 495 / 159; }
+.brand__mark--square { width: 13.907cqw; aspect-ratio: 257 / 159; }
+
+.brand__mark .logo__shape {
+  width: calc(54.77 * var(--u));
+  height: calc(95.34 * var(--u));
+  transform: translate(calc(9.204 * var(--u)), calc(2.239 * var(--u)))
+    matrix(0.999, -0.041, 0.041, 0.999, 0, 0);
+}
+
+.brand__mark .logo__ear {
+  width: calc(31.35 * var(--u));
+  height: calc(56.75 * var(--u));
+  transform: translate(calc(4.672 * var(--u)), calc(9.407 * var(--u)))
+    matrix(0.992, -0.128, 0.128, 0.992, 0, 0);
+}
+
+.brand__mark .icon-btn__shape {
+  width: calc(56.15 * var(--u));
+  height: calc(97.74 * var(--u));
+  transform: translate(calc(3.477 * var(--u)), calc(1.136 * var(--u)))
+    matrix(0.999, -0.041, 0.041, 0.999, 0, 0);
+}
+
+.brand__mark .logo__eye,
+.brand__mark .icon-btn__eye {
+  box-shadow: inset 0 0 0 calc(1 * var(--u)) var(--white);
+}
+
+.brand__mark .logo__eye { top: calc(37.8 * var(--u)); width: calc(5.2 * var(--u)); height: calc(5.8 * var(--u)); }
+.brand__mark .logo__eye--left { left: calc(38.1 * var(--u)); }
+.brand__mark .logo__eye--right { left: calc(50.1 * var(--u)); }
+
+.brand__mark .icon-btn__eye { top: calc(38.25 * var(--u)); width: calc(5.4 * var(--u)); height: calc(6 * var(--u)); }
+.brand__mark .icon-btn__eye--left { left: calc(33.6 * var(--u)); }
+.brand__mark .icon-btn__eye--right { left: calc(45.9 * var(--u)); }
+
+.brand__mark .logo__name {
+  left: calc(68 * var(--u));
+  top: calc(17 * var(--u));
+  font-size: calc(18 * var(--u));
+}
 
 .brand__mark-label {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(18px, 2vw, 36px);
-  color: var(--ink);
+  font-size: clamp(24px, 3.2vw, 64px);
+  color: var(--gray);
 }
 
 /* Палитра */
 
 .brand__palette {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: clamp(14px, 1.6vw, 24px);
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2.597%;
 }
 
 .brand__swatch {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: clamp(96px, 8vw, 140px);
-  border-radius: clamp(20px, 1.8vw, 32px);
+  aspect-ratio: 331 / 232;
+  border-radius: var(--radius-card);
   border: 2px solid var(--line);
 }
 
 .brand__hex {
   font-family: var(--font-mono);
-  font-size: clamp(11.7px, 1.17vw, 18px);
+  font-size: clamp(12px, 1.04vw, 20px);
   letter-spacing: 0.04em;
   color: var(--cream);
 }
@@ -75,7 +122,7 @@
   container-type: inline-size;
   position: relative;
   width: 100%;
-  aspect-ratio: 1030 / 330;
+  aspect-ratio: 1848 / 565;
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
   background: var(--lime);
@@ -85,73 +132,72 @@
 .brand__art img,
 .brand__art span {
   position: absolute;
+  transform-origin: 0 0;
   pointer-events: none;
 }
 
-.brand__art-cat {
-  left: 3%;
-  top: 8%;
-  width: 13%;
-}
+.brand__art-cat { left: 4.221%; top: 25.664%; width: 13.561%; }
 
-.brand__whisker {
-  top: 42%;
-  width: 6%;
-  height: 2px;
-  background: var(--coral);
+.brand__art-hand {
+  left: 19.264%;
+  top: -14.994%;
+  width: 28.214%;
+  transform: matrix(0.1395, 0.9902, 0.9902, -0.1395, 0, 0);
 }
-
-.brand__whisker--l1 { right: 97%; transform: rotate(9deg); transform-origin: 100% 50%; }
-.brand__whisker--l2 { right: 97%; transform: rotate(-9deg); transform-origin: 100% 50%; }
-.brand__whisker--r1 { left: 16%; transform: rotate(-9deg); transform-origin: 0 50%; }
-.brand__whisker--r2 { left: 16%; transform: rotate(9deg); transform-origin: 0 50%; }
 
 .brand__art-rabbit {
-  left: 42%;
-  top: 22%;
-  width: 11%;
+  left: 61.521%;
+  top: 34.159%;
+  width: 15.434%;
+  transform: matrix(-0.9989, 0.0476, 0.0476, 0.9989, 0, 0);
+}
+
+.brand__art-paw {
+  left: 95.653%;
+  top: 88.502%;
+  width: 33.553%;
+  transform: matrix(-0.7821, -0.6231, 0.6231, -0.7821, 0, 0);
 }
 
 .brand__art-eye {
-  width: 2.1%;
+  width: 1.749%;
   aspect-ratio: 1;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 0.34cqw var(--lime);
+  box-shadow: inset 0 0 0 0.212cqw var(--cream);
+  transform: matrix(0.9741, -0.2262, 0.2262, 0.9741, 0, 0);
 }
 
-.brand__art-eye--left { left: 45.2%; top: 61%; }
-.brand__art-eye--right { left: 48.7%; top: 61%; }
+.brand__art-eye--left { left: 49.61%; top: 74.418%; }
+.brand__art-eye--right { left: 52.966%; top: 71.868%; }
 
-.brand__art-paw {
-  transform-origin: 0 0;
+/* Усы: три штриха от каждой щеки, как во фрейме. */
+
+.brand__whisker {
+  top: 55.81%;
+  width: 4.437%;
+  height: 2px;
+  background: var(--cream);
 }
 
-.brand__art-paw--one {
-  left: 74%;
-  top: -14%;
-  width: 12%;
-  transform: rotate(28deg);
-}
-
-.brand__art-paw--two {
-  left: 88%;
-  top: -6%;
-  width: 16%;
-  transform: rotate(-14deg);
-}
+.brand__whisker--l1 { left: 6.569%; transform: rotate(154.4deg); }
+.brand__whisker--l2 { left: 6.569%; transform: rotate(170.9deg); }
+.brand__whisker--l3 { left: 6.569%; transform: rotate(-168.7deg); }
+.brand__whisker--r1 { left: 14.929%; transform: rotate(-11.3deg); }
+.brand__whisker--r2 { left: 14.929%; transform: rotate(9.1deg); }
+.brand__whisker--r3 { left: 14.929%; transform: rotate(25.6deg); }
 
 /* Суть бренда: салатовая колонка и кремовая рядом */
 
 .brand__pair {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: clamp(16px, 1.8vw, 28px);
-  align-items: start;
+  grid-template-columns: 758fr 1041fr;
+  gap: 2.652%;
+  align-items: stretch;
 }
 
 .brand__facets,
 .brand__values {
-  padding: clamp(24px, 2.6vw, 42px) clamp(24px, 3vw, 48px);
+  padding: clamp(20px, 2.6vw, 42px) clamp(24px, 3.1vw, 50px);
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
   animation: rise 0.7s both;
@@ -159,22 +205,22 @@
   animation-range: entry 0% entry 55%;
 }
 
-.brand__facets { background: var(--lime); }
-.brand__values { background: var(--cream); }
+.brand__facets,
+.brand__values { background: var(--lime); }
 
 .brand__facet-title {
-  margin-top: clamp(16px, 1.8vw, 28px);
-  font-size: clamp(18px, 1.9vw, 32px);
+  margin-top: clamp(18px, 2.5vw, 48px);
+  font-size: clamp(20px, 2.5vw, 48px);
   font-weight: 800;
   line-height: 1;
   text-align: right;
-  color: var(--coral);
+  color: var(--cream);
 }
 
 .brand__facets .brand__facet-title:first-child { margin-top: 0; }
 
 .brand__facet-text {
-  margin-top: 8px;
+  margin-top: clamp(10px, 1.4vw, 22px);
   font-family: var(--font-hand);
   font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.35;
@@ -183,15 +229,15 @@
 }
 
 .brand__values-title {
-  margin-bottom: clamp(14px, 1.6vw, 24px);
-  font-size: clamp(18px, 1.9vw, 32px);
+  margin-bottom: clamp(18px, 2.5vw, 48px);
+  font-size: clamp(20px, 2.5vw, 48px);
   font-weight: 800;
   line-height: 1;
   color: var(--ink);
 }
 
 .brand__value {
-  margin-top: 12px;
+  margin-top: clamp(10px, 1.4vw, 22px);
   font-family: var(--font-hand);
   font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.35;
@@ -243,7 +289,15 @@
 }
 
 @media (max-width: 860px) {
-  .brand__art { aspect-ratio: 16 / 9; }
+  .brand__logo-card { aspect-ratio: auto; padding: 24px; }
+
+  .brand__mark { --u: 0.315cqw; }
+  .brand__mark--wide { width: 52cqw; }
+  .brand__mark--square { width: 27cqw; }
+
+  .brand__palette { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+  .brand__pair { grid-template-columns: 1fr; gap: 16px; }
 
   .brand__facet-title,
   .brand__facet-text { text-align: left; }
