@@ -23,11 +23,12 @@ const copied = fs.readdirSync(__dirname).filter((name) => {
 
 copied.forEach((name) => fs.copyFileSync(path.join(__dirname, name), path.join(out, name)))
 
-// Картинки лежат отдельной папкой — копируем её целиком.
-const assets = path.join(__dirname, "assets")
-if (fs.existsSync(assets)) {
-  fs.cpSync(assets, path.join(out, "assets"), { recursive: true })
-}
+// Картинки и стили берём прямо из сайта: приложение должно выглядеть так же,
+// поэтому второй копии стилей не держим — она бы разъехалась с сайтом.
+const site = path.join(__dirname, "..", "app", "assets")
+fs.cpSync(path.join(site, "images"), path.join(out, "assets"), { recursive: true })
+fs.cpSync(path.join(site, "stylesheets"), path.join(out, "css"), { recursive: true })
+fs.rmSync(path.join(out, "css", "application.css"), { force: true })
 
 // index.html — точка входа, без неё выкладывать нечего.
 if (!copied.includes("index.html")) {

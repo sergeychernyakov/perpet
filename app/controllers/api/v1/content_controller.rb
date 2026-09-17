@@ -20,9 +20,15 @@ module Api
 
       private
 
+      # Вместе с текстом отдаём и раскладку рисунка: мини-приложение рисует
+      # карточку той же разметкой, что и сайт.
       def card(item)
         { title: item.title, text: item.text, cta: item.cta,
-          icon: asset(item.icon), route: route_for(item.route) }
+          icon: asset(item.icon), route: route_for(item.route),
+          art_left: item.art_left, art_top: item.art_top, art_width: item.art_width,
+          art_ratio: item.art_ratio, art_transform: item.art_transform,
+          text_left: item.text_left, text_width: item.text_width,
+          align: item.align, title_width: item.title_width }
       end
 
       # Мини-приложение живёт на хостинге VK, поэтому адреса картинок абсолютные.

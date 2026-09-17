@@ -4,8 +4,7 @@ import * as vk from "./vk.js"
 import { photoField } from "./photo.js"
 
 const screen = document.getElementById("screen")
-const tabbar = document.getElementById("tabbar")
-const topbarNote = document.getElementById("topbar-note")
+const menu = document.getElementById("menu")
 const sheet = document.getElementById("sheet")
 const sheetBody = document.getElementById("sheet-body")
 
@@ -20,9 +19,19 @@ function render(...nodes) {
 }
 
 function banner(title, note) {
+  return el("section", { class: "banner ads__head" }, [
+    el("h1", { class: "banner__title", text: title }),
+    note && el("p", { class: "ads__found", text: note })
+  ])
+}
+
+// Заголовок-разделитель с круглой кнопкой справа — как на сайте.
+function heading(title, onClick, icon = "shape-12.svg") {
   return el("section", { class: "banner" }, [
-    el("h1", { text: title }),
-    note && el("p", { text: note })
+    el("h2", { class: "banner__title", text: title }),
+    onClick && el("button", { class: "round-btn", type: "button", onClick, title }, [
+      el("img", { src: `assets/${icon}`, alt: "" })
+    ])
   ])
 }
 
@@ -56,24 +65,31 @@ async function loadContent() {
   return content
 }
 
-function heading(title, onClick) {
-  return el("section", { class: "headline" }, [
-    el("h2", { text: title }),
-    onClick && el("button", { class: "headline__go", type: "button", onClick, title: title }, [
-      el("img", { src: "assets/shape-12.svg", alt: "" })
+// Карточка промо и шага: разметка и доли — те же, что в макете сайта.
+const JUSTIFY = { center: "center", right: "flex-end", left: "flex-start" }
+
+function promoCard(promo, css = "promo") {
+  const art = el("img", { class: "promo__art", src: promo.icon, alt: "" })
+  art.style.cssText = `left: ${promo.art_left}; top: ${promo.art_top}; ` +
+    `width: ${promo.art_width}; aspect-ratio: ${promo.art_ratio}; transform: ${promo.art_transform};`
+
+  const title = el("h3", { class: "promo__title", text: promo.title })
+  if (promo.title_width) title.style.width = promo.title_width
+
+  const body = el("div", { class: "promo__body" }, [
+    title,
+    el("p", { class: "promo__text", text: promo.text }),
+    el("div", { class: "promo__actions" }, [
+      el("button", { class: "promo__arrow", type: "button", title: promo.cta, onClick: () => go(promo.route) }, [
+        el("img", { src: "assets/shape-11.svg", alt: "" })
+      ]),
+      el("button", { class: "promo__cta", type: "button", onClick: () => go(promo.route) }, promo.cta)
     ])
   ])
-}
+  body.style.cssText = `left: ${promo.text_left}; width: ${promo.text_width}; text-align: ${promo.align};`
+  body.querySelector(".promo__actions").style.justifyContent = JUSTIFY[promo.align] || "flex-start"
 
-function promoCard(promo) {
-  return el("article", { class: "promo" }, [
-    el("img", { class: "promo__art", src: promo.icon, alt: "" }),
-    el("h3", { class: "promo__title", text: promo.title }),
-    el("p", { class: "promo__text", text: promo.text }),
-    el("button", {
-      class: "btn btn--block", type: "button", onClick: () => go(promo.route)
-    }, promo.cta)
-  ])
+  return el("article", { class: css }, [ art, body ])
 }
 
 async function homeScreen() {
@@ -86,15 +102,47 @@ async function homeScreen() {
     return render(banner("PERPET"), error(failure.messages || "Не удалось загрузить"))
   }
 
-  const hero = el("section", { class: "hero" }, [
+  const HERO_LEAD = "Команда PERPET уже долгое время работает над преобразованием системы передержки " +
+    "животных. Мы — первые на рынке, кто сможет помочь Вам в трудную минуту с наименьшими затратами. " +
+    "Perpet — не просто компания, а целая система, которая обьединяет людей вокруг общей проблемы, " +
+    "а также помогает ее решить без лишнего беспокойства."
+  const HERO_JOIN = "Если вы хотите узнать больше о передержке с нашей помощью, то присоединяйтесь."
+
+  const join = () => go("ads")
+
+  // Широкая обложка: та же разметка и те же доли, что в макете сайта.
+  const heroWide = el("section", { class: "hero hero--wide" }, [
+    el("img", { class: "hero__cat", src: "assets/hero-21.svg", alt: "" }),
+    el("img", { class: "hero__paw", src: "assets/hero-22.svg", alt: "" }),
+    el("img", { class: "hero__hand", src: "assets/hero-19.svg", alt: "" }),
+    el("img", { class: "hero__hand-back", src: "assets/hero-20.svg", alt: "" }),
+    ...[ "r1", "r2", "r3", "l1", "l2", "l3" ].map((side, index) =>
+      el("img", { class: `hero__whisker hero__whisker--${side}`, src: `assets/hero-${23 + index}.svg`, alt: "" })),
+    el("span", { class: "hero__eye hero__eye--top" }),
+    el("span", { class: "hero__eye hero__eye--bottom" }),
+    el("div", { class: "hero__body" }, [
+      el("h1", { class: "hero__title", text: "PERPET" }),
+      el("p", { class: "hero__text", text: HERO_LEAD }),
+      el("p", { class: "hero__text hero__text--right", text: HERO_JOIN }),
+      el("div", { class: "hero__actions" }, [
+        el("button", { class: "hero__arrow", type: "button", title: "Присоединиться", onClick: join }, [
+          el("img", { src: "assets/shape-11.svg", alt: "" })
+        ]),
+        el("button", { class: "hero__cta", type: "button", onClick: join }, "Присоединиться")
+      ])
+    ])
+  ])
+
+  // Узкая обложка макета — её показывает та же медиазапрос-логика сайта.
+  const heroNarrow = el("section", { class: "hero hero--narrow" }, [
     el("h1", { class: "hero__title", text: "PERPET" }),
-    el("p", { class: "hero__text", text: "Команда PERPET уже долгое время работает над преобразованием системы передержки животных. Мы — первые на рынке, кто сможет помочь Вам в трудную минуту с наименьшими затратами." }),
-    el("div", { class: "hero__art" }, [
-      el("img", { class: "hero__cat", src: "assets/hero-21.svg", alt: "" }),
-      el("img", { class: "hero__hand", src: "assets/hero-19.svg", alt: "" })
+    el("p", { class: "hero__text", text: HERO_LEAD }),
+    el("div", { class: "hero__strip" }, [
+      el("img", { class: "hero__strip-cat", src: "assets/hero-21.svg", alt: "" }),
+      el("img", { class: "hero__strip-hand", src: "assets/hero-19.svg", alt: "" })
     ]),
-    el("p", { class: "hero__text", text: "Если вы хотите узнать больше о передержке с нашей помощью, то присоединяйтесь." }),
-    el("button", { class: "btn btn--block", type: "button", onClick: () => go("ads") }, "Присоединиться")
+    el("p", { class: "hero__text", text: HERO_JOIN }),
+    el("button", { class: "btn btn--block", type: "button", onClick: join }, "Присоединиться")
   ])
 
   const advantages = el("div", { class: "advantages" }, data.advantages.map((item) =>
@@ -104,16 +152,18 @@ async function homeScreen() {
     ])
   ))
 
-  const pie = el("section", { class: "stat" }, [
-    el("h3", { class: "stat__title", text: "Почему нас выбирают?" }),
+  const pie = el("div", { class: "stat" }, [
     el("div", { class: "stat__plate" }, [
+      el("h3", { class: "stat__title", text: "Почему нас выбирают?" }),
       el("img", { class: "stat__pie stat__pie--minor", src: "assets/pie-pink.svg", alt: "" }),
       el("img", { class: "stat__pie stat__pie--major", src: "assets/pie-cream.svg", alt: "" }),
       el("span", { class: "stat__value stat__value--minor", text: "37.2%" }),
-      el("span", { class: "stat__value stat__value--major", text: "62.8%" })
-    ]),
-    el("p", { class: "stat__note", text: "Столько людей не пользуются услугами передержки, но смогут начать с PERPET." }),
-    el("p", { class: "stat__note", text: "А столько уже пользуются, но всегда могут обратиться к PERPET в экстренный момент." })
+      el("span", { class: "stat__value stat__value--major", text: "62.8%" }),
+      el("span", { class: "stat__leader stat__leader--minor" }),
+      el("span", { class: "stat__leader stat__leader--major" }),
+      el("p", { class: "stat__note stat__note--minor", text: "Столько людей не пользуются услугами передержки, но смогут начать с PERPET." }),
+      el("p", { class: "stat__note stat__note--major", text: "А столько уже пользуются, но всегда могут обратиться к PERPET в экстренный момент." })
+    ])
   ])
 
   const note = el("section", { class: "note" }, [
@@ -121,24 +171,29 @@ async function homeScreen() {
   ])
 
   const important = el("section", { class: "important" }, [
-    el("img", { class: "important__art", src: "assets/vazhno-pink.svg", alt: "" }),
-    el("h2", { class: "important__title", text: "ВАЖНО" }),
-    el("p", { text: "Перед использованием наших услуг и перед регистрацией на сайте и в приложении настоятельно просим ознакомиться с нашей документацией. Это обезопасит вас и ваших питомцев и поможет нам для открытого и доверительного сотрудничества с нашими любимыми пользователями." }),
-    el("button", { class: "btn btn--block", type: "button", onClick: () => go("support") }, "Поддержка")
+    el("img", { class: "important__art important__art--pink", src: "assets/vazhno-pink.svg", alt: "" }),
+    el("img", { class: "important__art important__art--cream", src: "assets/vazhno-cream.svg", alt: "" }),
+    el("div", { class: "important__body" }, [
+      el("h2", { class: "important__title", text: "ВАЖНО" }),
+      el("p", { text: "Перед использованием наших услуг и перед регистрацией на сайте и в приложении настоятельно просим ознакомиться с нашей документацией. Это обезопасит вас и ваших питомцев и поможет нам для открытого и доверительного сотрудничества с нашими любимыми пользователями." }),
+      el("p", { text: "Ознакомьтесь с информацией ниже, которая содержит правила содержания и передачи животных, которые помогут в спорной ситуации и обезопасят вас и других пользователей." }),
+      el("div", { class: "important__actions" }, [
+        el("a", { class: "btn important__download", href: apiBase + "/perpet-pravila.txt", target: "_blank", rel: "noreferrer" }, "Скачать PDF"),
+        el("button", { class: "important__arrow", type: "button", title: "Поддержка", onClick: () => go("support") }, [
+          el("img", { src: "assets/shape-11.svg", alt: "" })
+        ]),
+        el("button", { class: "important__support btn", type: "button", onClick: () => go("support") }, "Поддержка")
+      ])
+    ])
   ])
 
-  const more = el("nav", { class: "more" }, [
-    el("button", { class: "btn", type: "button", onClick: () => go("about") }, "О нас"),
-    el("button", { class: "btn", type: "button", onClick: () => go("brand") }, "Brand book")
-  ])
-
-  render(hero,
-         heading("Нам доверяют, узнай почему"),
-         advantages, pie,
-         heading("О чем мы?", () => go("about")),
+  render(heroWide, heroNarrow,
+         heading("Нам доверяют, узнай почему", () => document.getElementById("why")?.scrollIntoView({ behavior: "smooth" })),
+         el("div", { class: "why", id: "why" }, [ advantages, pie ]),
+         heading("О чем мы?", () => go("about"), "shape-20.svg"),
          note,
-         el("div", { class: "promos" }, data.promos.map(promoCard)),
-         important, more)
+         el("div", { class: "promos" }, data.promos.map((promo) => promoCard(promo))),
+         important)
 }
 
 // ---------- о нас ----------
@@ -737,16 +792,16 @@ function go(route) {
 }
 
 function route() {
-  return (location.hash.replace(/^#/, "") || "ads").split("/")[0]
+  return (location.hash.replace(/^#/, "") || "home").split("/")[0]
 }
 
 function open() {
-  const [ name, id ] = (location.hash.replace(/^#/, "") || "ads").split("/")
+  const [ name, id ] = (location.hash.replace(/^#/, "") || "home").split("/")
 
   closeSheet()
-  tabbar.querySelectorAll(".tab").forEach((tab) => {
-    tab.toggleAttribute("aria-current", tab.dataset.route === name)
-    if (tab.dataset.route === name) tab.setAttribute("aria-current", "page")
+  menu.dataset.open = "false"
+  document.querySelectorAll(".nav__link").forEach((link) => {
+    link.classList.toggle("nav__link--current", link.dataset.route === name)
   })
 
   // Чтение статьи и карточка объявления открываются поверх списка и не сбрасывают
@@ -758,9 +813,14 @@ function open() {
   ;(ROUTES[name] || homeScreen)()
 }
 
-tabbar.addEventListener("click", (event) => {
-  const tab = event.target.closest(".tab")
-  if (tab) go(tab.dataset.route)
+// Любая кнопка с data-route ведёт на свой экран: шапка, меню и подвал.
+document.addEventListener("click", (event) => {
+  const target = event.target.closest("[data-route]")
+  if (target) go(target.dataset.route)
+})
+
+document.getElementById("burger").addEventListener("click", () => {
+  menu.dataset.open = menu.dataset.open === "true" ? "false" : "true"
 })
 
 window.addEventListener("hashchange", open)
@@ -777,7 +837,6 @@ function start() {
   }).then((user) => {
     if (!user) return
 
-    if (user.first_name) topbarNote.textContent = `Привет, ${user.first_name}!`
     if (route() === "profile") profileScreen()
   })
 }

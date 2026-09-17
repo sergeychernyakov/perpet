@@ -8,7 +8,20 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&family=Nunito:wght@400..900&family=Comic+Relief&family=Inter:wght@100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&family=Arsenal+SC:wght@400;700&family=Nunito:wght@400..900&family=Comic+Relief&family=Inter:wght@100..900&display=swap">
+
+    <!-- Стили сайта один в один: их складывает build.js из app/assets/stylesheets. -->
+    <link rel="stylesheet" href="css/vars.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages/home.css">
+    <link rel="stylesheet" href="css/pages/ads.css">
+    <link rel="stylesheet" href="css/pages/articles.css">
+    <link rel="stylesheet" href="css/pages/about.css">
+    <link rel="stylesheet" href="css/pages/brand.css">
+    <link rel="stylesheet" href="css/pages/profile.css">
+    <link rel="stylesheet" href="css/pages/support.css">
     <link rel="stylesheet" href="app.css">
 
     <!-- Мост VK лежит рядом со своими файлами: сторонний CDN может не открыться,
@@ -17,27 +30,67 @@
   </head>
 
   <body>
-    <div class="app">
-      <header class="topbar">
-        <span class="logo">
+    <div class="page">
+      <header class="header">
+        <button class="logo" type="button" data-route="home" title="На главную">
           <img class="logo__shape" src="assets/tb-logo-hand.svg" alt="">
           <img class="logo__ear" src="assets/tb-logo-ear.svg" alt="">
           <span class="logo__eye logo__eye--left"></span>
           <span class="logo__eye logo__eye--right"></span>
           <span class="logo__name">PERPET</span>
-        </span>
-        <span class="topbar__note" id="topbar-note">передержка питомцев</span>
+        </button>
+
+        <nav class="nav">
+          <button class="nav__link" type="button" data-route="articles">Статьи</button>
+          <button class="nav__link" type="button" data-route="ads">Обьявления</button>
+          <button class="nav__link" type="button" data-route="about">О нас</button>
+          <button class="nav__link" type="button" data-route="support">Поддержка</button>
+        </nav>
+
+        <button class="burger" type="button" id="burger" title="Меню" aria-label="Меню">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <button class="icon-btn" type="button" data-route="profile" title="Профиль">
+          <img class="icon-btn__shape" src="assets/tb-profile-hand.svg" alt="">
+          <span class="icon-btn__eye icon-btn__eye--left"></span>
+          <span class="icon-btn__eye icon-btn__eye--right"></span>
+        </button>
       </header>
 
-      <main class="screen" id="screen" aria-live="polite"></main>
-
-      <nav class="tabbar" id="tabbar">
-        <button class="tab" type="button" data-route="home">Главная</button>
-        <button class="tab" type="button" data-route="ads">Обьявления</button>
-        <button class="tab" type="button" data-route="articles">Статьи</button>
-        <button class="tab" type="button" data-route="profile">Профиль</button>
-        <button class="tab" type="button" data-route="support">Поддержка</button>
+      <nav class="menu" id="menu" data-open="false">
+        <button class="menu__link" type="button" data-route="articles">Статьи</button>
+        <button class="menu__link" type="button" data-route="ads">Обьявления</button>
+        <button class="menu__link" type="button" data-route="about">О нас</button>
+        <button class="menu__link" type="button" data-route="brand">Brand book</button>
+        <button class="menu__link" type="button" data-route="support">Поддержка</button>
+        <button class="menu__link" type="button" data-route="profile">Профиль</button>
       </nav>
+
+      <main class="main" id="screen" aria-live="polite"></main>
+
+      <footer class="footer">
+        <div class="footer__contacts">
+          <span>Наши контакты:</span>
+          <a href="tel:+79635747920">+7 963 574-79-20</a>
+          <a href="mailto:perpet@mail.ru">perpet@mail.ru</a>
+        </div>
+
+        <nav class="footer__links">
+          <button type="button" data-route="brand">Brand book</button>
+        </nav>
+
+        <div class="footer__socials">
+          <a href="https://vk.com" target="_blank" rel="noreferrer" title="VK" class="footer__social">
+            <img src="assets/shape-21.svg" alt="VK" width="53" height="53">
+          </a>
+          <a href="https://telegram.org" target="_blank" rel="noreferrer" title="Telegram" class="footer__social">
+            <img src="assets/shape-22.svg" alt="Telegram" width="59" height="59">
+          </a>
+        </div>
+      </footer>
     </div>
 
     <div class="sheet" id="sheet" hidden>
