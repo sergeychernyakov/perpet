@@ -26,7 +26,7 @@ class Article < ApplicationRecord
       excerpt: excerpt,
       readable: readable?,
       paragraphs: paragraphs,
-      blocks: blocks
+      layout: layout
     }
   end
 
@@ -40,20 +40,57 @@ class Article < ApplicationRecord
     paragraphs.reject { |paragraph| paragraph == excerpt.to_s.strip }
   end
 
-  # Текст статьи набирают в админке обычным текстом: пустая строка делит
-  # абзацы, «## » в начале — раздел, «### » — подзаголовок внутри раздела,
-  # строки с «- » — список.
-  def blocks
-    body_paragraphs.map do |chunk|
-      if chunk.start_with?("### ")
-        { kind: "subtitle", text: chunk.delete_prefix("### ").strip }
-      elsif chunk.start_with?("## ")
-        { kind: "title", text: chunk.delete_prefix("## ").strip }
-      elsif chunk.start_with?("- ")
-        { kind: "list", items: chunk.split("\n").map { |line| line.sub(/\A-\s*/, "").strip } }
+  # Текст статьи набирают в админке обычным текстом, пустая строка делит блоки:
+  #
+  #   ## Заголовок   — коралловая полоса раздела во всю ширину
+  #   ! Текст        — салатовая плашка с крупной мыслью
+  #   + Текст        — салатовая плашка с обычным текстом
+  #   ### Заголовок  — колонка: плашка с заголовком и тем, что идёт под ней
+  #   - пункт        — пункты-«пилюли»
+  #   ---            — конец ряда колонок
+  #   обычный абзац  — плашка с текстом
+  #
+  # Идущие подряд колонки встают в один ряд. Ряд из одной колонки макет
+  # раскладывает как панель с заголовком сбоку и пункты рядом.
+  def layout
+    rows = []
+    row = nil
+    column = nil
+    panels = 0
+
+    body_paragraphs.each do |chunk|
+      case chunk
+      when "---"
+        row = column = nil
+      when /\A## /
+        row = column = nil
+        rows << { kind: "section", text: chunk.delete_prefix("## ").strip }
+      when /\A! /
+        row = column = nil
+        rows << { kind: "highlight", text: chunk.delete_prefix("! ").strip }
+      when /\A\+ /
+        block = { kind: "plate", tone: "lime", text: chunk.delete_prefix("+ ").strip }
+        column ? column[:blocks] << block : rows << block
+      when /\A### /
+        panels += 1
+        column = { title: chunk.delete_prefix("### ").strip,
+                   tone: panels.odd? ? "lime" : "coral", blocks: [] }
+        if row
+          row[:columns] << column
+        else
+          row = { kind: "row", columns: [ column ] }
+          rows << row
+        end
+      when /\A- /
+        block = { kind: "list", items: chunk.split("\n").map { |line| line.sub(/\A-\s*/, "").strip } }
+        column ? column[:blocks] << block : rows << block
       else
-        { kind: "text", text: chunk }
+        block = { kind: "plate", text: chunk }
+        column ? column[:blocks] << block : rows << block
       end
     end
+
+    rows
   end
+
 end

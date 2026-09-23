@@ -1,0 +1,17 @@
+<%# Ряд колонок из макета. Одна колонка — это панель с заголовком сбоку
+    и содержимое рядом; две-три — равные колонки с панелью сверху. %>
+<% single = row[:columns].size == 1 %>
+<% tone = row[:columns].first[:tone] %>
+
+<div class="reading__row <%= "reading__row--split reading__row--#{tone}" if single %>"
+     style="<%= "--cols: #{row[:columns].size};" unless single %>">
+  <% row[:columns].each do |column| %>
+    <h3 class="reading__panel reading__panel--<%= column[:tone] %>"><%= column[:title] %></h3>
+
+    <div class="reading__col">
+      <% column[:blocks].each do |block| %>
+        <%= render "articles/block", block: block %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

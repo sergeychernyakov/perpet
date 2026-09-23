@@ -30,7 +30,7 @@
 
 .banner__title {
   margin: 0;
-  font-size: clamp(16.2px, 2.61vw, 57.6px);
+  font-size: clamp(16.2px, 3.33vw, 64px);
   font-weight: 900;
   line-height: 1.05;
   color: var(--ink);

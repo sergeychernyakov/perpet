@@ -75,13 +75,13 @@ bin/rails runner 'User.find_by(email: "kto@mail.ru").update!(role: :admin)'
 ### Проверки
 
 ```bash
-bin/rails test          # 76 тестов, 342 проверки
+bin/rails test          # 96 тестов, 432 проверки
 bin/rails test:system   # 4 системных теста в headless Chrome
 bin/rubocop             # стиль
 bin/brakeman            # безопасность
 ```
 
-Те же проверки прогоняются в GitHub Actions на каждый push и pull request.
+Прогонять их нужно локально: сборки в GitHub Actions отключены.
 
 ## Страницы сайта
 

@@ -1,0 +1,9 @@
+<% if block[:kind] == "list" %>
+  <div class="reading__pills">
+    <% block[:items].each do |item| %>
+      <p class="reading__pill"><%= item %></p>
+    <% end %>
+  </div>
+<% else %>
+  <p class="reading__plate <%= "reading__plate--lime" if block[:tone] == "lime" %>"><%= block[:text] %></p>
+<% end %>
