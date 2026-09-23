@@ -1,12 +1,16 @@
 class AdsController < ApplicationController
   before_action :authenticate_user!, only: :create
 
+  # В макете два раздела: объявления питомцев и объявления ситтеров.
+  # Поиск и фильтр по виду питомца макет не рисует, но на полтора десятка
+  # карточек без них не обойтись, поэтому они остались под переключателем.
   def index
+    @role = Ad::ROLES.key?(params[:role]) ? params[:role] : Ad::PET
     @kind = params[:kind].presence || Ad::ALL_KINDS
     @query = params[:q].to_s.strip
 
-    scope = Ad.published.of_kind(@kind).search(@query).recent
-    @total = Ad.published.count
+    scope = Ad.published.of_role(@role).of_kind(@kind).search(@query).recent
+    @total = Ad.published.of_role(@role).count
     @pager = Paginator.new(scope, page: params[:page])
     @ads = @pager.records
   end

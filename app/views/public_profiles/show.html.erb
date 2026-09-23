@@ -1,0 +1,53 @@
+<% content_for :title, "#{@profile.name} — PERPET" %>
+<% content_for :description, "Карточка пользователя PERPET: #{@profile.name}." %>
+
+<main class="main">
+  <section class="banner">
+    <h1 class="banner__title">Карточка пользователя</h1>
+  </section>
+
+  <div class="person">
+    <div class="person__photo">
+      <% if @profile.photo.attached? %>
+        <%= image_tag @profile.photo_url, alt: @profile.name %>
+      <% else %>
+        <%= image_tag "tb-profile-hand.svg", alt: "", class: "person__photo-icon" %>
+      <% end %>
+    </div>
+
+    <article class="person__card">
+      <h2 class="person__subtitle">Информация о пользователе</h2>
+      <p class="person__lines">
+        <% @profile.card_lines.each do |line| %>
+          <span><%= line %></span>
+        <% end %>
+      </p>
+    </article>
+
+    <div class="person__side">
+      <article class="person__card person__card--short">
+        <h2 class="person__subtitle">Контакты</h2>
+        <p class="person__lines">
+          <% @profile.contact_lines.each do |line| %>
+            <span><%= line %></span>
+          <% end %>
+        </p>
+      </article>
+
+      <%= link_to ads_path(role: @ads.first&.role), class: "person__card person__card--back" do %>
+        <span class="person__subtitle">Вернуться к обьявлениям</span>
+        <span class="person__arrow"><%= image_tag "shape-11.svg", alt: "" %></span>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @ads.any? %>
+    <section class="banner">
+      <h2 class="banner__title">Обьявления пользователя</h2>
+    </section>
+
+    <div class="ads">
+      <%= render partial: "ads/ad", collection: @ads, as: :ad %>
+    </div>
+  <% end %>
+</main>

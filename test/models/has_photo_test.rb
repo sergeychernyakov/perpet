@@ -12,7 +12,7 @@ class HasPhotoTest < ActiveSupport::TestCase
   end
 
   test "объявление принимает картинку и отдаёт ссылку" do
-    ad = attach(Ad.new(title: "Мурзик", kind: "Кошка"))
+    ad = attach(Ad.new(title: "Мурзик", kind: "Кот"))
 
     assert ad.save
     assert ad.photo.attached?
@@ -21,14 +21,14 @@ class HasPhotoTest < ActiveSupport::TestCase
   end
 
   test "без картинки ссылки нет" do
-    ad = Ad.create!(title: "Мурзик", kind: "Кошка")
+    ad = Ad.create!(title: "Мурзик", kind: "Кот")
 
     assert_nil ad.photo_url
     assert_nil ad.as_api[:photo_url]
   end
 
   test "не изображение отклоняется" do
-    ad = attach(Ad.new(title: "Мурзик", kind: "Кошка"),
+    ad = attach(Ad.new(title: "Мурзик", kind: "Кот"),
                 data: "вовсе не картинка", name: "doc.pdf", type: "application/pdf")
 
     assert_not ad.valid?
@@ -36,7 +36,7 @@ class HasPhotoTest < ActiveSupport::TestCase
   end
 
   test "слишком большой файл отклоняется" do
-    ad = attach(Ad.new(title: "Мурзик", kind: "Кошка"), data: "0" * (HasPhoto::MAX_BYTES + 1))
+    ad = attach(Ad.new(title: "Мурзик", kind: "Кот"), data: "0" * (HasPhoto::MAX_BYTES + 1))
 
     assert_not ad.valid?
     assert_includes ad.error_messages.join(" "), "больше 3 МБ"

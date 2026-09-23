@@ -8,8 +8,10 @@ const menu = document.getElementById("menu")
 const sheet = document.getElementById("sheet")
 const sheetBody = document.getElementById("sheet-body")
 
-const state = { kind: "Все", query: "", page: 1 }
-const KINDS = [ "Все", "Кошка", "Собака", "Грызун", "Птица" ]
+const state = { role: "pet", kind: "Все", query: "", page: 1 }
+const KINDS = [ "Все", "Кот", "Собака", "Кролик", "Грызун", "Птица" ]
+// Разделы объявлений из макета: карточки питомцев и карточки ситтеров.
+const ROLES = [ [ "pet", "питомцев" ], [ "sitter", "ситтеров" ] ]
 
 // ---------- каркас ----------
 
@@ -362,6 +364,20 @@ async function brandScreen() {
 // ---------- объявления ----------
 
 async function adsScreen() {
+  const role = state.role || "pet"
+  const label = ROLES.find(([ key ]) => key === role)[1]
+
+  // Переключатель разделов: две плашки со стрелкой, как в макете.
+  const tabs = el("nav", { class: "ads__switch" }, ROLES.map(([ key, name ], index) =>
+    el("button", {
+      class: `ads__tab${index ? " ads__tab--right" : ""}${key === role ? " ads__tab--current" : ""}`,
+      type: "button",
+      onClick: () => { state.role = key; state.kind = KINDS[0]; state.query = ""; state.page = 1; adsScreen() }
+    }, [
+      el("span", { class: "ads__tab-arrow" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ]),
+      el("span", { class: "ads__tab-label", text: `Обьявления ${name}` })
+    ])))
+
   const input = el("input", {
     class: "form__input search__input", type: "search",
     placeholder: "кошка, Москва, июнь…", "aria-label": "Поиск"
@@ -374,19 +390,19 @@ async function adsScreen() {
   }, [
     el("label", { class: "search" }, [ el("span", { class: "search__label", text: "Поиск" }), input ]),
     el("button", { class: "chip chip--filter chip--search", type: "submit" }, "Найти"),
-    ...KINDS.map((kind) => el("button", {
+    ...(role === "pet" ? KINDS.map((kind) => el("button", {
       class: `chip chip--filter${kind === state.kind ? " chip--current" : ""}`,
       type: "button",
       onClick: () => { state.kind = kind; state.page = 1; adsScreen() }
-    }, kind))
+    }, kind)) : [])
   ])
 
-  const list = el("div", { class: "grid grid--cards", id: "ads-top" })
+  const list = el("div", { class: "ads", id: "ads-top" })
   const found = el("p", { class: "ads__found" })
 
   render(el("section", { class: "banner ads__head" }, [
-    el("h1", { class: "banner__title", text: "Обьявления" }), found
-  ]), filters, list)
+    el("h1", { class: "banner__title", text: `Обьявления ${label}` }), found
+  ]), tabs, filters, list)
 
   loadAds(list, { found })
 }
@@ -394,11 +410,13 @@ async function adsScreen() {
 // Страницы не подменяют друг друга, а дописываются в конец списка — так
 // привычнее на телефоне и не теряется то, что человек уже просмотрел.
 async function loadAds(list, { append = false, found = null } = {}) {
-  const tail = el("div", { class: "grid grid--cards" }, skeletons(append ? 1 : 3))
+  const tail = el("div", { class: "ads" }, skeletons(append ? 1 : 3))
   append ? list.append(tail) : list.replaceChildren(tail)
 
   try {
-    const { ads, meta } = await api.ads({ kind: state.kind, q: state.query, page: state.page })
+    const { ads, meta } = await api.ads({
+      role: state.role || "pet", kind: state.kind, q: state.query, page: state.page
+    })
 
     if (found) found.textContent = `Найдено: ${meta.total} из ${meta.all ?? meta.total}`
 
@@ -426,26 +444,66 @@ async function loadAds(list, { append = false, found = null } = {}) {
   }
 }
 
+// Карточка из макета: слева фото, справа строки «Ключ: значение»,
+// кнопка на карточку хозяина и метки снизу.
 function adCard(ad) {
-  const cover = ad.photo_url
-    ? el("img", { class: "ad__photo", src: apiBase + ad.photo_url, alt: ad.title, loading: "lazy" })
-    : el("img", { src: `assets/${ad.icon}`, alt: "" })
+  const photo = ad.photo_url
+    ? el("img", { src: apiBase + ad.photo_url, alt: ad.title, loading: "lazy" })
+    : el("img", { class: "ad__icon", src: `assets/${ad.icon}`, alt: "" })
+
+  const owner = ad.owner_id
+    ? el("a", { class: "ad__owner", href: `#person/${ad.owner_id}`, text: ad.owner_label })
+    : el("button", { class: "ad__owner", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
 
   return el("article", { class: "ad" }, [
-    el("div", { class: "ad__cover" }, [ cover, el("span", { class: "ad__kind", text: ad.kind }) ]),
+    el("img", { class: "ad__paw", src: "assets/tb-logo-ear.svg", alt: "" }),
+    el("h3", { class: "ad__title", text: ad.title }),
+    el("div", { class: "ad__photo" }, [ photo ]),
     el("div", { class: "ad__body" }, [
-      el("h3", { class: "ad__title", text: ad.title }),
-      ad.meta && el("p", { class: "ad__meta", text: ad.meta }),
-      ad.description && el("p", { class: "ad__text", text: ad.description }),
-      el("div", { class: "ad__footer" }, [
-        el("span", { class: "ad__price", text: ad.price || "цена по договорённости" }),
-        el("div", { class: "card__buttons" }, [
-          vk.bridge() && el("button", { class: "btn", type: "button", onClick: (event) => share(event, ad) }, "Поделиться"),
-          el("button", { class: "btn btn--coral", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
-        ])
+      el("p", { class: "ad__text" }, (ad.card_lines || []).map((line) => el("span", { text: line }))),
+      owner
+    ]),
+    el("div", { class: "ad__tags" }, (ad.card_tags || []).map((tag) =>
+      el("span", { class: "tag tag--outline", text: tag })))
+  ])
+}
+
+// Карточка пользователя: кто стоит за объявлением.
+async function personScreen(id) {
+  render(...skeletons(2))
+
+  let profile, ads
+  try {
+    ({ profile, ads } = await api.publicProfile(id))
+  } catch (failure) {
+    return render(backButton("ads"), error(failure.messages))
+  }
+
+  const photo = profile.photo_url
+    ? el("img", { src: apiBase + profile.photo_url, alt: profile.name })
+    : el("img", { class: "person__photo-icon", src: "assets/tb-profile-hand.svg", alt: "" })
+
+  const person = el("div", { class: "person" }, [
+    el("div", { class: "person__photo" }, [ photo ]),
+    el("article", { class: "person__card" }, [
+      el("h2", { class: "person__subtitle", text: "Информация о пользователе" }),
+      el("p", { class: "person__lines" }, (profile.card_lines || []).map((line) => el("span", { text: line })))
+    ]),
+    el("div", { class: "person__side" }, [
+      el("article", { class: "person__card person__card--short" }, [
+        el("h2", { class: "person__subtitle", text: "Контакты" }),
+        el("p", { class: "person__lines" }, (profile.contact_lines || []).map((line) => el("span", { text: line })))
+      ]),
+      el("a", { class: "person__card person__card--back", href: "#ads" }, [
+        el("span", { class: "person__subtitle", text: "Вернуться к обьявлениям" }),
+        el("span", { class: "person__arrow" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ])
       ])
     ])
   ])
+
+  render(banner("Карточка пользователя"), person,
+         ...(ads.length ? [ heading("Обьявления пользователя"),
+                            el("div", { class: "ads" }, ads.map(adCard)) ] : []))
 }
 
 // Репост объявления на стену: окно подтверждения показывает сам ВКонтакте.
@@ -1030,6 +1088,7 @@ function open() {
   // Чтение статьи и карточка объявления открываются поверх списка и не сбрасывают
   // его: со «Назад» человек возвращается туда же, где был.
   if (name === "article" && id) return articleScreen(id)
+  if (name === "person" && id) return personScreen(id)
   if (name === "ad" && id) return adScreen(id)
 
   state.page = 1

@@ -2,7 +2,7 @@ require "test_helper"
 
 class AdTest < ActiveSupport::TestCase
   setup do
-    @cat = Ad.create!(kind: "Кошка", title: "Барсик, 4 года", city: "Москва", period: "12–26 июня",
+    @cat = Ad.create!(kind: "Кот", title: "Барсик, 4 года", city: "Москва", period: "12–26 июня",
                       price: "700 ₽ / день", description: "Спокойный, привит.", status: "published",
                       published_on: Date.current)
     @dog = Ad.create!(kind: "Собака", title: "Тоша, 2 года", city: "Казань", period: "3–10 июля",
@@ -17,7 +17,7 @@ class AdTest < ActiveSupport::TestCase
   end
 
   test "фильтр по виду питомца" do
-    assert_equal [ @cat ], Ad.of_kind("Кошка").to_a
+    assert_equal [ @cat ], Ad.of_kind("Кот").to_a
     assert_equal 2, Ad.of_kind(Ad::ALL_KINDS).count
   end
 
@@ -32,7 +32,7 @@ class AdTest < ActiveSupport::TestCase
   end
 
   test "черновик показывается как черновик" do
-    draft = Ad.create!(kind: "Кошка", title: "Новое объявление", status: "draft")
+    draft = Ad.create!(kind: "Кот", title: "Новое объявление", status: "draft")
 
     assert_equal "Черновик", draft.status_label
     assert_equal "Не опубликовано", draft.published_label

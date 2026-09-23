@@ -1,22 +1,35 @@
+<%# Карточка из макета: слева фото, справа строки «Ключ: значение»,
+    кнопка на карточку хозяина и метки снизу. Белая лапа — фон под текстом. %>
 <article class="ad">
-  <%# Есть фотография — показываем её, нет — силуэт из макета. %>
-  <div class="ad__cover">
+  <%= image_tag "tb-logo-ear.svg", alt: "", class: "ad__paw" %>
+
+  <h3 class="ad__title"><%= ad.title %></h3>
+
+  <div class="ad__photo">
     <% if ad.photo.attached? %>
-      <%= image_tag ad.photo_url, alt: ad.title, class: "ad__photo", loading: "lazy" %>
+      <%= image_tag ad.photo_url, alt: ad.title, loading: "lazy" %>
     <% else %>
-      <%= image_tag ad.icon_name, alt: "" %>
+      <%= image_tag ad.icon_name, alt: "", class: "ad__icon" %>
     <% end %>
-    <span class="ad__kind"><%= ad.kind %></span>
   </div>
 
   <div class="ad__body">
-    <h3 class="ad__title"><%= ad.title %></h3>
-    <p class="ad__meta"><%= ad.meta %></p>
-    <p class="ad__text"><%= ad.description %></p>
+    <p class="ad__text">
+      <% ad.card_lines.each do |line| %>
+        <span><%= line %></span>
+      <% end %>
+    </p>
 
-    <div class="ad__footer">
-      <span class="ad__price"><%= ad.price %></span>
-      <%= modal_button "Откликнуться", kind: "respond", subject: ad.title, css: "btn btn--coral" %>
-    </div>
+    <% if ad.profile %>
+      <%= link_to ad.owner_label, public_profile_path(ad.profile), class: "ad__owner" %>
+    <% else %>
+      <%= modal_button "Откликнуться", kind: "respond", subject: ad.title, css: "ad__owner" %>
+    <% end %>
+  </div>
+
+  <div class="ad__tags">
+    <% ad.card_tags.each do |tag| %>
+      <span class="tag tag--outline"><%= tag %></span>
+    <% end %>
   </div>
 </article>

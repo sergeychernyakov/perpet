@@ -31,7 +31,7 @@ class AdminTest < ActionDispatch::IntegrationTest
     article = Article.create!(title: "Статья", position: 1)
     faq = FaqItem.create!(question: "Как это работает?", answer: "Просто.", position: 1)
     channel = SupportChannel.create!(title: "Телефон", value: "+7 963 574-79-20", position: 1)
-    ad = Ad.create!(title: "Мурзик", kind: "Кошка", status: "published")
+    ad = Ad.create!(title: "Мурзик", kind: "Кот", status: "published")
 
     [ admin_root_path,
       admin_ads_path, new_admin_ad_path, edit_admin_ad_path(ad),
@@ -75,7 +75,7 @@ class AdminTest < ActionDispatch::IntegrationTest
     sign_in_admin
 
     assert_difference -> { Ad.count }, 1 do
-      post admin_ads_path, params: { ad: { title: "Мурзик, 2 года", kind: "Кошка", city: "Москва",
+      post admin_ads_path, params: { ad: { title: "Мурзик, 2 года", kind: "Кот", city: "Москва",
                                            period: "1–5 июля", price: "500 ₽ / день",
                                            description: "Спокойный кот", status: "published" } }
     end

@@ -9,12 +9,33 @@
   </label>
 
   <label>
-    <span class="form__label">Вид питомца</span>
-    <%= f.select :kind, Ad::KINDS %>
+    <span class="form__label">Раздел</span>
+    <%= f.select :role, Ad::ROLES.map { |value, title| [ "Обьявления #{title}", value ] } %>
   </label>
 
   <label>
-    <span class="form__label">Город</span>
+    <span class="form__label">Вид питомца</span>
+    <%= f.select :kind, Ad::KINDS, include_blank: "— для карточки ситтера —" %>
+  </label>
+
+  <label>
+    <span class="form__label">Порода</span>
+    <%= f.text_field :breed, class: "form__input", placeholder: "Манчкин" %>
+  </label>
+
+  <label>
+    <span class="form__label">Возраст</span>
+    <%= f.text_field :age, class: "form__input", placeholder: "3 года" %>
+  </label>
+
+  <label>
+    <span class="form__label">Деятельность</span>
+    <%= f.text_field :activity, class: "form__input", placeholder: "Работа" %>
+    <span class="form__hint">Только для карточки ситтера.</span>
+  </label>
+
+  <label>
+    <span class="form__label">Место</span>
     <%= f.text_field :city, class: "form__input" %>
   </label>
 

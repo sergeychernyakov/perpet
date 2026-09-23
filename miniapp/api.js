@@ -82,6 +82,7 @@ export const api = {
   articles: (params) => request("/api/v1/articles?" + new URLSearchParams(params)),
   article: (id) => request(`/api/v1/articles/${id}`),
   profile: () => request("/api/v1/profile"),
+  publicProfile: (id) => request(`/api/v1/profiles/${id}`),
   updateProfile: (profile) => request("/api/v1/profile", { method: "PATCH", body: { profile } }),
   support: () => request("/api/v1/support"),
   createLead: (lead) => request("/api/v1/leads", { method: "POST", body: { lead } }),

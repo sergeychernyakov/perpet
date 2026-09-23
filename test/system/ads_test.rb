@@ -4,7 +4,7 @@ require "application_system_test_case"
 # обычным тестам контроллера, поэтому проверяем его в настоящем браузере.
 class AdsTest < ApplicationSystemTestCase
   setup do
-    @ad = Ad.create!(title: "Мурзик, 2 года", kind: "Кошка", city: "Москва",
+    @ad = Ad.create!(title: "Мурзик, 2 года", kind: "Кот", city: "Москва",
                      period: "1–5 июля", price: "500 ₽ / день",
                      description: "Спокойный кот", status: "published",
                      published_on: Date.current)

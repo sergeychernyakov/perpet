@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_16_165154) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_23_175625) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -40,6 +40,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_165154) do
   end
 
   create_table "ads", force: :cascade do |t|
+    t.string "activity"
+    t.string "age"
+    t.string "breed"
     t.string "city"
     t.datetime "created_at", null: false
     t.text "description"
@@ -49,12 +52,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_165154) do
     t.string "price"
     t.integer "profile_id"
     t.date "published_on"
+    t.string "role", default: "pet", null: false
     t.string "search_text"
     t.string "status"
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["kind"], name: "index_ads_on_kind"
     t.index ["profile_id"], name: "index_ads_on_profile_id"
+    t.index ["role"], name: "index_ads_on_role"
     t.index ["status"], name: "index_ads_on_status"
   end
 
@@ -88,12 +93,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_165154) do
   end
 
   create_table "profiles", force: :cascade do |t|
+    t.text "about"
+    t.string "activity"
+    t.string "age"
     t.string "city"
     t.datetime "created_at", null: false
     t.string "email"
     t.string "name"
     t.string "pet_age"
     t.string "pet_name"
+    t.string "phone"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["user_id"], name: "index_profiles_on_user_id", unique: true

@@ -23,6 +23,31 @@ end
 
 # ------------------ Пользователи и профиль ------------------
 
+# Люди из макета: у каждого объявления есть хозяин или ситтер, и кнопка
+# «Хозяин»/«Профиль» на карточке ведёт именно на него.
+PEOPLE = [
+  { key: :maria, email: "m.mary@mail.ru", name: "Мария", age: "23", city: "г. Москва",
+    activity: "Обучение", phone: "89039487129",
+    about: "Привет, меня зовут Мария и я буду рада помочь Вам с вашим питомцем, " \
+           "так как сама хотела бы завести себе животное." },
+  { key: :michael, email: "mixi@mail.ru", name: "Михаил", age: "27", city: "г. Москва",
+    activity: "Работа", phone: "89059382319",
+    about: "Привет, меня зовут Михаил, я хозяин нескольких замечательных питомцев, " \
+           "с которыми я вынужден прощаться на время командировок." },
+  { key: :peter, email: "petr@mail.ru", name: "Пётр", age: "32 года", city: "г. Москва",
+    activity: "Работа", phone: "89031157742",
+    about: "Привет, меня зовут Пётр, я хотел бы помочь другим с их животными, " \
+           "так как работаю онлайн и буду рад быть не один." },
+  { key: :margarita, email: "margarita@mail.ru", name: "Маргарита", age: "44 года",
+    city: "г. Москва, метро Щелковская", activity: "-", phone: "89261480356",
+    about: "Привет, меня зовут Маргарита. Я вышла на пенсию, а дети выросли. " \
+           "Хотела бы сделать доброе дело и помочь." },
+  { key: :anastasia, email: "anastasia@mail.ru", name: "Анастасия", age: "19 года",
+    city: "г. Москва, Строгино", activity: "Учеба", phone: "89154402318",
+    about: "Привет, меня зовут Анастасия. Сейчас каникулы и я хотела бы завести помочь, " \
+           "так как сама хочу завести питомца." }
+].freeze
+
 DEMO_PASSWORD = "perpet123".freeze
 
 def create_users
@@ -35,35 +60,68 @@ def create_users
     name: "Анна Петрова",
     city: "Москва",
     email: "anna@mail.ru",
+    phone: "89031234567",
+    age: "31 год",
+    activity: "Работа",
+    about: "Привет, меня зовут Анна. Часто уезжаю в командировки и ищу тех, кому спокойно доверю Барсика.",
     pet_name: "Барсик",
     pet_age: "4 года"
   )
 
-  puts "Пользователи: #{admin.email} (администратор) и #{user.email}, пароль #{DEMO_PASSWORD}"
+  @people = {}
+  PEOPLE.each do |attributes|
+    person = User.create!(email: attributes[:email], password: DEMO_PASSWORD)
+    person.profile.update!(attributes.except(:key).merge(email: attributes[:email]))
+    @people[attributes[:key]] = person.profile
+  end
+
+  puts "Пользователи: #{User.count}, пароль у всех #{DEMO_PASSWORD} (администратор — #{admin.email})"
 end
 
 # ------------------ Объявления ------------------
 
+# Карточки питомцев из макета 2.0 — все принадлежат Михаилу.
+PET_ADS = [
+  { kind: "Кот", title: "Мартин", age: "3 года", city: "г. Москва", breed: "Манчкин",
+    period: "16.02.26 - 24.02.26", description: "Необходимо протирать глаза каждый вечер.",
+    icon: "shape-03.svg" },
+  { kind: "Собака", title: "Тоби", age: "4 года", city: "г. Москва, метро Спартак", breed: "Корги",
+    period: "10.06.26 - 14.06.26", description: "Нет, только рекомендации по выгулу.",
+    icon: "shape-17.svg" },
+  { kind: "Кролик", title: "Бантик", age: "1.5 года", city: "г. Москва, Строгино",
+    breed: "Карликовый кролик", period: "03.07.26 - 05.07.26",
+    description: "Никаких важных деталей, все необходимое предоставим.", icon: "shape-04.svg" },
+  { kind: "Кот", title: "Грей", age: "5 лет", city: "г. Москва", breed: "-",
+    period: "10.03.26 - 25.03.26", description: "Никаких важных уточнений.", icon: "shape-03.svg" }
+].freeze
+
+# Карточки ситтеров: то же объявление, только про человека.
+SITTER_ADS = [
+  { key: :peter, period: "01.01.26 - 30.05.26" },
+  { key: :margarita, period: "17.03.26 - 24.06.26" },
+  { key: :anastasia, period: "16.06.26 - 31.08.26" }
+].freeze
+
 ADS = [
-  { kind: "Кошка", title: "Барсик, 4 года", city: "Москва", period: "12–26 июня", price: "700 ₽ / день",
+  { kind: "Кот", title: "Барсик, 4 года", city: "Москва", period: "12–26 июня", price: "700 ₽ / день",
     description: "Спокойный, кастрирован, привит. Нужна передержка на время командировки.", icon: "shape-03.svg" },
   { kind: "Собака", title: "Тоша, 2 года", city: "Санкт-Петербург", period: "3–10 июля", price: "1 200 ₽ / день",
     description: "Метис, 12 кг, любит долгие прогулки. Ест сухой корм, аллергий нет.", icon: "shape-18.svg" },
   { kind: "Грызун", title: "Пряник, морская свинка", city: "Казань", period: "1–14 августа", price: "300 ₽ / день",
     description: "Клетка и корм с собой. Нужно менять сено и воду раз в день.", icon: "shape-04.svg" },
-  { kind: "Кошка", title: "Муся, 7 лет", city: "Москва", period: "20–30 июня", price: "800 ₽ / день",
+  { kind: "Кот", title: "Муся, 7 лет", city: "Москва", period: "20–30 июня", price: "800 ₽ / день",
     description: "Пожилая кошка, принимает таблетки утром. Ищу хозяев с опытом.", icon: "shape-04.svg" },
   { kind: "Птица", title: "Кеша, волнистый попугай", city: "Екатеринбург", period: "5–19 июля", price: "250 ₽ / день",
     description: "Разговорчивый, клетка своя. Просьба не выпускать при открытых окнах.", icon: "shape-04.svg" },
   { kind: "Собака", title: "Лада, 5 лет", city: "Новосибирск", period: "15–25 августа", price: "1 000 ₽ / день",
     description: "Хаски, активная, нужны две прогулки в день. Документы и прививки в порядке.", icon: "shape-17.svg" },
-  { kind: "Кошка", title: "Симба, 1 год", city: "Москва", period: "8–15 июля", price: "650 ₽ / день",
+  { kind: "Кот", title: "Симба, 1 год", city: "Москва", period: "8–15 июля", price: "650 ₽ / день",
     description: "Котёнок-подросток, очень игривый. Нужен дом без других животных.", icon: "shape-03.svg" },
   { kind: "Собака", title: "Рекс, 6 лет", city: "Казань", period: "22 июня – 2 июля", price: "900 ₽ / день",
     description: "Овчарка, послушный, знает команды. Нужен двор или частые прогулки.", icon: "shape-18.svg" },
   { kind: "Грызун", title: "Соня, шиншилла", city: "Санкт-Петербург", period: "1–8 июля", price: "350 ₽ / день",
     description: "Боится шума, нужна прохладная комната. Клетка и песок для купания свои.", icon: "shape-04.svg" },
-  { kind: "Кошка", title: "Тиша и Миша, 3 года", city: "Екатеринбург", period: "10–24 июля", price: "1 100 ₽ / день",
+  { kind: "Кот", title: "Тиша и Миша, 3 года", city: "Екатеринбург", period: "10–24 июля", price: "1 100 ₽ / день",
     description: "Два брата, разлучать нельзя. Спокойные, к лотку приучены идеально.", icon: "shape-03.svg" },
   { kind: "Птица", title: "Грета, корелла", city: "Москва", period: "28 июня – 6 июля", price: "300 ₽ / день",
     description: "Любит музыку и общение. Нужно менять воду дважды в день.", icon: "shape-19.svg" },
@@ -71,25 +129,45 @@ ADS = [
     description: "Корги, ленивый и дружелюбный. Диета по расписанию, корм отдам с собой.", icon: "shape-17.svg" },
   { kind: "Грызун", title: "Пиксель, хомяк", city: "Казань", period: "17–30 июля", price: "200 ₽ / день",
     description: "Активен по ночам. Нужно только менять корм и воду, остальное сам.", icon: "shape-04.svg" },
-  { kind: "Кошка", title: "Багира, 9 лет", city: "Санкт-Петербург", period: "3–17 августа", price: "750 ₽ / день",
+  { kind: "Кот", title: "Багира, 9 лет", city: "Санкт-Петербург", period: "3–17 августа", price: "750 ₽ / день",
     description: "Пожилая, спит большую часть дня. Уколы раз в сутки — научу заранее.", icon: "shape-03.svg" },
   { kind: "Птица", title: "Чижик, канарейка", city: "Новосибирск", period: "12–19 июля", price: "250 ₽ / день",
     description: "Поёт с утра. Клетку нельзя ставить на сквозняк и под прямое солнце.", icon: "shape-19.svg" }
 ].freeze
 
 def create_ads
-  ADS.each_with_index do |attributes, index|
-    Ad.create!(attributes.merge(status: "published", published_on: Date.current - index.days))
+  PET_ADS.each_with_index do |attributes, index|
+    Ad.create!(attributes.merge(profile: @people[:michael], status: "published",
+                                published_on: Date.current - index.days))
   end
-  puts "Объявлений в каталоге: #{Ad.published.count}"
+
+  SITTER_ADS.each_with_index do |attributes, index|
+    profile = @people[attributes[:key]]
+    Ad.create!(
+      role: Ad::SITTER, profile: profile, title: profile.name, age: profile.age,
+      city: profile.city, activity: profile.activity, description: profile.about,
+      period: attributes[:period], icon: "shape-04.svg",
+      status: "published", published_on: Date.current - index.days
+    )
+  end
+
+  # Остальной каталог раздаём по кругу, чтобы у каждой карточки был хозяин.
+  owners = [ @profile, @people[:michael], @people[:maria] ]
+  ADS.each_with_index do |attributes, index|
+    Ad.create!(attributes.merge(profile: owners[index % owners.size], status: "published",
+                                published_on: Date.current - (index + PET_ADS.size).days))
+  end
+
+  puts "Объявлений: питомцев #{Ad.published.of_role(Ad::PET).count}, " \
+       "ситтеров #{Ad.published.of_role(Ad::SITTER).count}"
 end
 
-# Фотографии котов из макета — чтобы в каталоге с первой же страницы было
-# видно, как выглядит карточка со снимком, а не только с силуэтом.
+# Фотографии из макета — чтобы в каталоге с первой же страницы было видно,
+# как выглядит карточка со снимком, а не только с силуэтом.
 PET_PHOTOS = {
-  "Барсик, 4 года" => "profile-photo.jpg",
-  "Симба, 1 год" => "pet-simba.jpg",
-  "Муся, 7 лет" => "pet-musya.jpg"
+  "Мартин" => "pet-simba.jpg",
+  "Грей" => "pet-musya.jpg",
+  "Барсик, 4 года" => "profile-photo.jpg"
 }.freeze
 
 def attach_pet_photo(record, file)
@@ -122,7 +200,7 @@ def create_my_ads
 
   Ad.create!(
     profile: @profile,
-    kind: "Кошка",
+    kind: "Кот",
     title: "Новое объявление",
     description: "Заполните описание питомца и сроки передержки.",
     icon: "shape-04.svg",

@@ -3,9 +3,11 @@ module Api
     class AdsController < BaseController
       before_action :authenticate!, only: %i[mine create update destroy]
 
+      # role — раздел из макета: объявления питомцев или объявления ситтеров.
       def index
-        scope = Ad.published.of_kind(params[:kind]).search(params[:q]).recent
-        render_page(Paginator.new(scope, page: page), :ads, all: Ad.published.count, &:as_api)
+        published = Ad.published.of_role(params[:role])
+        scope = published.of_kind(params[:kind]).search(params[:q]).recent
+        render_page(Paginator.new(scope, page: page), :ads, all: published.count, &:as_api)
       end
 
       def show
@@ -45,7 +47,8 @@ module Api
       private
 
       def ad_params
-        params.require(:ad).permit(:title, :kind, :city, :period, :price, :description, :icon, :status, :photo)
+        params.require(:ad).permit(:title, :kind, :role, :age, :breed, :activity,
+                                   :city, :period, :price, :description, :icon, :status, :photo)
       end
     end
   end

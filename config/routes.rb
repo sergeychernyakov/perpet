@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :leads, only: %i[create]
 
   resource :profile, only: %i[show update], controller: "profiles"
+  get "profiles/:id", to: "public_profiles#show", as: :public_profile
 
   namespace :admin do
     root "dashboard#index"
@@ -38,6 +39,7 @@ Rails.application.routes.draw do
       resources :leads, only: %i[create]
       resources :support_tickets, only: %i[create]
       resource :profile, only: %i[show update], controller: "profiles"
+      get "profiles/:id", to: "public_profiles#show", as: :public_profile
       resource :support, only: %i[show], controller: "support"
       resource :content, only: %i[show], controller: "content"
     end

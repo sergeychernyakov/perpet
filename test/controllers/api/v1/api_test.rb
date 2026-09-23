@@ -4,7 +4,7 @@ module Api
   module V1
     class ApiTest < ActionDispatch::IntegrationTest
       setup do
-        @ad = Ad.create!(title: "Мурзик, 2 года", kind: "Кошка", city: "Москва",
+        @ad = Ad.create!(title: "Мурзик, 2 года", kind: "Кот", city: "Москва",
                          period: "1–5 июля", price: "500 ₽ / день", status: "published",
                          published_on: Date.current)
         Ad.create!(title: "Тоша, 3 года", kind: "Собака", city: "Казань", status: "published")
@@ -41,7 +41,7 @@ module Api
       test "объявление и статья открываются по id" do
         get api_v1_ad_path(@ad)
         assert_response :success
-        assert_equal "Кошка", json["ad"]["kind"]
+        assert_equal "Кот", json["ad"]["kind"]
 
         get api_v1_article_path(@article)
         assert_response :success
