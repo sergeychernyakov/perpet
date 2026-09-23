@@ -248,8 +248,8 @@
 
 .why {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: clamp(16px, 2vw, 48px);
+  grid-template-columns: minmax(0, 820fr) minmax(0, 980fr);
+  gap: clamp(16px, 2.5vw, 48px);
   scroll-margin-top: 110px;
 }
 
@@ -434,7 +434,7 @@
 .promos {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(16px, 1.8vw, 49px);
+  gap: clamp(16px, 2.5vw, 48px);
 }
 
 .promo,
@@ -442,7 +442,7 @@
   container-type: inline-size;
   position: relative;
   width: 100%;
-  aspect-ratio: 583.33 / 565;
+  aspect-ratio: 584 / 529;
   border-radius: clamp(24px, 2.706vw, 50px);
   background: var(--cream);
   overflow: hidden;

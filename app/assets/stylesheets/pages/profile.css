@@ -92,6 +92,7 @@
 
 .oops {
   display: flex;
+  min-height: clamp(96px, 9.53vw, 183px);
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
@@ -262,6 +263,7 @@
 
 .card-form__note {
   grid-column: 1 / -1;
+  min-height: clamp(80px, 7.4vw, 142px);
   padding: clamp(18px, 1.9vw, 35px) clamp(20px, 2.2vw, 40px);
   border-radius: var(--radius-card);
   border: 2px solid var(--line);

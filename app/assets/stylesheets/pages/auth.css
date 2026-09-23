@@ -190,6 +190,7 @@
 
 .reg__switch {
   container-type: inline-size;
+  min-height: clamp(110px, 10.47vw, 201px);
   display: flex;
   flex-direction: column;
   align-items: flex-start;

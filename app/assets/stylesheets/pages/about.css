@@ -259,12 +259,17 @@
   white-space: nowrap;
 }
 
+/* На «О нас» в макете колонки обратные главной: плашка с диаграммой шире,
+   а сама диаграмма та же — справа от неё остаётся пустое поле. */
+#stats.why { grid-template-columns: minmax(0, 1070fr) minmax(0, 730fr); }
+#stats .stat__plate { width: 91.589%; }
+
 /* Факты */
 
 .facts {
   display: flex;
   flex-direction: column;
-  gap: clamp(16px, 2vw, 48px);
+  gap: clamp(16px, 2.5vw, 48px);
 }
 
 .fact {
@@ -272,7 +277,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: clamp(20px, 3vw, 48px);
+  gap: clamp(20px, 2.5vw, 48px);
   min-height: clamp(220px, 18vw, 354px);
   padding: clamp(24px, 2.6vw, 50px);
   border-radius: var(--radius-card);
@@ -331,12 +336,11 @@
 .flow {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(16px, 2vw, 48px);
+  gap: clamp(16px, 2.5vw, 48px);
   scroll-margin-top: 110px;
 }
 
 .step {
-  aspect-ratio: 584 / 529;
   border-radius: clamp(20px, 8.562cqw, 50px);
   background: none;
 }

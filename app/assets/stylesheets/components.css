@@ -17,6 +17,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  min-height: clamp(72px, 7.29vw, 140px);
   padding: var(--pad-banner);
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
@@ -135,7 +136,7 @@
 
 .grid--wide {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: clamp(16px, 2vw, 48px);
+  gap: clamp(16px, 2.5vw, 48px);
 }
 
 /* Формы */
