@@ -92,5 +92,4 @@ class Article < ApplicationRecord
 
     rows
   end
-
 end

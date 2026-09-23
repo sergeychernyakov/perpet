@@ -468,6 +468,40 @@ function adCard(ad) {
   ])
 }
 
+// Блок текста статьи: плашка с текстом или пункты-«пилюли».
+function articleBlock(block) {
+  if (block.kind === "list") {
+    return el("div", { class: "reading__pills" },
+      block.items.map((item) => el("p", { class: "reading__pill", text: item })))
+  }
+
+  return el("p", { class: `reading__plate${block.tone === "lime" ? " reading__plate--lime" : ""}`, text: block.text })
+}
+
+// Ряд статьи: полоса раздела, выделение или колонки с заголовками.
+function articleRow(row) {
+  if (row.kind === "section") {
+    return el("section", { class: "banner" }, [ el("h2", { class: "banner__title", text: row.text }) ])
+  }
+  if (row.kind === "highlight") return el("p", { class: "reading__highlight", text: row.text })
+  if (row.kind !== "row") return articleBlock(row)
+
+  const tone = row.columns[0].tone
+  const panel = (column) => el("h3", { class: `reading__panel reading__panel--${tone}`, text: column.title })
+  const body = (column) => el("div", { class: "reading__col" }, column.blocks.map(articleBlock))
+
+  if (row.columns.length === 1) {
+    return el("div", { class: `reading__row reading__row--split reading__row--${tone}` },
+      [ panel(row.columns[0]), body(row.columns[0]) ])
+  }
+
+  const grid = el("div", { class: "reading__row" }, row.columns.map((column) =>
+    el("div", { class: "reading__column" }, [ panel(column), body(column) ])))
+  grid.style.setProperty("--cols", row.columns.length)
+
+  return grid
+}
+
 // Карточка пользователя: кто стоит за объявлением.
 async function personScreen(id) {
   render(...skeletons(2))
@@ -702,26 +736,9 @@ async function articleScreen(id) {
     return render(backButton("articles"), error(failure.messages))
   }
 
-  const tags = [ ...(article.tags || (article.tag ? [ article.tag ] : [])) ]
-  if (article.read_time) tags.push(article.read_time)
-
-  // Текст приходит блоками: абзац, подзаголовок или список — как на сайте.
-  const body = (article.blocks || []).map((block) => {
-    if (block.kind === "title") return el("h2", { class: "reading__subtitle", text: block.text })
-    if (block.kind === "subtitle") {
-      return el("h3", { class: "reading__subtitle reading__subtitle--small", text: block.text })
-    }
-    if (block.kind === "list") {
-      return el("ul", { class: "reading__list" }, block.items.map((item) => el("li", { text: item })))
-    }
-
-    return el("p", { class: "reading__text", text: block.text })
-  })
-
+  // Статья приходит рядами плашек — та же раскладка, что на сайте.
   const reading = el("article", { class: "reading" }, [
-    el("div", { class: "reading__tags" }, tags.map((tag) => el("span", { class: "tag tag--outline", text: tag }))),
-    article.excerpt && el("p", { class: "reading__lead", text: article.excerpt }),
-    ...body,
+    ...(article.layout || []).map(articleRow),
     el("div", { class: "reading__actions" }, [
       el("a", { class: "btn", href: "#articles" }, "Все статьи"),
       el("button", { class: "btn btn--coral btn--wide", type: "button", onClick: () => go("ads") }, "Присоединиться")
@@ -730,9 +747,7 @@ async function articleScreen(id) {
 
   const more = el("div", { class: "articles" })
 
-  render(el("section", { class: "reading__head" }, [
-    el("h1", { class: "reading__title", text: article.title })
-  ]), reading, more)
+  render(banner(article.title), reading, more)
 
   // «Читать дальше» — те же блоки, что и в списке.
   try {

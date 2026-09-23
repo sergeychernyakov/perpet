@@ -33,7 +33,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "страница статьи показывает текст и метки" do
+  test "страница статьи показывает текст" do
     article = Article.create!(title: "Как везти кота", tag: "Перевозка, Документы",
                               read_time: "5 минут", excerpt: "Коротко о главном.",
                               body: "Первый абзац.\n\nВторой абзац.")
@@ -42,18 +42,19 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h1", "Как везти кота"
-    assert_select ".reading__text", 2
-    assert_select ".reading__lead", "Коротко о главном."
-    assert_select ".reading__tags .tag", 3
+    assert_select ".reading__plate", 2
   end
 
-  test "текст статьи разбирается на подзаголовки и списки" do
+  test "текст статьи раскладывается плашками, как в макете" do
     article = Article.create!(title: "Как везти кота", excerpt: "Коротко о главном.",
-                              body: "Вступление.\n\n## Что взять\n\n- Переноска.\n- Пеленки.")
+                              body: "Вступление.\n\n## Дорога\n\n! Главная мысль.\n\n" \
+                                    "### Что взять\n\n- Переноска.\n- Пеленки.")
 
     get article_path(article)
 
-    assert_select ".reading__subtitle", "Что взять"
-    assert_select ".reading__list li", 2
+    assert_select ".banner__title", text: "Дорога"
+    assert_select ".reading__highlight", "Главная мысль."
+    assert_select ".reading__row--split .reading__panel", "Что взять"
+    assert_select ".reading__pill", 2
   end
 end
