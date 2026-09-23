@@ -390,4 +390,13 @@ def create_support_channels
   puts "Каналов поддержки: #{SupportChannel.count}"
 end
 
-seed
+# bin/rails db:seed пересоздаёт все демонстрационные данные и стирает
+# заведённые аккаунты. Когда меняются только тексты статей, этого не нужно:
+# SEED=articles bin/rails db:seed обновит один раздел.
+case ENV["SEED"]
+when "articles"
+  Article.destroy_all
+  create_articles
+else
+  seed
+end
