@@ -58,7 +58,8 @@
   </label>
 
   <div class="card-form__plate card-form__plate--photo">
-    <%= render "shared/photo_field", form: f, record: ad,
+    <%= image_tag "tb-logo-ear.svg", alt: "", class: "card-form__paw" %>
+    <%= render "shared/photo_field", form: f, record: ad, plus: true,
                label: ad.sitter? ? "Добавьте ваше фото*" : "Добавьте фото питомца*" %>
   </div>
 

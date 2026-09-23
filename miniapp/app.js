@@ -830,7 +830,9 @@ async function profileEditScreen() {
   // Имя и город подставляем из VK, пока человек не вписал свои.
   const fromVk = vk.suggestedProfile()
   const prefilled = fromVk && vk.untouchedName(profile.name)
-  const photo = photoField("Добавьте ваше фото", { current: profile.photo_url && apiBase + profile.photo_url })
+  const photo = photoField("Добавьте ваше фото", {
+    current: profile.photo_url && apiBase + profile.photo_url, plus: true
+  })
 
   const input = (name, value, placeholder, required = false) =>
     el("label", { class: "card-form__field" }, [
@@ -857,7 +859,9 @@ async function profileEditScreen() {
       el("input", { class: "form__input", name: "phone", value: profile.phone || "", placeholder: "Телефон" }),
       el("input", { class: "form__input", name: "email", value: profile.email || "", placeholder: "Почта" })
     ]),
-    el("div", { class: "card-form__plate card-form__plate--photo" }, photo.field),
+    el("div", { class: "card-form__plate card-form__plate--photo" }, [
+      el("img", { class: "card-form__paw", src: "assets/tb-logo-ear.svg", alt: "" }), photo.field
+    ]),
     el("div", { class: "card-form__actions" }, [
       el("button", { class: "btn btn--coral btn--wide", type: "submit" }, "Сохранить"),
       el("a", { class: "btn", href: "#profile" }, "Отмена")
@@ -967,7 +971,7 @@ async function cardScreen(role, id) {
   }
 
   const photo = photoField(sitter ? "Добавьте ваше фото*" : "Добавьте фото питомца*",
-                           { current: ad.photo_url && apiBase + ad.photo_url })
+                           { current: ad.photo_url && apiBase + ad.photo_url, plus: true })
 
   const input = (name, value, placeholder, required = false) =>
     el("label", { class: "card-form__field" }, [
@@ -1008,7 +1012,9 @@ async function cardScreen(role, id) {
       el("span", { class: "card-form__label", text: "Укажите даты пребывания*" }),
       el("input", { class: "form__input", name: "period", value: ad.period || "", placeholder: "16.02 – 24.02" })
     ]),
-    el("div", { class: "card-form__plate card-form__plate--photo" }, photo.field),
+    el("div", { class: "card-form__plate card-form__plate--photo" }, [
+      el("img", { class: "card-form__paw", src: "assets/tb-logo-ear.svg", alt: "" }), photo.field
+    ]),
     el("p", {
       class: "card-form__note",
       text: sitter ? "После заполнения карточки Ваш профиль отобразится у других пользователей."

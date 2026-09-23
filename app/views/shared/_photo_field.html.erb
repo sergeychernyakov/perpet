@@ -1,6 +1,12 @@
-<%# Поле фотографии: браузер уменьшает картинку до отправки. %>
-<div class="photo-field" data-controller="upload">
-  <span class="form__label"><%= label %></span>
+<%# Поле фотографии: браузер уменьшает картинку до отправки.
+    В карточках макета это плашка с круглым «+» и подписью под ним —
+    такой вид включает plus: true. %>
+<% plus = local_assigns.fetch(:plus, false) %>
+
+<div class="photo-field <%= "photo-field--plus" if plus %>" data-controller="upload">
+  <% unless plus %>
+    <span class="form__label"><%= label %></span>
+  <% end %>
 
   <div class="photo-field__row">
     <%= image_tag(record.photo_url, class: "photo-field__preview", alt: "",
@@ -9,12 +15,21 @@
       <img class="photo-field__preview" alt="" hidden data-upload-target="preview">
     <% end %>
 
-    <label class="btn">
-      Выбрать фото
+    <label class="<%= plus ? "photo-field__plus" : "btn" %>" title="Выбрать фото">
+      <% if plus %>
+        <span aria-hidden="true">+</span>
+        <span class="visually-hidden">Выбрать фото</span>
+      <% else %>
+        Выбрать фото
+      <% end %>
       <%= form.file_field :photo, accept: "image/jpeg,image/png,image/webp", class: "visually-hidden",
                           data: { upload_target: "input", action: "upload#choose" } %>
     </label>
   </div>
+
+  <% if plus %>
+    <span class="photo-field__caption"><%= label %></span>
+  <% end %>
 
   <p class="form__hint" data-upload-target="note"></p>
 </div>

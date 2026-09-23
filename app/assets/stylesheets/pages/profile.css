@@ -149,7 +149,10 @@
   color: var(--gray);
 }
 
-.card-form__field--pair .form__input { min-width: 0; }
+/* «Вид/порода*»: в макете это одно поле, у нас вид уходит в метку и фильтр,
+   поэтому под выбор вида отдаём больше места — длинная подпись не режется. */
+.card-form__field--pair .form__input { min-width: 0; flex: 1; }
+.card-form__field--pair select.form__input { flex: 1.5; padding: 0 12px; }
 
 .card-form__plate {
   display: flex;
@@ -162,14 +165,68 @@
   background: var(--lime);
 }
 
-.card-form__plate--photo { background: var(--cream); }
+/* Плашка с фотографией: в макете круглый «+», подпись под ним и белая лапа
+   в углу, которая уходит за край. */
 
-/* В макете подпись к фотографии набрана тем же шрифтом, что и остальной текст. */
-.card-form__plate .form__label {
+.card-form__plate--photo {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 1.6vw, 26px);
+  overflow: hidden;
+}
+
+.card-form__paw {
+  position: absolute;
+  left: 76.7%;
+  top: -14.9%;
+  width: 80.7%;
+  pointer-events: none;
+}
+
+.card-form__plate--photo > *:not(.card-form__paw) { position: relative; }
+
+.photo-field--plus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1.1vw, 18px);
+}
+
+.photo-field--plus .photo-field__row {
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1.1vw, 18px);
+}
+
+.photo-field__plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(88px, 7.3vw, 134px);
+  aspect-ratio: 134 / 96;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--line);
+  background: var(--white);
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.2vw, 40px);
+  line-height: 1;
+  color: var(--gray);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.photo-field__plus:hover {
+  background: var(--coral);
+  color: var(--ink);
+  transform: scale(1.04);
+}
+
+.photo-field__caption {
   font-family: var(--font-hand);
   font-size: clamp(11.7px, 1.17vw, 18px);
-  letter-spacing: normal;
-  text-transform: none;
+  line-height: 1.25;
+  text-align: center;
   color: var(--gray);
 }
 

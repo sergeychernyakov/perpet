@@ -25,10 +25,11 @@ export async function shrink(file) {
 }
 
 // Возвращает поле и функцию, которая отдаёт выбранный файл (уже уменьшенный).
-export function photoField(label, { current } = {}) {
+// plus: true — вид из макета: круглый «+» и подпись под ним.
+export function photoField(label, { current, plus = false } = {}) {
   let chosen = null
 
-  const preview = el("img", { class: "photo__preview", alt: "" })
+  const preview = el("img", { class: plus ? "photo__preview photo-field__preview" : "photo__preview", alt: "" })
   preview.hidden = !current
   if (current) preview.src = current
 
@@ -53,14 +54,25 @@ export function photoField(label, { current } = {}) {
     note.textContent = `${Math.round(chosen.size / 1024)} КБ`
   })
 
-  const field = el("div", { class: "field photo" }, [
-    el("span", { text: label }),
-    el("div", { class: "photo__row" }, [
-      preview,
-      el("label", { class: "btn" }, [ "Выбрать фото", input ])
-    ]),
-    note
-  ])
+  const field = plus
+    ? el("div", { class: "photo-field photo-field--plus" }, [
+        el("div", { class: "photo-field__row" }, [
+          preview,
+          el("label", { class: "photo-field__plus", title: "Выбрать фото" }, [
+            el("span", { "aria-hidden": "true", text: "+" }), input
+          ])
+        ]),
+        el("span", { class: "photo-field__caption", text: label }),
+        note
+      ])
+    : el("div", { class: "field photo" }, [
+        el("span", { text: label }),
+        el("div", { class: "photo__row" }, [
+          preview,
+          el("label", { class: "btn" }, [ "Выбрать фото", input ])
+        ]),
+        note
+      ])
 
   return { field, file: () => chosen }
 }
