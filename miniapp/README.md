@@ -33,7 +33,7 @@ npm start                       # соберёт build/ и раздаст на h
 Откройте с адресом своего API и подставленными параметрами запуска:
 
 ```
-http://localhost:5173/index.html?api=http://localhost:3000&vk_user_id=501&vk_app_id=54774377
+http://localhost:5173/index.html?api=http://localhost:3000&vk_user_id=501&vk_app_id=54774841
 ```
 
 `http://localhost:5173` уже разрешён в `CORS_ORIGINS` по умолчанию, поэтому
@@ -52,23 +52,28 @@ npm run deploy                  # сборка в build/ и заливка
 
 | Вопрос | Ответ |
 | --- | --- |
-| `Enter test group name` | любое имя, например `perpet` |
-| `Do you want to update test group url?` | **n** — иначе адрес тестовой группы перезапишет боевой |
-| остальные подтверждения | `y` |
+| подтверждение выкладки | `y` |
+| `Would you like to update prod urls?` | `y` — обновить боевую версию |
+| `Would you like to update dev urls?` | `y` |
+| `Would you like to update test group url?` | `n` |
 | код подтверждения | придёт в чат «Администрация ВКонтакте» |
 
-Выйти из аккаунта и зайти другим — `npx @vkontakte/vk-miniapps-deploy login`;
-токен лежит в `~/.config/configstore/@vkontakte/vk-miniapps-deploy.json`.
+CLI должен быть авторизован под аккаунтом администратора приложения;
+сохранённый токен лежит в `~/.config/configstore/@vkontakte/vk-miniapps-deploy.json`.
 
-`npm run deploy -- --production` переводит залитую версию в боевую.
+Для явного выбора production: `MINI_APPS_ENVIRONMENT=production npm run deploy`.
+На вопрос об обновлении prod URL ответьте `y`.
 
 ### Куда выкладывается
 
-`vk-hosting-config.json` указывает на приложение **54774377** и на папку `build/`.
-Приложение заказчика — **54774841**; чтобы выкладывать туда, нужны права
-администратора или редактора в его настройках на dev.vk.com, иначе deploy отвечает
-`Permission ... User should be admin or editor of application`. Как дадут права —
-поменять `app_id` в `vk-hosting-config.json` и `VK_APP_ID` в `config.js`.
+`vk-hosting-config.json` указывает на основное приложение заказчика **54774841**
+и на папку `build/`; этот же ID задан в `config.js`. Права администратора получены.
+Для выкладки нужно войти в CLI под аккаунтом с этими правами.
+Прежнее приложение **54774377** больше не является целью выкладки.
+
+На сервере `VK_APP_SECRET` должен содержать защищённый ключ приложения **54774841**,
+иначе авторизация через API вернёт 401. При переезде можно оставить оба ключа
+через запятую (см. `../DEPLOY.md`). Не добавляйте защищённый ключ в клиентский код.
 
 ## Что нужно, чтобы заработало внутри VK
 
