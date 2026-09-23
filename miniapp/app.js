@@ -197,9 +197,9 @@ async function homeScreen() {
   ])
 
   render(heroWide, heroNarrow,
-         heading("Нам доверяют, узнай почему", () => scrollTo_("why")),
+         heading("Нам доверяют, узнай почему", () => go("brand")),
          el("div", { class: "why", id: "why" }, [ advantages, pie ]),
-         heading("О чем мы?", () => go("about"), "shape-20.svg"),
+         heading("О чем мы?", () => go("brand"), "shape-20.svg"),
          note,
          el("div", { class: "promos" }, data.promos.map((promo) => promoCard(promo))),
          important)

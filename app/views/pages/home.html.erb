@@ -59,9 +59,9 @@
 
   <section class="banner">
     <h2 class="banner__title">Нам доверяют, узнай почему</h2>
-    <a href="#why" class="round-btn" title="К статистике">
+    <%= link_to brand_path, class: "round-btn", title: "Стиль бренда" do %>
       <%= image_tag "shape-12.svg", alt: "" %>
-    </a>
+    <% end %>
   </section>
 
   <div class="why" id="why">
@@ -95,7 +95,7 @@
 
   <section class="banner">
     <h2 class="banner__title">О чем мы?</h2>
-    <%= link_to about_path, class: "round-btn", title: "Знакомство с нами" do %>
+    <%= link_to brand_path, class: "round-btn", title: "Стиль бренда" do %>
       <%= image_tag "shape-20.svg", alt: "" %>
     <% end %>
   </section>
