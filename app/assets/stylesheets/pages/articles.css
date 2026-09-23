@@ -166,16 +166,6 @@
 .article__whisker--r2 { transform: rotate(0deg); }
 .article__whisker--r3 { transform: rotate(-11deg); }
 
-.article__meow {
-  position: absolute;
-  left: 104%;
-  top: 11%;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(26px, 2.6vw, 50px);
-  color: var(--ink);
-}
-
 @media (max-width: 860px) {
   .article__cat { display: none; }
 

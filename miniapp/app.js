@@ -576,8 +576,7 @@ function articleCat() {
   return el("div", { class: "article__cat", "aria-hidden": "true" }, [
     el("img", { class: "article__cat-art", src: "assets/hero-21.svg", alt: "" }),
     ...[ "l1", "l2", "l3", "r1", "r2", "r3" ].map((side) =>
-      el("span", { class: `article__whisker article__whisker--${side}` })),
-    el("span", { class: "article__meow", text: "мяу" })
+      el("span", { class: `article__whisker article__whisker--${side}` }))
   ])
 }
 
