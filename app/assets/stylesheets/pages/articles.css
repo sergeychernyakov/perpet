@@ -234,11 +234,37 @@
 
 .reading__text {
   max-width: 62ch;
-  font-family: var(--font-body);
+  font-family: var(--font-hand);
   font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.55;
   color: var(--gray);
 }
+
+/* Подзаголовки и списки внутри текста: в макете статья разбита на разделы
+   с плашками, на странице им отвечают заголовок и маркированный список. */
+
+.reading__subtitle {
+  margin-top: clamp(10px, 1.2vw, 20px);
+  font-size: clamp(18px, 1.8vw, 32px);
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.reading__list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 0.9vw, 14px);
+  max-width: 62ch;
+  margin: 0;
+  padding-left: 1.2em;
+  font-family: var(--font-hand);
+  font-size: clamp(11.7px, 1.17vw, 18px);
+  line-height: 1.55;
+  color: var(--gray);
+}
+
+.reading__list li::marker { color: var(--coral); }
 
 .reading__actions {
   display: flex;

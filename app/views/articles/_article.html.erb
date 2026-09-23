@@ -1,6 +1,7 @@
 <%# В макете статья — блок во всю ширину, соседние зеркальны: у нечётных
     заголовок слева и кнопка справа, у чётных наоборот, фон через один,
-    и через один же из-за блока выглядывает кот. %>
+    и через один же из-за блока выглядывает кот.
+    Ссылкой карточка становится, только если у статьи есть текст. %>
 <article class="article <%= "article--mirror" if article_index.odd? %>">
   <% if article_index.odd? %>
     <div class="article__cat" aria-hidden="true">
@@ -15,9 +16,13 @@
   <% end %>
 
   <div class="article__top">
-    <h3 class="article__title"><%= link_to article.title, article %></h3>
-    <%= link_to article, class: "article__arrow", title: "Читать «#{article.title}»" do %>
-      <%= image_tag "shape-11.svg", alt: "" %>
+    <h3 class="article__title">
+      <%= article.readable? ? link_to(article.title, article) : article.title %>
+    </h3>
+    <% if article.readable? %>
+      <%= link_to article, class: "article__arrow", title: "Читать «#{article.title}»" do %>
+        <%= image_tag "shape-11.svg", alt: "" %>
+      <% end %>
     <% end %>
   </div>
 

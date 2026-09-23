@@ -580,6 +580,8 @@ function articleCat() {
   ])
 }
 
+// Ссылкой карточка становится, только если у статьи есть текст: остальные —
+// анонсы будущих тем, открывать в них нечего.
 function articleCard(article, index) {
   const href = `#article/${article.id}`
   const tags = article.tags || (article.tag ? [ article.tag ] : [])
@@ -587,8 +589,9 @@ function articleCard(article, index) {
   return el("article", { class: `article${index % 2 ? " article--mirror" : ""}` }, [
     index % 2 ? articleCat() : null,
     el("div", { class: "article__top" }, [
-      el("h3", { class: "article__title" }, [ el("a", { href, text: article.title }) ]),
-      el("a", { class: "article__arrow", href, title: `Читать «${article.title}»` }, [
+      el("h3", { class: "article__title" },
+         article.readable ? [ el("a", { href, text: article.title }) ] : article.title),
+      article.readable && el("a", { class: "article__arrow", href, title: `Читать «${article.title}»` }, [
         el("img", { src: "assets/shape-11.svg", alt: "" })
       ])
     ]),
@@ -644,13 +647,20 @@ async function articleScreen(id) {
   const tags = [ ...(article.tags || (article.tag ? [ article.tag ] : [])) ]
   if (article.read_time) tags.push(article.read_time)
 
-  // Лид — это excerpt, поэтому повторяющий его первый абзац не показываем дважды.
-  const body = (article.paragraphs || []).filter((text) => text.trim() !== (article.excerpt || "").trim())
+  // Текст приходит блоками: абзац, подзаголовок или список — как на сайте.
+  const body = (article.blocks || []).map((block) => {
+    if (block.kind === "title") return el("h2", { class: "reading__subtitle", text: block.text })
+    if (block.kind === "list") {
+      return el("ul", { class: "reading__list" }, block.items.map((item) => el("li", { text: item })))
+    }
+
+    return el("p", { class: "reading__text", text: block.text })
+  })
 
   const reading = el("article", { class: "reading" }, [
     el("div", { class: "reading__tags" }, tags.map((tag) => el("span", { class: "tag tag--outline", text: tag }))),
     article.excerpt && el("p", { class: "reading__lead", text: article.excerpt }),
-    ...body.map((text) => el("p", { class: "reading__text", text })),
+    ...body,
     el("div", { class: "reading__actions" }, [
       el("a", { class: "btn", href: "#articles" }, "Все статьи"),
       el("button", { class: "btn btn--coral btn--wide", type: "button", onClick: () => go("ads") }, "Присоединиться")
@@ -666,7 +676,7 @@ async function articleScreen(id) {
   // «Читать дальше» — те же блоки, что и в списке.
   try {
     const { articles } = await api.articles({ page: 1 })
-    const rest = articles.filter((one) => String(one.id) !== String(id)).slice(0, 2)
+    const rest = articles.filter((one) => one.readable && String(one.id) !== String(id)).slice(0, 2)
     if (rest.length) {
       more.replaceWith(el("section", { class: "banner" }, [
         el("h2", { class: "banner__title", text: "Читать дальше" })

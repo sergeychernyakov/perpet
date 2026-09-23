@@ -18,8 +18,18 @@
 
     <p class="reading__lead"><%= @article.excerpt %></p>
 
-    <% @article.body_paragraphs.each do |paragraph| %>
-      <p class="reading__text"><%= paragraph %></p>
+    <% @article.blocks.each do |block| %>
+      <% if block[:kind] == "title" %>
+        <h2 class="reading__subtitle"><%= block[:text] %></h2>
+      <% elsif block[:kind] == "list" %>
+        <ul class="reading__list">
+          <% block[:items].each do |item| %>
+            <li><%= item %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="reading__text"><%= block[:text] %></p>
+      <% end %>
     <% end %>
 
     <div class="reading__actions">

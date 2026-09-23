@@ -27,6 +27,10 @@
   <label>
     <span class="form__label">Текст статьи</span>
     <%= f.text_area :body, class: "form__textarea", rows: 10 %>
+    <span class="form__hint">
+      Пустая строка делит абзацы, «## » в начале строки — подзаголовок, «- » — пункт списка.
+      Пока текста нет, статья видна в списке, но не открывается.
+    </span>
   </label>
 
   <label>
