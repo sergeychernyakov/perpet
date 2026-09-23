@@ -21,6 +21,8 @@
     <% @article.blocks.each do |block| %>
       <% if block[:kind] == "title" %>
         <h2 class="reading__subtitle"><%= block[:text] %></h2>
+      <% elsif block[:kind] == "subtitle" %>
+        <h3 class="reading__subtitle reading__subtitle--small"><%= block[:text] %></h3>
       <% elsif block[:kind] == "list" %>
         <ul class="reading__list">
           <% block[:items].each do |item| %>

@@ -30,8 +30,8 @@
       </label>
 
       <div class="card-form__field card-form__field--pair">
-        <span class="visually-hidden">Вид и порода</span>
-        <%= f.select :kind, Ad::KINDS, { prompt: "Вид*" }, class: "form__input" %>
+        <span class="visually-hidden">Вид/порода*</span>
+        <%= f.select :kind, Ad::KINDS, { prompt: "Вид/порода*" }, class: "form__input" %>
         <%= f.text_field :breed, class: "form__input", placeholder: "Порода" %>
       </div>
 

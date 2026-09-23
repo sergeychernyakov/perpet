@@ -41,10 +41,13 @@ class Article < ApplicationRecord
   end
 
   # Текст статьи набирают в админке обычным текстом: пустая строка делит
-  # абзацы, «## » в начале — подзаголовок, строки с «- » — список.
+  # абзацы, «## » в начале — раздел, «### » — подзаголовок внутри раздела,
+  # строки с «- » — список.
   def blocks
     body_paragraphs.map do |chunk|
-      if chunk.start_with?("## ")
+      if chunk.start_with?("### ")
+        { kind: "subtitle", text: chunk.delete_prefix("### ").strip }
+      elsif chunk.start_with?("## ")
         { kind: "title", text: chunk.delete_prefix("## ").strip }
       elsif chunk.start_with?("- ")
         { kind: "list", items: chunk.split("\n").map { |line| line.sub(/\A-\s*/, "").strip } }

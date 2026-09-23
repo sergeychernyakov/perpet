@@ -708,6 +708,9 @@ async function articleScreen(id) {
   // Текст приходит блоками: абзац, подзаголовок или список — как на сайте.
   const body = (article.blocks || []).map((block) => {
     if (block.kind === "title") return el("h2", { class: "reading__subtitle", text: block.text })
+    if (block.kind === "subtitle") {
+      return el("h3", { class: "reading__subtitle reading__subtitle--small", text: block.text })
+    }
     if (block.kind === "list") {
       return el("ul", { class: "reading__list" }, block.items.map((item) => el("li", { text: item })))
     }
@@ -972,15 +975,17 @@ async function cardScreen(role, id) {
       el("input", { class: "form__input", name, value: value || "", placeholder, required: required || null })
     ])
 
-  const kinds = el("select", { class: "form__input", name: "kind" },
-    KINDS.slice(1).map((kind) => el("option", { value: kind, selected: kind === ad.kind || null }, kind)))
+  const kinds = el("select", { class: "form__input", name: "kind" }, [
+    el("option", { value: "", disabled: true, selected: !ad.kind || null }, "Вид/порода*"),
+    ...KINDS.slice(1).map((kind) => el("option", { value: kind, selected: kind === ad.kind || null }, kind))
+  ])
 
   const fields = sitter
     ? [ input("title", ad.title, "Имя*", true), input("age", ad.age, "Возраст*"),
         input("activity", ad.activity, "Деятельность*"), input("city", ad.city, "Адрес*") ]
     : [ input("title", ad.title, "Кличка*", true),
         el("div", { class: "card-form__field card-form__field--pair" }, [
-          el("span", { class: "visually-hidden", text: "Вид и порода" }),
+          el("span", { class: "visually-hidden", text: "Вид/порода*" }),
           kinds,
           el("input", { class: "form__input", name: "breed", value: ad.breed || "", placeholder: "Порода" })
         ]),
