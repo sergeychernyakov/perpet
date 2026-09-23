@@ -113,7 +113,8 @@
   transition: background 0.2s, transform 0.2s;
 }
 
-.problem__arrow:hover {
+.problem__arrow:hover,
+.problem__arrow:has(+ .problem__cta:hover) {
   background: var(--coral);
   transform: scale(1.06);
 }
@@ -136,7 +137,8 @@
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
-.problem__cta:hover {
+.problem__cta:hover,
+.problem__arrow:hover + .problem__cta {
   background: var(--coral);
   color: var(--ink);
   transform: scale(1.03);

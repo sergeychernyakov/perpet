@@ -140,6 +140,8 @@
   gap: 0.406cqw;
 }
 
+/* Кружок со стрелкой и кнопка с подписью рядом — это одно и то же действие,
+   поэтому и отзываются они вместе: навёл на любую половину — светятся обе. */
 .hero__arrow {
   display: flex;
   flex: none;
@@ -154,7 +156,8 @@
   transition: background 0.2s, transform 0.2s;
 }
 
-.hero__arrow:hover {
+.hero__arrow:hover,
+.hero__arrow:has(+ .hero__cta:hover) {
   background: var(--coral);
   transform: scale(1.06);
 }
@@ -177,7 +180,8 @@
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
-.hero__cta:hover {
+.hero__cta:hover,
+.hero__arrow:hover + .hero__cta {
   background: var(--coral);
   color: var(--ink);
   transform: scale(1.03);
@@ -232,6 +236,7 @@
 .hero--narrow .btn {
   min-height: 48px;
   border-radius: 25px;
+  font-family: var(--font-hand);
 }
 
 @media (max-width: 860px) {
@@ -485,7 +490,7 @@
 }
 
 .promo__text {
-  font-family: var(--font-body);
+  font-family: var(--font-hand);
   font-size: clamp(11.7px, 1.17vw, 18px);
   line-height: 1.3;
   color: var(--gray);
@@ -512,7 +517,8 @@
   transition: background 0.2s, transform 0.2s;
 }
 
-.promo__arrow:hover {
+.promo__arrow:hover,
+.promo__arrow:has(+ .promo__cta:hover) {
   background: var(--coral);
   transform: scale(1.06);
 }
@@ -533,13 +539,14 @@
   border-radius: 4.286cqw;
   border: 0.171cqw solid var(--line);
   background: var(--cream);
-  font-family: var(--font-mono);
+  font-family: var(--font-hand);
   font-size: max(10.8px, 2.6694cqw);
   color: var(--gray);
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
-.promo__cta:hover {
+.promo__cta:hover,
+.promo__arrow:hover + .promo__cta {
   background: var(--coral);
   color: var(--ink);
   transform: scale(1.03);
@@ -626,6 +633,7 @@
 .important__download,
 .important__support {
   width: 34.57%;
+  font-family: var(--font-hand);
   min-height: max(30px, 2.219cqw);
   padding: 0;
   border-radius: 1.353cqw;
@@ -648,7 +656,8 @@
   transition: background 0.2s, transform 0.2s;
 }
 
-.important__arrow:hover {
+.important__arrow:hover,
+.important__arrow:has(+ .important__support:hover) {
   background: var(--coral);
   transform: scale(1.06);
 }
@@ -657,6 +666,12 @@
   width: max(11px, 1.041cqw);
   aspect-ratio: 19.244 / 17;
   pointer-events: none;
+}
+
+.important__arrow:hover + .important__support {
+  background: var(--coral);
+  color: var(--ink);
+  transform: scale(1.03);
 }
 
 /* На узком экране проценты от ширины оставляют текст в колонке в два слова —
