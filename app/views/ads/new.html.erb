@@ -1,0 +1,10 @@
+<% title = @ad.sitter? ? "Карточка временного хозяина" : "Карточка питомца" %>
+<% content_for :title, "#{title} — PERPET" %>
+
+<main class="main">
+  <section class="banner">
+    <h1 class="banner__title"><%= title %></h1>
+  </section>
+
+  <%= render "ads/form", ad: @ad %>
+</main>

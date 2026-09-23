@@ -1,0 +1,32 @@
+<%# Своя карточка: та же плашка, что в каталоге, но с кнопкой «Изменить». %>
+<article class="ad">
+  <%= image_tag "tb-logo-ear.svg", alt: "", class: "ad__paw" %>
+
+  <h3 class="ad__title"><%= ad.title %></h3>
+
+  <div class="ad__photo">
+    <% if ad.photo.attached? %>
+      <%= image_tag ad.photo_url, alt: ad.title, loading: "lazy" %>
+    <% else %>
+      <%= image_tag ad.icon_name, alt: "", class: "ad__icon" %>
+    <% end %>
+  </div>
+
+  <div class="ad__body">
+    <p class="ad__text">
+      <% ad.card_lines.each do |line| %>
+        <span><%= line %></span>
+      <% end %>
+      <span><%= ad.published_label %></span>
+    </p>
+
+    <%= link_to "Изменить", edit_ad_path(ad), class: "ad__owner" %>
+  </div>
+
+  <div class="ad__tags">
+    <span class="tag tag--outline"><%= ad.status_label %></span>
+    <% ad.card_tags.each do |tag| %>
+      <span class="tag tag--outline"><%= tag %></span>
+    <% end %>
+  </div>
+</article>

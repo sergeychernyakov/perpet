@@ -1,91 +1,84 @@
-<% content_for :title, "Профиль — PERPET" %>
+<% content_for :title, "Ваш профиль — PERPET" %>
 
 <main class="main">
-  <section class="profile">
-    <div class="profile__photo">
-      <%# Своё фото, если загрузили; иначе картинка из макета. %>
-      <%= image_tag @profile.photo_url || "profile-photo.jpg", alt: "Фото питомца",
-                    class: class_names("profile__photo-own" => @profile.photo.attached?) %>
-      <span class="profile__caption"><%= @profile.pet_caption.presence || "Расскажите о питомце" %></span>
-    </div>
+  <section class="banner">
+    <h1 class="banner__title">Ваш профиль</h1>
+  </section>
 
-    <div>
-      <h1 class="profile__title">Ваш профиль</h1>
-
-      <%= form_with model: @profile, url: profile_path, method: :patch, class: "profile__form" do |f| %>
-        <label class="profile__field">
-          <span>Имя</span>
-          <%= f.text_field :name, placeholder: "Анна Петрова", required: true %>
-        </label>
-
-        <label class="profile__field">
-          <span>Город</span>
-          <%= f.text_field :city, placeholder: "Москва" %>
-        </label>
-
-        <label class="profile__field">
-          <span>Контакт для связи</span>
-          <%= f.text_field :email, placeholder: "anna@mail.ru" %>
-        </label>
-
-        <label class="profile__field">
-          <span>Питомец</span>
-          <%= f.text_field :pet_name, placeholder: "Барсик" %>
-        </label>
-
-        <label class="profile__field">
-          <span>Возраст питомца</span>
-          <%= f.text_field :pet_age, placeholder: "3 года" %>
-        </label>
-
-        <div class="profile__field">
-          <%= render "shared/photo_field", form: f, record: @profile, label: "Фото питомца" %>
-        </div>
-
-        <% if (message = error_message_for(@profile)) %>
-          <p class="form__error"><%= message %></p>
-        <% end %>
-
-        <%= f.submit "Сохранить", class: "btn profile__save" %>
+  <div class="person">
+    <div class="person__photo">
+      <% if @profile.photo.attached? %>
+        <%= image_tag @profile.photo_url, alt: @profile.name %>
+      <% else %>
+        <%= image_tag "ab-paw-cream.svg", alt: "", class: "person__photo-icon" %>
       <% end %>
-
-      <div class="profile__account">
-        <span><%= current_user.email %></span>
-        <% if current_user.vk_id.present? %>
-          <span class="profile__vk">ВКонтакте привязан</span>
-        <% else %>
-          <%= render "shared/vk_button", label: "Привязать ВКонтакте" %>
-        <% end %>
-        <%= link_to "Аккаунт", edit_user_registration_path, class: "btn" %>
-        <% if current_user.admin? %>
-          <%= link_to "Админка", admin_root_path, class: "btn" %>
-        <% end %>
-        <%= button_to "Выйти", destroy_user_session_path, method: :delete, class: "btn", form_class: "contents" %>
-      </div>
     </div>
-  </section>
 
-  <section class="my-ads">
-    <h2 class="my-ads__title">Мои обьявления</h2>
-    <%= link_to "Смотреть все", ads_path, class: "my-ads__all" %>
-    <%= button_to ads_path, class: "my-ads__add", form_class: "contents", title: "Добавить карточку" do %>
-      <%= image_tag "shape-54.svg", alt: "" %>
-    <% end %>
-  </section>
+    <article class="person__card">
+      <h2 class="person__subtitle">Информация о пользователе</h2>
+      <p class="person__lines">
+        <% if @profile.card_lines.any? %>
+          <% @profile.card_lines.each do |line| %>
+            <span><%= line %></span>
+          <% end %>
+        <% else %>
+          <span>Расскажите о себе — так вас узнают другие пользователи.</span>
+        <% end %>
+      </p>
+      <%= link_to "Изменить данные", edit_profile_path, class: "person__edit" %>
+    </article>
 
-  <div class="grid grid--cards grid--my-ads">
-    <%= button_to ads_path, class: "my-ad--new", form_class: "contents" do %>
-      <span>Добавить карточку</span>
-      <%= image_tag "shape-55.svg", alt: "" %>
-    <% end %>
-
-    <% @ads.each do |ad| %>
-      <article class="my-ad">
-        <span class="tag"><%= ad.status_label %></span>
-        <h3 class="my-ad__title"><%= ad.title %></h3>
-        <p class="my-ad__text"><%= ad.description %></p>
-        <p class="my-ad__meta"><%= ad.published_label %></p>
+    <div class="person__side">
+      <article class="person__card person__card--short">
+        <h2 class="person__subtitle">Контакты</h2>
+        <p class="person__lines">
+          <% if @profile.contact_lines.any? %>
+            <% @profile.contact_lines.each do |line| %>
+              <span><%= line %></span>
+            <% end %>
+          <% else %>
+            <span>Телефон и почту видят те, кто откликается на карточку.</span>
+          <% end %>
+        </p>
       </article>
+
+      <%= link_to profile_pets_path, class: "person__card person__card--back" do %>
+        <span class="person__subtitle">Ваши питомцы</span>
+        <span class="person__arrow"><%= image_tag "shape-11.svg", alt: "" %></span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="profile__cards">
+    <%= link_to new_ad_path(role: Ad::SITTER), class: "profile__add" do %>
+      <span class="profile__add-title">Добавь карточку ситтера</span>
+      <span class="person__arrow"><%= image_tag "shape-11.svg", alt: "" %></span>
+      <%= image_tag "tb-logo-ear.svg", alt: "", class: "profile__add-paw" %>
     <% end %>
+
+    <%= link_to new_ad_path(role: Ad::PET), class: "profile__add" do %>
+      <span class="profile__add-title">Добавь карточку питомца</span>
+      <span class="person__arrow"><%= image_tag "shape-11.svg", alt: "" %></span>
+      <%= image_tag "ab-paw-cream.svg", alt: "", class: "profile__add-paw" %>
+    <% end %>
+
+    <p class="profile__note">
+      После заполнения профиля добавляйте карточки хозяина или питомца,
+      чтобы продолжать поддерживать питомцев и их хозяев.
+    </p>
+  </div>
+
+  <div class="profile__account">
+    <span><%= current_user.email %></span>
+    <% if current_user.vk_id.present? %>
+      <span class="profile__vk">ВКонтакте привязан</span>
+    <% else %>
+      <%= render "shared/vk_button", label: "Привязать ВКонтакте" %>
+    <% end %>
+    <%= link_to "Аккаунт", edit_user_registration_path, class: "btn" %>
+    <% if current_user.admin? %>
+      <%= link_to "Админка", admin_root_path, class: "btn" %>
+    <% end %>
+    <%= button_to "Выйти", destroy_user_session_path, method: :delete, class: "btn", form_class: "contents" %>
   </div>
 </main>

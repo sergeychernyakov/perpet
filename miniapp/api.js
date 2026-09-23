@@ -77,6 +77,7 @@ export const api = {
   myAds: () => request("/api/v1/ads/mine"),
   createAd: (ad) => request("/api/v1/ads", { method: "POST", body: { ad } }),
   createAdWithPhoto: (form) => upload("/api/v1/ads", "POST", form),
+  updateAd: (id, ad) => request(`/api/v1/ads/${id}`, { method: "PATCH", body: { ad } }),
   updateProfileWithPhoto: (form) => upload("/api/v1/profile", "PATCH", form),
   deleteAd: (id) => request(`/api/v1/ads/${id}`, { method: "DELETE" }),
   articles: (params) => request("/api/v1/articles?" + new URLSearchParams(params)),

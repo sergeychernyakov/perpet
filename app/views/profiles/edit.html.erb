@@ -1,0 +1,55 @@
+<% content_for :title, "Изменить данные — PERPET" %>
+
+<main class="main">
+  <section class="banner">
+    <h1 class="banner__title">Изменить данные</h1>
+  </section>
+
+  <%= form_with model: @profile, url: profile_path, method: :patch, class: "card-form" do |f| %>
+    <% if (message = error_message_for(@profile)) %>
+      <div class="errors"><ul><li><%= message %></li></ul></div>
+    <% end %>
+
+    <div class="card-form__fields">
+      <label class="card-form__field">
+        <span class="visually-hidden">Имя</span>
+        <%= f.text_field :name, class: "form__input", placeholder: "Имя*", required: true %>
+      </label>
+
+      <label class="card-form__field">
+        <span class="visually-hidden">Возраст</span>
+        <%= f.text_field :age, class: "form__input", placeholder: "Возраст" %>
+      </label>
+
+      <label class="card-form__field">
+        <span class="visually-hidden">Деятельность</span>
+        <%= f.text_field :activity, class: "form__input", placeholder: "Деятельность" %>
+      </label>
+
+      <label class="card-form__field">
+        <span class="visually-hidden">Место</span>
+        <%= f.text_field :city, class: "form__input", placeholder: "Место" %>
+      </label>
+    </div>
+
+    <label class="card-form__plate card-form__plate--wide">
+      <span class="card-form__label">Расскажите о себе</span>
+      <%= f.text_area :about, class: "card-form__area", rows: 6 %>
+    </label>
+
+    <div class="card-form__plate">
+      <span class="card-form__label">Контакты</span>
+      <%= f.text_field :phone, class: "form__input", placeholder: "Телефон" %>
+      <%= f.text_field :email, class: "form__input", placeholder: "Почта" %>
+    </div>
+
+    <div class="card-form__plate card-form__plate--photo">
+      <%= render "shared/photo_field", form: f, record: @profile, label: "Добавьте ваше фото" %>
+    </div>
+
+    <div class="card-form__actions">
+      <%= f.submit "Сохранить", class: "btn btn--coral btn--wide" %>
+      <%= link_to "Отмена", profile_path, class: "btn" %>
+    </div>
+  <% end %>
+</main>

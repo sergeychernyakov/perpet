@@ -303,7 +303,7 @@ async function brandScreen() {
         el("span", { class: "logo__name", text: "PERPET" })
       ]),
       el("span", { class: "brand__mark brand__mark--square" }, [
-        el("img", { class: "icon-btn__shape", src: "assets/tb-profile-hand.svg", alt: "" }),
+        el("img", { class: "icon-btn__shape", src: "assets/ab-paw-cream.svg", alt: "" }),
         el("span", { class: "icon-btn__eye icon-btn__eye--left" }),
         el("span", { class: "icon-btn__eye icon-btn__eye--right" })
       ])
@@ -481,7 +481,7 @@ async function personScreen(id) {
 
   const photo = profile.photo_url
     ? el("img", { src: apiBase + profile.photo_url, alt: profile.name })
-    : el("img", { class: "person__photo-icon", src: "assets/tb-profile-hand.svg", alt: "" })
+    : el("img", { class: "person__photo-icon", src: "assets/ab-paw-cream.svg", alt: "" })
 
   const person = el("div", { class: "person" }, [
     el("div", { class: "person__photo" }, [ photo ]),
@@ -750,72 +750,118 @@ async function articleScreen(id) {
 async function profileScreen() {
   render(...skeletons(3))
 
-  let profile, ads
+  let profile
   try {
-    ;[ { profile }, { ads } ] = await Promise.all([ api.profile(), api.myAds() ])
+    ({ profile } = await api.profile())
   } catch (failure) {
     return render(
-      banner("Профиль"),
+      banner("Ваш профиль"),
       error(failure.messages),
       failure.status === 401 && el("p", { class: "muted", text: "Откройте приложение внутри VK — профиль привязан к вашей странице." })
     )
   }
 
+  const photo = profile.photo_url
+    ? el("img", { src: apiBase + profile.photo_url, alt: profile.name })
+    : el("img", { class: "person__photo-icon", src: "assets/ab-paw-cream.svg", alt: "" })
+
+  const person = el("div", { class: "person" }, [
+    el("div", { class: "person__photo" }, [ photo ]),
+    el("article", { class: "person__card" }, [
+      el("h2", { class: "person__subtitle", text: "Информация о пользователе" }),
+      personLines(profile.card_lines, "Расскажите о себе — так вас узнают другие пользователи."),
+      el("a", { class: "person__edit", href: "#profile-edit", text: "Изменить данные" })
+    ]),
+    el("div", { class: "person__side" }, [
+      el("article", { class: "person__card person__card--short" }, [
+        el("h2", { class: "person__subtitle", text: "Контакты" }),
+        personLines(profile.contact_lines, "Телефон и почту видят те, кто откликается на карточку.")
+      ]),
+      el("a", { class: "person__card person__card--back", href: "#pets" }, [
+        el("span", { class: "person__subtitle", text: "Ваши питомцы" }),
+        el("span", { class: "person__arrow" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ])
+      ])
+    ])
+  ])
+
+  render(banner("Ваш профиль"), person, addCards(), vkAccount())
+}
+
+function personLines(values, fallback) {
+  const lines = values && values.length ? values : [ fallback ]
+
+  return el("p", { class: "person__lines" }, lines.map((line) => el("span", { text: line })))
+}
+
+// Две плашки «Добавь карточку» и пояснение — они же на экране «Ваши питомцы».
+function addCards() {
+  const plate = (role, title, paw) =>
+    el("a", { class: "profile__add", href: `#card/${role}` }, [
+      el("span", { class: "profile__add-title", text: title }),
+      el("span", { class: "person__arrow" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ]),
+      el("img", { class: "profile__add-paw", src: `assets/${paw}`, alt: "" })
+    ])
+
+  return el("div", { class: "profile__cards" }, [
+    plate("sitter", "Добавь карточку ситтера", "tb-logo-ear.svg"),
+    plate("pet", "Добавь карточку питомца", "ab-paw-cream.svg"),
+    el("p", {
+      class: "profile__note",
+      text: "После заполнения профиля добавляйте карточки хозяина или питомца, " +
+            "чтобы продолжать поддерживать питомцев и их хозяев."
+    })
+  ])
+}
+
+// «Изменить данные»: та же форма, что на сайте.
+async function profileEditScreen() {
+  render(...skeletons(2))
+
+  let profile
+  try {
+    ({ profile } = await api.profile())
+  } catch (failure) {
+    return render(backButton("profile"), error(failure.messages))
+  }
+
   // Имя и город подставляем из VK, пока человек не вписал свои.
   const fromVk = vk.suggestedProfile()
   const prefilled = fromVk && vk.untouchedName(profile.name)
-  const photo = photoField("Фото питомца", { current: profile.photo_url && apiBase + profile.photo_url })
+  const photo = photoField("Добавьте ваше фото", { current: profile.photo_url && apiBase + profile.photo_url })
 
-  const row = (label, name, value, placeholder, required = false) =>
-    el("label", { class: "profile__field" }, [
-      el("span", { text: label }),
-      el("input", { name, value: value || "", placeholder, required: required || null })
+  const input = (name, value, placeholder, required = false) =>
+    el("label", { class: "card-form__field" }, [
+      el("span", { class: "visually-hidden", text: placeholder }),
+      el("input", { class: "form__input", name, value: value || "", placeholder, required: required || null })
     ])
 
-  const form = el("form", { class: "profile__form", onSubmit: save }, [
-    row("Имя", "name", prefilled ? fromVk.name : profile.name, "Анна Петрова", true),
-    row("Город", "city", profile.city || (prefilled ? fromVk.city : ""), "Москва"),
-    row("Контакт для связи", "email", profile.email, "anna@mail.ru"),
-    row("Питомец", "pet_name", profile.pet_name, "Барсик"),
-    row("Возраст питомца", "pet_age", profile.pet_age, "3 года"),
-    el("div", { class: "profile__field" }, photo.field),
-    prefilled && el("p", { class: "muted", text: "Имя и город подставлены из вашей страницы ВКонтакте — поправьте, если нужно." }),
-    el("button", { class: "btn profile__save", type: "submit" }, "Сохранить")
-  ])
+  const about = el("textarea", { class: "card-form__area", name: "about", rows: 6 })
+  about.value = profile.about || ""
 
-  const avatar = profile.photo_url
-    ? el("img", { class: "profile__photo-own", src: apiBase + profile.photo_url, alt: "Фото питомца" })
-    : el("img", { src: "assets/profile-photo.jpg", alt: "Фото питомца" })
-
-  const card = el("section", { class: "profile" }, [
-    el("div", { class: "profile__photo" }, [
-      avatar,
-      el("span", { class: "profile__caption", text: profile.pet_caption || "Расскажите о питомце" })
+  const form = el("form", { class: "card-form", onSubmit: save }, [
+    el("div", { class: "card-form__fields" }, [
+      input("name", prefilled ? fromVk.name : profile.name, "Имя*", true),
+      input("age", profile.age, "Возраст"),
+      input("activity", profile.activity, "Деятельность"),
+      input("city", profile.city || (prefilled ? fromVk.city : ""), "Место")
     ]),
-    el("div", {}, [
-      el("h1", { class: "profile__title", text: "Ваш профиль" }),
-      form,
-      vkAccount()
-    ])
-  ])
-
-  const head = el("section", { class: "my-ads" }, [
-    el("h2", { class: "my-ads__title", text: "Мои обьявления" }),
-    el("a", { class: "my-ads__all", href: "#ads", text: "Смотреть все" }),
-    el("button", { class: "my-ads__add", type: "button", title: "Добавить карточку", onClick: newAdSheet }, [
-      el("img", { src: "assets/shape-54.svg", alt: "" })
-    ])
-  ])
-
-  const grid = el("div", { class: "grid grid--cards grid--my-ads" }, [
-    el("button", { class: "my-ad--new", type: "button", onClick: newAdSheet }, [
-      el("span", { text: "Добавить карточку" }),
-      el("img", { src: "assets/shape-55.svg", alt: "" })
+    el("label", { class: "card-form__plate card-form__plate--wide" }, [
+      el("span", { class: "card-form__label", text: "Расскажите о себе" }),
+      about
     ]),
-    ...ads.map(myAdCard)
+    el("div", { class: "card-form__plate" }, [
+      el("span", { class: "card-form__label", text: "Контакты" }),
+      el("input", { class: "form__input", name: "phone", value: profile.phone || "", placeholder: "Телефон" }),
+      el("input", { class: "form__input", name: "email", value: profile.email || "", placeholder: "Почта" })
+    ]),
+    el("div", { class: "card-form__plate card-form__plate--photo" }, photo.field),
+    el("div", { class: "card-form__actions" }, [
+      el("button", { class: "btn btn--coral btn--wide", type: "submit" }, "Сохранить"),
+      el("a", { class: "btn", href: "#profile" }, "Отмена")
+    ])
   ])
 
-  render(card, head, grid)
+  render(banner("Изменить данные"), form)
 
   async function save(event) {
     event.preventDefault()
@@ -825,10 +871,12 @@ async function profileScreen() {
 
     const fields = {
       name: form.elements.name.value,
+      age: form.elements.age.value,
+      activity: form.elements.activity.value,
       city: form.elements.city.value,
-      email: form.elements.email.value,
-      pet_name: form.elements.pet_name.value,
-      pet_age: form.elements.pet_age.value
+      about: about.value,
+      phone: form.elements.phone.value,
+      email: form.elements.email.value
     }
 
     try {
@@ -843,11 +891,172 @@ async function profileScreen() {
         await api.updateProfile(fields)
       }
 
-      button.before(notice("Профиль сохранён"))
+      go("profile")
     } catch (failure) {
-      button.before(error(failure.messages))
-    } finally {
       button.disabled = false
+      button.before(error(failure.messages))
+    }
+  }
+}
+
+// «Ваши питомцы»: заведённые карточки или «Упс!», если их ещё нет.
+async function petsScreen() {
+  render(...skeletons(2))
+
+  let ads
+  try {
+    ({ ads } = await api.myAds())
+  } catch (failure) {
+    return render(banner("Ваши питомцы"), error(failure.messages))
+  }
+
+  const list = ads.length
+    ? el("div", { class: "ads" }, ads.map(myAdCard))
+    : el("section", { class: "oops" }, [
+        el("h2", { class: "oops__title", text: "Упс!" }),
+        el("p", { class: "oops__text", text: "Вы еще не заполнили ни одну карточку питомца" })
+      ])
+
+  render(banner("Ваши питомцы"), list, addCards())
+}
+
+function myAdCard(ad) {
+  const photo = ad.photo_url
+    ? el("img", { src: apiBase + ad.photo_url, alt: ad.title, loading: "lazy" })
+    : el("img", { class: "ad__icon", src: `assets/${ad.icon}`, alt: "" })
+
+  return el("article", { class: "ad" }, [
+    el("img", { class: "ad__paw", src: "assets/tb-logo-ear.svg", alt: "" }),
+    el("h3", { class: "ad__title", text: ad.title }),
+    el("div", { class: "ad__photo" }, [ photo ]),
+    el("div", { class: "ad__body" }, [
+      el("p", { class: "ad__text" }, [
+        ...(ad.card_lines || []).map((line) => el("span", { text: line })),
+        el("span", { text: ad.published_label })
+      ]),
+      el("a", { class: "ad__owner", href: `#card/${ad.role}/${ad.id}`, text: "Изменить" })
+    ]),
+    el("div", { class: "ad__tags" }, [ ad.status_label, ...(ad.card_tags || []) ].map((tag) =>
+      el("span", { class: "tag tag--outline", text: tag })))
+  ])
+}
+
+// «Карточка питомца» и «Карточка временного хозяина» — одна форма на две роли.
+async function cardScreen(role, id) {
+  render(...skeletons(2))
+
+  const sitter = role === "sitter"
+  const title = sitter ? "Карточка временного хозяина" : "Карточка питомца"
+
+  let ad = { role }
+  try {
+    if (id) {
+      // Берём из своих карточек, а не из каталога: чужую так не открыть.
+      const { ads } = await api.myAds()
+      ad = ads.find((one) => String(one.id) === String(id)) || { role }
+    } else if (sitter) {
+      const { profile } = await api.profile()
+      ad = { role, title: profile.name, age: profile.age, city: profile.city,
+             activity: profile.activity, description: profile.about }
+    }
+  } catch (failure) {
+    return render(backButton("pets"), error(failure.messages))
+  }
+
+  const photo = photoField(sitter ? "Добавьте ваше фото*" : "Добавьте фото питомца*",
+                           { current: ad.photo_url && apiBase + ad.photo_url })
+
+  const input = (name, value, placeholder, required = false) =>
+    el("label", { class: "card-form__field" }, [
+      el("span", { class: "visually-hidden", text: placeholder }),
+      el("input", { class: "form__input", name, value: value || "", placeholder, required: required || null })
+    ])
+
+  const kinds = el("select", { class: "form__input", name: "kind" },
+    KINDS.slice(1).map((kind) => el("option", { value: kind, selected: kind === ad.kind || null }, kind)))
+
+  const fields = sitter
+    ? [ input("title", ad.title, "Имя*", true), input("age", ad.age, "Возраст*"),
+        input("activity", ad.activity, "Деятельность*"), input("city", ad.city, "Адрес*") ]
+    : [ input("title", ad.title, "Кличка*", true),
+        el("div", { class: "card-form__field card-form__field--pair" }, [
+          el("span", { class: "visually-hidden", text: "Вид и порода" }),
+          kinds,
+          el("input", { class: "form__input", name: "breed", value: ad.breed || "", placeholder: "Порода" })
+        ]),
+        input("age", ad.age, "Возраст*"), input("city", ad.city, "Адрес*") ]
+
+  const about = el("textarea", { class: "card-form__area", name: "description", rows: 6 })
+  about.value = ad.description || ""
+
+  const form = el("form", { class: "card-form", onSubmit: save }, [
+    el("div", { class: "card-form__fields" }, fields),
+    el("label", { class: "card-form__plate card-form__plate--wide" }, [
+      el("span", {
+        class: "card-form__label",
+        text: sitter ? "Укажите важную информацию о себе и почему решили стать ситтером*"
+                     : "Укажите важную информацию о питомце*"
+      }),
+      about
+    ]),
+    el("label", { class: "card-form__plate" }, [
+      el("span", { class: "card-form__label", text: "Укажите даты пребывания*" }),
+      el("input", { class: "form__input", name: "period", value: ad.period || "", placeholder: "16.02 – 24.02" })
+    ]),
+    el("div", { class: "card-form__plate card-form__plate--photo" }, photo.field),
+    el("p", {
+      class: "card-form__note",
+      text: sitter ? "После заполнения карточки Ваш профиль отобразится у других пользователей."
+                   : "После заполнения карточки питомца Ваш профиль станет виден другим пользователям."
+    }),
+    el("div", { class: "card-form__actions" }, [
+      el("button", { class: "btn btn--coral btn--wide", type: "submit" }, "Сохранить"),
+      el("a", { class: "btn", href: "#pets" }, "Отмена"),
+      id && el("button", {
+        class: "btn", type: "button",
+        onClick: async () => { await api.deleteAd(id); go("pets") }
+      }, "Удалить")
+    ])
+  ])
+
+  render(banner(title), form)
+
+  async function save(event) {
+    event.preventDefault()
+    const button = form.querySelector("button[type=submit]")
+    button.disabled = true
+    form.querySelectorAll(".error").forEach((node) => node.remove())
+
+    const values = {
+      role, title: form.elements.title.value, age: form.elements.age.value,
+      city: form.elements.city.value, period: form.elements.period.value,
+      description: about.value, status: "published"
+    }
+    if (sitter) {
+      values.activity = form.elements.activity.value
+    } else {
+      values.kind = kinds.value
+      values.breed = form.elements.breed.value
+    }
+
+    try {
+      const file = photo.file()
+
+      if (file) {
+        const data = new FormData()
+        Object.entries(values).forEach(([ key, value ]) => data.append(`ad[${key}]`, value ?? ""))
+        data.append("ad[photo]", file)
+        await api.createAdWithPhoto(data)
+      } else if (id) {
+        await api.updateAd(id, values)
+      } else {
+        await api.createAd(values)
+      }
+
+      go("pets")
+    } catch (failure) {
+      button.disabled = false
+      button.before(error(failure.messages))
     }
   }
 }
@@ -868,64 +1077,6 @@ function vkAccount() {
     el("span", { text: [ user.first_name, user.last_name ].filter(Boolean).join(" ") }),
     el("span", { class: "profile__vk", text: "ВКонтакте привязан" })
   ])
-}
-
-function myAdCard(ad) {
-  return el("article", { class: "my-ad" }, [
-    el("span", { class: "tag", text: ad.status_label }),
-    el("h3", { class: "my-ad__title", text: ad.title }),
-    ad.description && el("p", { class: "my-ad__text", text: ad.description }),
-    el("p", { class: "my-ad__meta", text: ad.published_label }),
-    el("button", {
-      class: "btn", type: "button",
-      onClick: async () => { await api.deleteAd(ad.id); profileScreen() }
-    }, "Удалить")
-  ])
-}
-
-function newAdSheet() {
-  const kinds = el("select", { name: "kind" }, KINDS.slice(1).map((kind) => el("option", { value: kind }, kind)))
-  const photo = photoField("Фотография питомца")
-
-  const form = el("form", { class: "form", onSubmit: submit }, [
-    el("h2", { id: "sheet-title", text: "Новое объявление" }),
-    field("Заголовок", "title", { placeholder: "Барсик, 4 года" }),
-    el("label", { class: "field" }, [ el("span", { text: "Вид питомца" }), kinds ]),
-    field("Город", "city", { placeholder: "Москва" }),
-    field("Сроки", "period", { placeholder: "12–26 июня" }),
-    field("Цена", "price", { placeholder: "700 ₽ / день" }),
-    field("Описание", "description", { rows: 4, placeholder: "Спокойный, привит, ест сухой корм." }),
-    photo.field,
-    el("button", { class: "btn btn--coral btn--block", type: "submit" }, "Сохранить черновик")
-  ])
-
-  openSheet(form)
-  form.elements.title.focus()
-
-  async function submit(event) {
-    event.preventDefault()
-    const button = form.querySelector("button[type=submit]")
-    button.disabled = true
-    form.querySelectorAll(".error").forEach((node) => node.remove())
-
-    try {
-      const data = new FormData()
-      data.append("ad[title]", form.elements.title.value)
-      data.append("ad[kind]", kinds.value)
-      data.append("ad[city]", form.elements.city.value)
-      data.append("ad[period]", form.elements.period.value)
-      data.append("ad[price]", form.elements.price.value)
-      data.append("ad[description]", form.elements.description.value)
-      if (photo.file()) data.append("ad[photo]", photo.file())
-
-      await api.createAdWithPhoto(data)
-      closeSheet()
-      profileScreen()
-    } catch (failure) {
-      button.disabled = false
-      button.before(error(failure.messages))
-    }
-  }
 }
 
 // ---------- поддержка ----------
@@ -1065,6 +1216,8 @@ const ROUTES = {
   ads: adsScreen,
   articles: articlesScreen,
   profile: profileScreen,
+  "profile-edit": profileEditScreen,
+  pets: petsScreen,
   support: supportScreen
 }
 
@@ -1090,6 +1243,7 @@ function open() {
   if (name === "article" && id) return articleScreen(id)
   if (name === "person" && id) return personScreen(id)
   if (name === "ad" && id) return adScreen(id)
+  if (name === "card") return cardScreen(id || "pet", (location.hash.split("/")[2]))
 
   state.page = 1
   ;(ROUTES[name] || homeScreen)()

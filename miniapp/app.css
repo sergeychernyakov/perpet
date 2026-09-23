@@ -200,6 +200,22 @@ body.vk-dark {
   .btn--loading::after { animation: none; }
 }
 
+/* Внутри плашки карточки поле фотографии не рисует свою рамку. */
+.card-form__plate .field {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+/* Подпись к фотографии внутри карточки набрана как остальной текст макета. */
+.card-form__plate .field > span {
+  font-family: var(--font-hand);
+  font-size: clamp(11.7px, 1.17vw, 18px);
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--gray);
+}
+
 .photo__row {
   display: flex;
   align-items: center;

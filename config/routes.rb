@@ -10,12 +10,13 @@ Rails.application.routes.draw do
   get "brand", to: "pages#brand", as: :brand
   get "support", to: "support#show", as: :support
 
-  resources :ads, only: %i[index create]
+  resources :ads, only: %i[index new create edit update destroy]
   resources :articles, only: %i[index show]
   resources :support_tickets, only: %i[create]
   resources :leads, only: %i[create]
 
-  resource :profile, only: %i[show update], controller: "profiles"
+  resource :profile, only: %i[show edit update], controller: "profiles"
+  get "profile/pets", to: "profiles#pets", as: :profile_pets
   get "profiles/:id", to: "public_profiles#show", as: :public_profile
 
   namespace :admin do

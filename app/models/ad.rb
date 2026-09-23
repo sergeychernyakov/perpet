@@ -72,6 +72,16 @@ class Ad < ApplicationRecord
     [ (kind if pet?), city, period ].compact_blank
   end
 
+  # Карточка ситтера — рассказ о себе, поэтому форма открывается уже
+  # заполненной тем, что человек указал в профиле.
+  def prefill_from(profile)
+    self.title ||= profile.name
+    self.age ||= profile.age
+    self.city ||= profile.city
+    self.activity ||= profile.activity
+    self.description ||= profile.about
+  end
+
   # Кнопка ведёт на карточку хозяина питомца или самого ситтера.
   def owner_label
     sitter? ? "Профиль" : "Хозяин"

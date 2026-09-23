@@ -1,0 +1,76 @@
+<%# «Карточка питомца» и «Карточка временного хозяина» из макета: слева
+    четыре поля, дальше рассказ, сроки и фотография. %>
+<%= form_with model: ad, class: "card-form" do |f| %>
+  <%= f.hidden_field :role %>
+
+  <% if ad.errors.any? %>
+    <div class="errors"><ul><% ad.error_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
+  <% end %>
+
+  <div class="card-form__fields">
+    <% if ad.sitter? %>
+      <label class="card-form__field">
+        <span class="visually-hidden">Имя</span>
+        <%= f.text_field :title, class: "form__input", placeholder: "Имя*", required: true %>
+      </label>
+
+      <label class="card-form__field">
+        <span class="visually-hidden">Возраст</span>
+        <%= f.text_field :age, class: "form__input", placeholder: "Возраст*" %>
+      </label>
+
+      <label class="card-form__field">
+        <span class="visually-hidden">Деятельность</span>
+        <%= f.text_field :activity, class: "form__input", placeholder: "Деятельность*" %>
+      </label>
+    <% else %>
+      <label class="card-form__field">
+        <span class="visually-hidden">Кличка</span>
+        <%= f.text_field :title, class: "form__input", placeholder: "Кличка*", required: true %>
+      </label>
+
+      <div class="card-form__field card-form__field--pair">
+        <span class="visually-hidden">Вид и порода</span>
+        <%= f.select :kind, Ad::KINDS, { prompt: "Вид*" }, class: "form__input" %>
+        <%= f.text_field :breed, class: "form__input", placeholder: "Порода" %>
+      </div>
+
+      <label class="card-form__field">
+        <span class="visually-hidden">Возраст</span>
+        <%= f.text_field :age, class: "form__input", placeholder: "Возраст*" %>
+      </label>
+    <% end %>
+
+    <label class="card-form__field">
+      <span class="visually-hidden">Адрес</span>
+      <%= f.text_field :city, class: "form__input", placeholder: "Адрес*" %>
+    </label>
+  </div>
+
+  <label class="card-form__plate card-form__plate--wide">
+    <span class="card-form__label"><%= ad.sitter? ? "Укажите важную информацию о себе и почему решили стать ситтером*" : "Укажите важную информацию о питомце*" %></span>
+    <%= f.text_area :description, class: "card-form__area", rows: 6 %>
+  </label>
+
+  <label class="card-form__plate">
+    <span class="card-form__label">Укажите даты пребывания*</span>
+    <%= f.text_field :period, class: "form__input", placeholder: "16.02 – 24.02" %>
+  </label>
+
+  <div class="card-form__plate card-form__plate--photo">
+    <%= render "shared/photo_field", form: f, record: ad,
+               label: ad.sitter? ? "Добавьте ваше фото*" : "Добавьте фото питомца*" %>
+  </div>
+
+  <p class="card-form__note">
+    <%= ad.sitter? ? "После заполнения карточки Ваш профиль отобразится у других пользователей." : "После заполнения карточки питомца Ваш профиль станет виден другим пользователям." %>
+  </p>
+
+  <div class="card-form__actions">
+    <%= f.submit "Сохранить", class: "btn btn--coral btn--wide" %>
+    <%= link_to "Отмена", profile_pets_path, class: "btn" %>
+    <% if ad.persisted? %>
+      <%= button_to "Удалить", ad_path(ad), method: :delete, class: "btn", form_class: "contents" %>
+    <% end %>
+  </div>
+<% end %>

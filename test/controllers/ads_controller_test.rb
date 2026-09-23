@@ -54,23 +54,45 @@ class AdsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".ad__owner[href=?]", public_profile_path(profile), text: "Хозяин"
   end
 
-  test "гость не может создать черновик" do
+  test "гость не может завести карточку" do
     assert_no_difference -> { Ad.count } do
-      post ads_path
+      post ads_path, params: { ad: { title: "Мартин", kind: "Кот" } }
     end
 
     assert_redirected_to new_user_session_path
   end
 
-  test "пользователь создаёт черновик в своём профиле" do
+  test "пользователь заводит карточку питомца" do
     user = User.create!(email: "anna@mail.ru", password: "perpet123")
     sign_in user
 
     assert_difference -> { user.profile.ads.count }, 1 do
-      post ads_path
+      post ads_path, params: { ad: { role: Ad::PET, title: "Мартин", kind: "Кот",
+                                     age: "3 года", city: "г. Москва" } }
     end
 
-    assert_redirected_to profile_path
-    assert_equal "draft", user.profile.ads.last.status
+    assert_redirected_to profile_pets_path
+    assert_equal "published", user.profile.ads.last.status
+  end
+
+  test "форма карточки ситтера заполнена данными профиля" do
+    user = sign_in_member
+    user.profile.update!(name: "Мария", age: "23", activity: "Обучение", about: "Люблю котов")
+
+    get new_ad_path(role: Ad::SITTER)
+
+    assert_response :success
+    assert_select ".banner__title", "Карточка временного хозяина"
+    assert_select "input[value=?]", "Мария"
+  end
+
+  test "чужую карточку не отредактировать" do
+    other = User.create!(email: "other@mail.ru", password: "perpet123").profile
+    ad = Ad.create!(profile: other, kind: "Кот", title: "Мартин", status: "published")
+    sign_in_member
+
+    get edit_ad_path(ad)
+
+    assert_response :not_found
   end
 end

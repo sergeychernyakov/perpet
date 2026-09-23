@@ -64,6 +64,9 @@ img {
   max-width: 100%;
 }
 
+/* display: block выше перебивает [hidden] из стилей браузера. */
+img[hidden] { display: none; }
+
 :focus-visible {
   outline: 3px solid var(--coral);
   outline-offset: 3px;
