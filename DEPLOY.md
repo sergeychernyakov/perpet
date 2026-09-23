@@ -36,10 +36,11 @@ bin/deploy          # git push + обновление сервера + пере�
 bin/deploy --seed   # то же плюс пересоздать демонстрационные данные
 ```
 
-`--seed` пересоздаёт всё и стирает заведённые аккаунты. Обновить только статьи:
+`--seed` пересоздаёт всё и стирает заведённые аккаунты. Обновить только
+содержимое (статьи, объявления, демо-людей) — `SEED=content`, только статьи — `SEED=articles`:
 
 ```bash
-ssh deploy@195.19.209.216 'cd /var/www/perpet && RAILS_ENV=production SEED=articles bundle exec rails db:seed'
+ssh deploy@195.19.209.216 'cd /var/www/perpet && RAILS_ENV=production SEED=content bundle exec rails db:seed'
 ```
 
 Полезное:

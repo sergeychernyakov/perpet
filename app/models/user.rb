@@ -1,11 +1,19 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
+  # В макете 2.0 вход по логину; почта остаётся для восстановления пароля.
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
+         authentication_keys: [ :login ]
 
   enum :role, { member: 0, admin: 1 }
 
   has_one :profile, dependent: :destroy
 
+  validates :login, presence: true, uniqueness: { case_sensitive: false }
+
+  before_validation :normalize_login
   after_create :create_default_profile
+
+  # Имя из формы регистрации: у самого пользователя его нет, оно живёт в профиле.
+  attr_accessor :name
 
   # Посетитель мини-приложения VK: логина и пароля у него нет, поэтому заводим
   # техническую учётную запись, привязанную к vk_user_id.
@@ -58,15 +66,27 @@ class User < ApplicationRecord
   end
 
   def display_name
-    profile&.name.presence || email
+    profile&.name.presence || login
   end
 
   private
+
+  # Логин придумываем сами всем, кто пришёл не через форму регистрации:
+  # гостям мини-приложения и тем, кто вошёл через VK ID.
+  def normalize_login
+    self.login = login.to_s.strip.downcase.presence
+
+    return if login.present?
+
+    base = email.to_s.split("@").first.to_s.parameterize(separator: "_").presence || "user"
+    self.login = base
+    self.login = "#{base}#{SecureRandom.hex(2)}" while self.class.where(login: login).where.not(id: id).exists?
+  end
 
   # У каждого пользователя сразу есть профиль — его страница доступна после входа.
   # Гостю из VK технический адрес в контакты не пишем: он ничей и писать на него
   # некуда, пусть человек укажет свой.
   def create_default_profile
-    create_profile!(name: email.split("@").first, email: vk_id? ? nil : email)
+    create_profile!(name: name.presence || login, email: vk_id? ? nil : email)
   end
 end

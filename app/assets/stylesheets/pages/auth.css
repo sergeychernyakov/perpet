@@ -59,16 +59,17 @@
   font-size: 13.5px;
 }
 
-/* Регистрация. В макете это один салатовый блок: заголовок и поля слева,
-   чёрный заяц справа и белая лапа снизу — обе фигуры выходят за нижний край. */
+/* Регистрация и вход. В макете это салатовая плашка: заголовок и поля слева,
+   коралловая рука с белой лапой справа — обе выходят за край. Под ней вторая
+   плашка со ссылкой на соседний экран. */
 
 .reg {
   container-type: inline-size;
   position: relative;
   width: 100%;
-  aspect-ratio: 1030 / 555;
+  aspect-ratio: 1848 / 749;
   min-height: 420px;
-  border-radius: var(--radius-card);
+  border-radius: clamp(24px, 2.604vw, 48px);
   border: 2px solid var(--line);
   background: var(--lime);
   overflow: hidden;
@@ -76,77 +77,82 @@
   animation-timeline: auto;
 }
 
+.reg--login { aspect-ratio: 1848 / 693; }
+
 .reg__hand,
-.reg__rabbit {
+.reg__rabbit,
+.reg__eye {
   position: absolute;
+  transform-origin: 0 0;
   pointer-events: none;
 }
 
 .reg__hand {
-  left: 0;
-  top: 48.1%;
-  width: 16.6%;
-  height: auto;
-  animation: fly-in-left 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.15s both;
-}
-
-.reg__rabbit {
-  left: 61%;
-  top: 1.5%;
-  width: 38.3%;
-  height: auto;
-  transform: scaleX(-1);
+  left: 89.935%;
+  top: 2.435cqw;
+  width: 39.183%;
+  aspect-ratio: 382.168 / 665.219;
+  transform: matrix(-0.9787, -0.2054, -0.2054, 0.9787, 0, 0);
   animation: fly-in-right 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.1s both;
 }
 
+.reg__rabbit {
+  left: 53.734%;
+  top: 19.318cqw;
+  width: 17.94%;
+  aspect-ratio: 119.2 / 215.8;
+  transform: matrix(-0.9801, -0.1984, -0.1984, 0.9801, 0, 0);
+  animation: fly-in-right 1s cubic-bezier(0.22, 0.7, 0.2, 1) 0.22s both;
+}
+
+.reg--login .reg__rabbit { left: 52.381%; top: 15.963cqw; }
+
 .reg__eye {
-  position: absolute;
-  width: 5.3%;
+  width: 5.092%;
   aspect-ratio: 1;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 0.62cqw var(--white);
-  pointer-events: none;
+  box-shadow: inset 0 0 0 0.11cqw var(--white);
+  transform: matrix(0.7812, -0.6243, 0.6243, 0.7812, 0, 0);
   animation: appear 0.6s ease 0.7s both;
 }
 
-.reg__eye--left { left: 67.7%; top: 47%; }
-.reg__eye--right { left: 80.1%; top: 47%; }
+.reg__eye--left { left: 50.162%; top: 24.73cqw; }
+.reg__eye--right { left: 60.931%; top: 24.73cqw; }
 
 .reg__body {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2.9cqw;
-  padding: 3.2% 0 0 3.2%;
+  gap: 2.597cqw;
+  padding: 2.273cqw 0 0 2.706%;
   max-width: 62%;
 }
 
 .reg__title {
-  font-size: 6.2cqw;
+  font-size: 6.926cqw;
   line-height: 1;
-  color: var(--cream);
+  color: var(--white);
 }
 
 .reg__form {
   display: flex;
   flex-direction: column;
-  gap: 1.7cqw;
-  width: 23.8cqw;
-  margin-left: 14.5cqw;
+  gap: 2.597cqw;
+  width: 19.589%;
+  min-width: 220px;
 }
 
 .reg__field {
   width: 100%;
-  height: max(34px, 3.7cqw);
+  height: max(38px, 3.355cqw);
   padding: 0 1.8cqw;
   border-radius: var(--radius-pill);
   border: 2px solid var(--line);
-  background: var(--white);
-  font-family: var(--font-mono);
-  font-size: max(12px, 1.4cqw);
+  background: var(--cream);
+  font-family: var(--font-hand);
+  font-size: max(12px, 1.082cqw);
   color: var(--gray);
-  text-align: center;
   outline: none;
 }
 
@@ -155,35 +161,70 @@
 .reg__field:focus-visible { border-color: var(--coral); }
 
 .reg__submit {
-  display: flex;
-  align-self: flex-end;
-  align-items: center;
-  justify-content: center;
-  width: 9.8cqw;
-  min-width: 64px;
-  height: max(30px, 2.9cqw);
-  margin-top: 1.2cqw;
+  width: 82.6%;
+  height: max(32px, 2.219cqw);
+  padding: 0;
   border-radius: var(--radius-pill);
   border: 2px solid var(--line);
   background: var(--cream);
-  transition: background 0.2s, transform 0.2s;
+  font-family: var(--font-hand);
+  font-size: max(12px, 1.082cqw);
+  color: var(--gray);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
 .reg__submit:hover {
   background: var(--coral);
-  transform: scale(1.04);
-}
-
-.reg__submit img {
-  width: max(14px, 1.8cqw);
-  aspect-ratio: 19.244 / 17;
-  pointer-events: none;
+  color: var(--ink);
+  transform: scale(1.03);
 }
 
 .reg__body .errors {
   position: relative;
   z-index: 1;
   width: 100%;
+}
+
+/* Вторая плашка: «Уже есть аккаунт?» и кнопка на соседний экран. */
+
+.reg__switch {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.949cqw;
+  padding: 2.273cqw 2.706%;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--line);
+}
+
+.reg__switch-text {
+  font-family: var(--font-hand);
+  font-size: max(12px, 1.082cqw);
+  color: var(--ink);
+}
+
+.reg__switch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16.18%;
+  min-width: 160px;
+  min-height: max(32px, 2.219cqw);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--line);
+  background: var(--cream);
+  font-family: var(--font-hand);
+  font-size: max(12px, 1.082cqw);
+  color: var(--gray);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.reg__switch-btn:hover {
+  background: var(--coral);
+  color: var(--ink);
+  transform: scale(1.03);
 }
 
 /* Вход через ВКонтакте и ссылки в макете не нарисованы — держим их
@@ -197,7 +238,8 @@
 
 /* На узком экране блок разворачивается в обычную колонку. */
 @media (max-width: 860px) {
-  .reg {
+  .reg,
+  .reg--login {
     aspect-ratio: auto;
     padding: 28px 22px 32px;
   }
@@ -212,27 +254,28 @@
     gap: 18px;
   }
 
-  .reg__title { font-size: clamp(36px, 11vw, 64px); }
+  .reg__title { font-size: clamp(36px, 11vw, 64px); color: var(--ink); }
 
   .reg__form {
     width: 100%;
-    margin-left: 0;
     gap: 12px;
   }
 
   .reg__field {
-    width: 100%;
     height: 48px;
     padding: 0 20px;
     font-size: 16px;
-    text-align: left;
   }
 
   .reg__submit {
-    align-self: stretch;
     width: 100%;
     height: 48px;
+    font-size: 15.57px;
   }
+
+  .reg__switch { gap: 14px; padding: 22px; border-radius: 28px; }
+  .reg__switch-text { font-size: 15.3px; }
+  .reg__switch-btn { width: 100%; min-height: 48px; font-size: 15.57px; }
 }
 
 .reg__remember {

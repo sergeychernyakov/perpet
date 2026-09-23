@@ -26,23 +26,23 @@ end
 # Люди из макета: у каждого объявления есть хозяин или ситтер, и кнопка
 # «Хозяин»/«Профиль» на карточке ведёт именно на него.
 PEOPLE = [
-  { key: :maria, email: "m.mary@mail.ru", name: "Мария", age: "23", city: "г. Москва",
+  { key: :maria, login: "maria", email: "m.mary@mail.ru", name: "Мария", age: "23", city: "г. Москва",
     activity: "Обучение", phone: "89039487129",
     about: "Привет, меня зовут Мария и я буду рада помочь Вам с вашим питомцем, " \
            "так как сама хотела бы завести себе животное." },
-  { key: :michael, email: "mixi@mail.ru", name: "Михаил", age: "27", city: "г. Москва",
+  { key: :michael, login: "mixi", email: "mixi@mail.ru", name: "Михаил", age: "27", city: "г. Москва",
     activity: "Работа", phone: "89059382319",
     about: "Привет, меня зовут Михаил, я хозяин нескольких замечательных питомцев, " \
            "с которыми я вынужден прощаться на время командировок." },
-  { key: :peter, email: "petr@mail.ru", name: "Пётр", age: "32 года", city: "г. Москва",
+  { key: :peter, login: "petr", email: "petr@mail.ru", name: "Пётр", age: "32 года", city: "г. Москва",
     activity: "Работа", phone: "89031157742",
     about: "Привет, меня зовут Пётр, я хотел бы помочь другим с их животными, " \
            "так как работаю онлайн и буду рад быть не один." },
-  { key: :margarita, email: "margarita@mail.ru", name: "Маргарита", age: "44 года",
+  { key: :margarita, login: "margarita", email: "margarita@mail.ru", name: "Маргарита", age: "44 года",
     city: "г. Москва, метро Щелковская", activity: "-", phone: "89261480356",
     about: "Привет, меня зовут Маргарита. Я вышла на пенсию, а дети выросли. " \
            "Хотела бы сделать доброе дело и помочь." },
-  { key: :anastasia, email: "anastasia@mail.ru", name: "Анастасия", age: "19 года",
+  { key: :anastasia, login: "anastasia", email: "anastasia@mail.ru", name: "Анастасия", age: "19 года",
     city: "г. Москва, Строгино", activity: "Учеба", phone: "89154402318",
     about: "Привет, меня зовут Анастасия. Сейчас каникулы и я хотела бы завести помочь, " \
            "так как сама хочу завести питомца." }
@@ -50,11 +50,21 @@ PEOPLE = [
 
 DEMO_PASSWORD = "perpet123".freeze
 
+# Ищем по логину, а не создаём вслепую: этот же код обновляет демо-данные
+# на сервере, где заведённые вручную учётные записи трогать нельзя.
+def demo_user(login, email, role: :member)
+  User.find_or_create_by!(login: login) do |user|
+    user.email = email
+    user.password = DEMO_PASSWORD
+    user.role = role
+  end
+end
+
 def create_users
-  admin = User.create!(email: "admin@perpet.ru", password: DEMO_PASSWORD, role: :admin)
+  admin = demo_user("admin", "admin@perpet.ru", role: :admin)
   admin.profile.update!(name: "Администратор", city: "Москва")
 
-  user = User.create!(email: "anna@mail.ru", password: DEMO_PASSWORD)
+  user = demo_user("anna", "anna@mail.ru")
   @profile = user.profile
   @profile.update!(
     name: "Анна Петрова",
@@ -70,12 +80,13 @@ def create_users
 
   @people = {}
   PEOPLE.each do |attributes|
-    person = User.create!(email: attributes[:email], password: DEMO_PASSWORD)
-    person.profile.update!(attributes.except(:key).merge(email: attributes[:email]))
+    person = demo_user(attributes[:login], attributes[:email])
+    person.profile.update!(attributes.except(:key, :login).merge(email: attributes[:email]))
     @people[attributes[:key]] = person.profile
   end
 
-  puts "Пользователи: #{User.count}, пароль у всех #{DEMO_PASSWORD} (администратор — #{admin.email})"
+  puts "Пользователи: #{User.count}, вход по логину, пароль у всех #{DEMO_PASSWORD} " \
+       "(администратор — #{admin.login})"
 end
 
 # ------------------ Объявления ------------------
@@ -474,6 +485,16 @@ end
 case ENV["SEED"]
 when "articles"
   Article.destroy_all
+  create_articles
+when "content"
+  # Тексты, объявления и демо-люди из макета — без чистки учётных записей,
+  # которые завели сами.
+  Ad.destroy_all
+  Article.destroy_all
+  create_users
+  create_ads
+  attach_catalog_photos
+  create_my_ads
   create_articles
 else
   seed
