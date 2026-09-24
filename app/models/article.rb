@@ -69,8 +69,15 @@ class Article < ApplicationRecord
         row = column = nil
         rows << { kind: "highlight", text: chunk.delete_prefix("! ").strip }
       when /\A\+ /
+        # Салатовые плашки подряд макет ставит в ряд — у них нет заголовка.
         block = { kind: "plate", tone: "lime", text: chunk.delete_prefix("+ ").strip }
-        column ? column[:blocks] << block : rows << block
+        if column
+          column[:blocks] << block
+        else
+          column = { title: nil, blocks: [ block ] }
+          row ? row[:columns] << column : rows << (row = { kind: "row", columns: [ column ] })
+          column = nil
+        end
       when /\A### /
         panels += 1
         column = { title: chunk.delete_prefix("### ").strip,

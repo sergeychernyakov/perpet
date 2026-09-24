@@ -1,9 +1,11 @@
-<%# Ряд колонок из макета. Одна колонка — панель с заголовком сбоку и
-    содержимое рядом; две-три — равные колонки с панелью сверху. %>
+<%# Ряд из макета. Колонка с заголовком — панель сбоку (если она одна)
+    или панель сверху (если колонок несколько). Колонки без заголовка —
+    просто плашки в ряд. %>
 <% columns = row[:columns] %>
+<% titled = columns.any? { |column| column[:title].present? } %>
 <% tone = columns.first[:tone] %>
 
-<% if columns.size == 1 %>
+<% if titled && columns.size == 1 %>
   <div class="reading__row reading__row--split reading__row--<%= tone %>">
     <h3 class="reading__panel reading__panel--<%= tone %>"><%= columns.first[:title] %></h3>
 
@@ -18,7 +20,9 @@
   <div class="reading__row" style="--cols: <%= columns.size %>;">
     <% columns.each do |column| %>
       <div class="reading__column">
-        <h3 class="reading__panel reading__panel--<%= tone %>"><%= column[:title] %></h3>
+        <% if column[:title].present? %>
+          <h3 class="reading__panel reading__panel--<%= tone %>"><%= column[:title] %></h3>
+        <% end %>
 
         <div class="reading__col">
           <% column[:blocks].each do |block| %>

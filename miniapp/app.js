@@ -487,16 +487,17 @@ function articleRow(row) {
   if (row.kind !== "row") return articleBlock(row)
 
   const tone = row.columns[0].tone
+  const titled = row.columns.some((column) => column.title)
   const panel = (column) => el("h3", { class: `reading__panel reading__panel--${tone}`, text: column.title })
   const body = (column) => el("div", { class: "reading__col" }, column.blocks.map(articleBlock))
 
-  if (row.columns.length === 1) {
+  if (titled && row.columns.length === 1) {
     return el("div", { class: `reading__row reading__row--split reading__row--${tone}` },
       [ panel(row.columns[0]), body(row.columns[0]) ])
   }
 
   const grid = el("div", { class: "reading__row" }, row.columns.map((column) =>
-    el("div", { class: "reading__column" }, [ panel(column), body(column) ])))
+    el("div", { class: "reading__column" }, [ column.title && panel(column), body(column) ])))
   grid.style.setProperty("--cols", row.columns.length)
 
   return grid
