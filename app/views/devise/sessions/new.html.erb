@@ -45,6 +45,6 @@
 
   <div class="reg__aside">
     <%= render "shared/vk_button", label: "Войти через ВКонтакте" %>
-    <%= render "devise/shared/links" %>
+    <%= link_to "Забыли пароль?", new_password_path(resource_name) %>
   </div>
 </main>
