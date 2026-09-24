@@ -339,7 +339,7 @@ async function brandScreen() {
     el("article", { class: "brand__values" }, [
       el("h2", { class: "brand__values-title", text: "Ценности" }),
       ...brand.values.map((value) => el("p", { class: "brand__value" }, [
-        el("span", { class: "brand__value-name", text: `${value.title}: ` }),
+        el("span", { class: "brand__value-name", text: `${value.title}:` }),
         document.createTextNode(value.text)
       ]))
     ])

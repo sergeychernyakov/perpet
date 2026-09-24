@@ -244,7 +244,11 @@
   color: var(--gray);
 }
 
-.brand__value-name { color: var(--ink); }
+/* В макете название ценности стоит отдельной строкой над текстом. */
+.brand__value-name {
+  display: block;
+  color: var(--ink);
+}
 
 /* Мерч */
 
