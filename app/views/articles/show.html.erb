@@ -17,7 +17,7 @@
       <% when "row" %>
         <%= render "articles/row", row: row %>
       <% else %>
-        <%= render "articles/block", block: row, lead: row == @article.layout.first %>
+        <%= render "articles/block", block: row %>
       <% end %>
     <% end %>
   </article>

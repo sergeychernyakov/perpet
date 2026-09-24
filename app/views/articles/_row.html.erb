@@ -6,8 +6,12 @@
 <% if style == "filled" %>
   <% columns.each do |column| %>
     <section class="reading__filled reading__filled--<%= column[:tone] %>">
-      <%= image_tag column[:tone] == "lime" ? "hero-19.svg" : "ab-paw-cream.svg",
-                    alt: "", class: "reading__filled-paw" %>
+      <%# У зайца на салатовой плашке в макете ещё и пара глаз. %>
+      <%= article_art(column[:art]) %>
+      <% if column[:art] == "plus" %>
+        <span class="reading__eye reading__eye--a"></span>
+        <span class="reading__eye reading__eye--b"></span>
+      <% end %>
       <h3 class="reading__filled-title"><%= column[:title] %></h3>
       <% column[:blocks].each do |block| %>
         <%= render "articles/block", block: block, bare: true %>
@@ -20,7 +24,8 @@
   <% side = column[:tone] == "lime" ? "left" : "right" %>
   <div class="reading__row reading__row--split reading__row--<%= column[:tone] %>">
     <h3 class="reading__panel reading__panel--<%= column[:tone] %>">
-      <%= image_tag "ab-paw-cream.svg", alt: "", class: "reading__panel-paw" %>
+      <%= image_tag column[:tone] == "lime" ? "cat-cream.svg" : "vazhno-cream.svg", alt: "",
+                    class: "reading__art reading__art--panel-#{column[:tone]}" %>
       <span><%= column[:title] %></span>
     </h3>
 

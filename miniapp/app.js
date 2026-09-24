@@ -468,43 +468,63 @@ function adCard(ad) {
   ])
 }
 
+// Рисунки блоков статьи: в макете они расставлены вручную, поэтому картинку
+// называет сам текст статьи — строкой «~ cat» внутри блока.
+const ART_IMAGES = {
+  cat: "ab-cat-big.svg",
+  plus: "hero-19.svg",
+  minus: "ear-cream.svg",
+  hand: "hero-19.svg",
+  "hand-right": "hero-19.svg"
+}
+
+function articleArt(art) {
+  if (!ART_IMAGES[art]) return null
+
+  return el("img", { class: `reading__art reading__art--${art}`, src: `assets/${ART_IMAGES[art]}`, alt: "" })
+}
+
 // Блок текста статьи: плашка, пункты-«пилюли» или текст без своей рамки.
 // paw — рука сбоку у пунктов, badge — кружок со стрелкой в чек-листе.
-function articleBlock(block, { bare = false, paw = null, badge = false, lead = false } = {}) {
+function articleBlock(block, { bare = false, paw = null, badge = false } = {}) {
   if (block.kind === "list") {
     return el("div", { class: "reading__pills" }, block.items.map((item) =>
       el("p", { class: `reading__pill${paw ? ` reading__pill--paw reading__pill--paw-${paw.side}` : ""}` }, [
         paw && el("img", { class: "reading__pill-paw", alt: "",
                            src: `assets/${paw.tone === "coral" ? "hero-19.svg" : "paw-lime.svg"}` }),
         paw && el("img", { class: "reading__pill-ear", src: "assets/tb-logo-ear.svg", alt: "" }),
-        badge && el("span", { class: "reading__pill-badge" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ]),
-        el("span", { text: item })
+        el("span", { text: item }),
+        badge && el("span", { class: "reading__pill-badge" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ])
       ])))
   }
   if (bare) return el("p", { class: "reading__text", text: block.text })
 
-  return el("p", { class: `reading__plate${block.tone === "lime" ? " reading__plate--lime" : ""}` }, [
-    block.tone === "lime" && el("img", { class: "reading__plate-paw", src: "assets/hero-19.svg", alt: "" }),
-    lead && el("img", { class: "reading__plate-paw reading__plate-paw--lead", src: "assets/ab-cat-big.svg", alt: "" }),
+  const tone = block.tone === "lime" ? " reading__plate--lime" : ""
+  const art = block.art ? ` reading__plate--${block.art}` : ""
+
+  return el("p", { class: `reading__plate${tone}${art}` }, [
+    articleArt(block.art),
     el("span", { text: block.text })
   ])
 }
 
 // Ряд статьи: полоса раздела, выделение или колонки с заголовками.
-function articleRow(row, lead = false) {
+function articleRow(row) {
   if (row.kind === "section") {
     return el("section", { class: "banner" }, [ el("h2", { class: "banner__title", text: row.text }) ])
   }
   if (row.kind === "highlight") return el("p", { class: "reading__highlight", text: row.text })
-  if (row.kind !== "row") return articleBlock(row, { lead })
+  if (row.kind !== "row") return articleBlock(row)
 
   const style = row.columns[0].style
 
   // Плашка с заливкой: заголовок и текст внутри, во всю ширину.
   if (style === "filled") {
     return row.columns.map((column) => el("section", { class: `reading__filled reading__filled--${column.tone}` }, [
-      el("img", { class: "reading__filled-paw", alt: "",
-                  src: `assets/${column.tone === "lime" ? "hero-19.svg" : "ab-paw-cream.svg"}` }),
+      articleArt(column.art),
+      // У зайца на салатовой плашке в макете ещё и пара глаз.
+      column.art === "plus" && el("span", { class: "reading__eye reading__eye--a" }),
+      column.art === "plus" && el("span", { class: "reading__eye reading__eye--b" }),
       el("h3", { class: "reading__filled-title", text: column.title }),
       ...column.blocks.map((block) => articleBlock(block, { bare: true }))
     ]))
@@ -518,7 +538,8 @@ function articleRow(row, lead = false) {
 
     return el("div", { class: `reading__row reading__row--split reading__row--${column.tone}` }, [
       el("h3", { class: `reading__panel reading__panel--${column.tone}` }, [
-        el("img", { class: "reading__panel-paw", src: "assets/ab-paw-cream.svg", alt: "" }),
+        el("img", { class: `reading__art reading__art--panel-${column.tone}`, alt: "",
+                    src: `assets/${column.tone === "lime" ? "cat-cream.svg" : "vazhno-cream.svg"}` }),
         el("span", { text: column.title })
       ]),
       el("div", { class: "reading__col" }, column.blocks.map((b) => articleBlock(b, { paw })))
@@ -782,7 +803,7 @@ async function articleScreen(id) {
   // Ниже последнего блока в макете ничего нет, поэтому и у нас пусто.
   const rows = article.layout || []
   const reading = el("article", { class: "reading" },
-    rows.flatMap((row, index) => articleRow(row, index === 0)))
+    rows.flatMap((row) => articleRow(row)))
 
   render(banner(article.title), reading)
 }

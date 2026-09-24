@@ -199,7 +199,7 @@
   gap: var(--gap);
 }
 
-/* В макете почти у каждой плашки сбоку рука. Она уходит за край, поэтому
+/* В макете почти у каждой плашки сбоку рисунок. Он уходит за край, поэтому
    плашки обрезают содержимое, а текст лежит поверх рисунка. */
 .reading__plate,
 .reading__filled,
@@ -216,76 +216,10 @@
   position: relative;
 }
 
-.reading__plate-paw,
-.reading__filled-paw,
-.reading__panel-paw,
-.reading__pill-paw,
-.reading__pill-ear {
-  position: absolute;
-  pointer-events: none;
-}
-
-.reading__plate-paw {
-  right: -1%;
-  top: -18%;
-  width: 11%;
-}
-
-/* Первая плашка статьи: лапа с «птицами» в правом нижнем углу. */
-.reading__plate-paw--lead {
-  right: -3%;
-  top: auto;
-  bottom: -62%;
-  width: 27.9%;
-}
-
-.reading__plate > span { max-width: 84%; display: block; }
-
-.reading__filled-paw {
-  right: -1.5%;
-  top: -8%;
-  width: 15.4%;
-}
-
-.reading__panel-paw {
-  left: 50%;
-  bottom: -28%;
-  width: 40%;
-}
-
-/* Пункты в ряду с панелью: большая рука цвета панели и белое «ухо» поверх. */
-.reading__pill-paw {
-  top: -14%;
-  width: 15.1%;
-}
-
-.reading__pill-ear {
-  top: 20%;
-  width: 9.2%;
-}
-
-.reading__pill--paw-left .reading__pill-paw { left: 2.8%; }
-.reading__pill--paw-left .reading__pill-ear { left: 1.4%; }
-.reading__pill--paw-right .reading__pill-paw { right: 2.8%; }
-.reading__pill--paw-right .reading__pill-ear { right: 1.4%; }
-
-/* Кружок со стрелкой у пунктов чек-листа. */
-.reading__pill-badge {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: max(34px, 10.27cqw);
-  aspect-ratio: 1;
-  margin-right: 2.4%;
-  border-radius: 50%;
-  border: 2px solid var(--line);
-}
-
-.reading__pill-badge img { width: 48%; }
+.reading__plate > span { display: block; }
 
 .reading__plate {
-  padding: 2.273cqw 2.706%;
+  padding: 2.273cqw 2.706cqw;
   border-radius: clamp(24px, 2.706vw, 50px);
   border: 2px solid var(--line);
   font-family: var(--font-hand);
@@ -309,7 +243,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.082cqw;
-  padding: 2.273cqw 2.706%;
+  padding: 2.273cqw 2.706cqw;
   border-radius: clamp(24px, 2.706vw, 50px);
   border: 2px solid var(--line);
 }
@@ -334,7 +268,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.082cqw;
-  padding: 2.273cqw 2.706%;
+  padding: 2.273cqw 2.706cqw;
   border-radius: clamp(24px, 2.706vw, 50px);
   border: 2px solid var(--line);
 }
@@ -348,7 +282,7 @@
 }
 
 .reading__highlight {
-  padding: 1.57cqw 3.193%;
+  padding: 1.57cqw 3.193cqw;
   border-radius: clamp(24px, 2.706vw, 50px);
   border: 2px solid var(--line);
   background: var(--lime);
@@ -379,7 +313,7 @@
 .reading__panel {
   display: flex;
   align-items: flex-start;
-  padding: 2.273cqw 2.706%;
+  padding: 2.273cqw 2.706cqw;
   border-radius: clamp(24px, 2.706vw, 50px);
   border: 2px solid var(--line);
   font-family: var(--font-display);
@@ -411,7 +345,7 @@
   align-items: center;
   gap: 0;
   min-height: max(48px, 4.329cqw);
-  padding: 0.541cqw 2.706%;
+  padding: 0.541cqw 2.706cqw;
   border-radius: var(--radius-pill);
   border: 2px solid var(--line);
   font-family: var(--font-hand);
@@ -427,7 +361,123 @@
 }
 
 .reading__pill--paw-left { padding-left: 34%; }
-.reading__pill--paw-right { padding-right: 34%; }
+.reading__pill--paw-right { padding-right: 25%; }
+
+/* Место и поворот каждого рисунка взяты из макета: доли — от ширины своей
+   плашки, вертикаль — в cqw, то есть в долях ширины всей статьи (1848). */
+.reading__art,
+.reading__eye,
+.reading__pill-paw,
+.reading__pill-ear {
+  position: absolute;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+/* Кот с птицами у первой плашки «Как принять решение о перевозке питомца?». */
+.reading__art--cat {
+  left: 89.297%;
+  top: 19.356cqw;
+  width: 27.857%;
+  transform: matrix(-0.8978, -0.4404, 0.4404, -0.8978, 0, 0);
+}
+
+/* Рядом с котом текст в макете узкий — иначе он лёг бы прямо на рисунок. */
+.reading__plate--cat > span { max-width: 47%; }
+
+/* Заяц на салатовой плашке «Плюсы поездок с питомцами» — и его глаза:
+   в макете это кольца кремовой обводкой, без заливки. */
+.reading__art--plus {
+  left: 100%;
+  top: 1.515cqw;
+  width: 15.433%;
+  transform: matrix(-0.9989, 0.0476, 0.0476, 0.9989, 0, 0);
+}
+
+.reading__eye {
+  width: 1.58%;
+  aspect-ratio: 1;
+  border: max(2px, 0.192cqw) solid var(--cream);
+  border-radius: 50%;
+}
+
+.reading__eye--a { left: 91.323%; top: 11.895cqw; }
+.reading__eye--b { left: 88.357%; top: 12.846cqw; }
+
+/* Кремовая рука на коралловой плашке «Скрытые минусы и сложности». */
+.reading__art--minus {
+  left: 96.975%;
+  top: 2.716cqw;
+  width: 13.788%;
+  transform: matrix(-0.9904, -0.1379, -0.1379, 0.9904, 0, 0);
+}
+
+/* «Самые частые ошибки»: рука держит первую плашку слева, вторую справа. */
+.reading__art--hand,
+.reading__art--hand-right {
+  top: 1.228cqw;
+  width: 20.967%;
+  transform: matrix(0.9992, -0.0409, 0.0409, 0.9992, 0, 0);
+}
+
+.reading__art--hand { left: 3.333%; }
+.reading__art--hand-right { left: 72.222%; }
+
+/* Кот на салатовой панели и «важно» на коралловой сидят у нижнего края. */
+.reading__art--panel-lime {
+  right: 10.437%;
+  bottom: -2.884cqw;
+  width: 31.53%;
+}
+
+.reading__art--panel-coral {
+  left: 65.847%;
+  bottom: -7.078cqw;
+  width: 67.832%;
+  transform: matrix(-0.9331, 0.3596, 0.3596, 0.9331, 0, 0);
+}
+
+/* Пункты в ряду с панелью: большая рука цвета панели и белое «ухо» поверх. */
+.reading__pill-paw {
+  top: 0.904cqw;
+  width: 15.084%;
+  transform: matrix(0.9992, -0.0409, 0.0409, 0.9992, 0, 0);
+}
+
+.reading__pill-ear {
+  left: 1.375%;
+  top: 1.878cqw;
+  width: 9.249%;
+  transform: matrix(0.9918, -0.1278, 0.1278, 0.9918, 0, 0);
+}
+
+.reading__pill--paw-left .reading__pill-paw { left: 2.79%; }
+.reading__pill--paw-right .reading__pill-paw { left: 78.817%; top: 0.471cqw; }
+
+/* Кружок со стрелкой у пунктов чек-листа — в макете он справа. */
+.reading__pill-badge {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: max(34px, 3.247cqw);
+  aspect-ratio: 1;
+  margin-left: auto;
+  margin-right: -2.002cqw;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+}
+
+.reading__pill-badge img {
+  width: 49%;
+  transform: matrix(0, 1, 1, 0, 0, 0);
+}
+
+.reading__plate--hand { padding-left: 34.4%; }
+.reading__plate--hand-right { padding-right: 29%; }
+
+.reading__plate--hand > span,
+.reading__plate--hand-right > span { max-width: 100%; }
 
 .reading__actions {
   display: flex;
@@ -451,12 +501,24 @@
   .reading__pill--paw-left { padding-left: 90px; }
   .reading__pill--paw-right { padding-right: 90px; }
   .reading__pill--paw { min-height: 72px; }
-  .reading__pill-paw { width: 52px; }
-  .reading__pill-ear { width: 32px; }
-  .reading__pill-badge { width: 40px; }
-  .reading__plate-paw,
-  .reading__filled-paw { width: 84px; }
-  .reading__panel-paw { width: 140px; }
+  .reading__pill-paw { width: 52px; top: 6px; }
+  .reading__pill--paw-right .reading__pill-paw { left: auto; right: 10px; top: 6px; }
+  .reading__pill-ear { width: 32px; top: 12px; left: 6px; }
+  .reading__pill-badge { width: 40px; margin-right: 0; }
+
+  .reading__art--cat,
+  .reading__art--plus,
+  .reading__art--minus,
+  .reading__art--hand,
+  .reading__art--hand-right,
+  .reading__eye { display: none; }
+
+  .reading__plate--cat > span { max-width: 100%; }
+  .reading__plate--hand { padding-left: 22px; }
+  .reading__plate--hand-right { padding-right: 22px; }
+
+  .reading__art--panel-lime,
+  .reading__art--panel-coral { width: 140px; }
 
   .reading__plate,
   .reading__pill { font-size: 15.3px; }
