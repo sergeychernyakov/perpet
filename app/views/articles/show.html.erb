@@ -1,6 +1,7 @@
 <% content_for :title, "#{@article.title} — PERPET" %>
 <% content_for :description, @article.excerpt %>
 
+<%# В макете ниже последнего блока статьи ничего нет — сразу подвал. %>
 <main class="main">
   <section class="banner">
     <h1 class="banner__title"><%= @article.title %></h1>
@@ -16,25 +17,8 @@
       <% when "row" %>
         <%= render "articles/row", row: row %>
       <% else %>
-        <%= render "articles/block", block: row %>
+        <%= render "articles/block", block: row, lead: row == @article.layout.first %>
       <% end %>
     <% end %>
-
-    <div class="reading__actions">
-      <%= link_to "Все статьи", articles_path, class: "btn" %>
-      <%= modal_button "Присоединиться", css: "btn btn--coral btn--wide" %>
-    </div>
   </article>
-
-  <% if @more.any? %>
-    <section class="banner">
-      <h2 class="banner__title">Читать дальше</h2>
-    </section>
-
-    <div class="articles">
-      <% @more.each_with_index do |article, index| %>
-        <%= render "articles/article", article: article, article_index: index %>
-      <% end %>
-    </div>
-  <% end %>
 </main>

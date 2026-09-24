@@ -199,6 +199,91 @@
   gap: var(--gap);
 }
 
+/* В макете почти у каждой плашки сбоку рука. Она уходит за край, поэтому
+   плашки обрезают содержимое, а текст лежит поверх рисунка. */
+.reading__plate,
+.reading__filled,
+.reading__panel,
+.reading__pill {
+  position: relative;
+  overflow: hidden;
+}
+
+.reading__plate > span,
+.reading__filled-title,
+.reading__panel > span,
+.reading__pill > span {
+  position: relative;
+}
+
+.reading__plate-paw,
+.reading__filled-paw,
+.reading__panel-paw,
+.reading__pill-paw,
+.reading__pill-ear {
+  position: absolute;
+  pointer-events: none;
+}
+
+.reading__plate-paw {
+  right: -1%;
+  top: -18%;
+  width: 11%;
+}
+
+/* Первая плашка статьи: лапа с «птицами» в правом нижнем углу. */
+.reading__plate-paw--lead {
+  right: -3%;
+  top: auto;
+  bottom: -62%;
+  width: 27.9%;
+}
+
+.reading__plate > span { max-width: 84%; display: block; }
+
+.reading__filled-paw {
+  right: -1.5%;
+  top: -8%;
+  width: 15.4%;
+}
+
+.reading__panel-paw {
+  left: 50%;
+  bottom: -28%;
+  width: 40%;
+}
+
+/* Пункты в ряду с панелью: большая рука цвета панели и белое «ухо» поверх. */
+.reading__pill-paw {
+  top: -14%;
+  width: 15.1%;
+}
+
+.reading__pill-ear {
+  top: 20%;
+  width: 9.2%;
+}
+
+.reading__pill--paw-left .reading__pill-paw { left: 2.8%; }
+.reading__pill--paw-left .reading__pill-ear { left: 1.4%; }
+.reading__pill--paw-right .reading__pill-paw { right: 2.8%; }
+.reading__pill--paw-right .reading__pill-ear { right: 1.4%; }
+
+/* Кружок со стрелкой у пунктов чек-листа. */
+.reading__pill-badge {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: max(34px, 10.27cqw);
+  aspect-ratio: 1;
+  margin-right: 2.4%;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+}
+
+.reading__pill-badge img { width: 48%; }
+
 .reading__plate {
   padding: 2.273cqw 2.706%;
   border-radius: clamp(24px, 2.706vw, 50px);
@@ -231,6 +316,9 @@
 
 .reading__filled--lime { background: var(--lime); }
 .reading__filled--coral { background: var(--coral); }
+
+.reading__filled-title,
+.reading__filled .reading__text { max-width: 71.9%; }
 
 .reading__filled-title {
   margin-bottom: 0.5cqw;
@@ -321,6 +409,7 @@
 .reading__pill {
   display: flex;
   align-items: center;
+  gap: 0;
   min-height: max(48px, 4.329cqw);
   padding: 0.541cqw 2.706%;
   border-radius: var(--radius-pill);
@@ -330,6 +419,15 @@
   line-height: 1.35;
   color: var(--gray);
 }
+
+.reading__pill--paw {
+  min-height: max(64px, 8.279cqw);
+  padding-top: 1.082cqw;
+  padding-bottom: 1.082cqw;
+}
+
+.reading__pill--paw-left { padding-left: 34%; }
+.reading__pill--paw-right { padding-right: 34%; }
 
 .reading__actions {
   display: flex;
@@ -349,6 +447,16 @@
   .reading__panel,
   .reading__filled,
   .reading__frame { padding: 18px 22px; }
+
+  .reading__pill--paw-left { padding-left: 90px; }
+  .reading__pill--paw-right { padding-right: 90px; }
+  .reading__pill--paw { min-height: 72px; }
+  .reading__pill-paw { width: 52px; }
+  .reading__pill-ear { width: 32px; }
+  .reading__pill-badge { width: 40px; }
+  .reading__plate-paw,
+  .reading__filled-paw { width: 84px; }
+  .reading__panel-paw { width: 140px; }
 
   .reading__plate,
   .reading__pill { font-size: 15.3px; }

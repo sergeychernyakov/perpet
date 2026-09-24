@@ -469,42 +469,59 @@ function adCard(ad) {
 }
 
 // Блок текста статьи: плашка, пункты-«пилюли» или текст без своей рамки.
-function articleBlock(block, bare = false) {
+// paw — рука сбоку у пунктов, badge — кружок со стрелкой в чек-листе.
+function articleBlock(block, { bare = false, paw = null, badge = false, lead = false } = {}) {
   if (block.kind === "list") {
-    return el("div", { class: "reading__pills" },
-      block.items.map((item) => el("p", { class: "reading__pill", text: item })))
+    return el("div", { class: "reading__pills" }, block.items.map((item) =>
+      el("p", { class: `reading__pill${paw ? ` reading__pill--paw reading__pill--paw-${paw.side}` : ""}` }, [
+        paw && el("img", { class: "reading__pill-paw", alt: "",
+                           src: `assets/${paw.tone === "coral" ? "hero-19.svg" : "paw-lime.svg"}` }),
+        paw && el("img", { class: "reading__pill-ear", src: "assets/tb-logo-ear.svg", alt: "" }),
+        badge && el("span", { class: "reading__pill-badge" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ]),
+        el("span", { text: item })
+      ])))
   }
   if (bare) return el("p", { class: "reading__text", text: block.text })
 
-  return el("p", { class: `reading__plate${block.tone === "lime" ? " reading__plate--lime" : ""}`, text: block.text })
+  return el("p", { class: `reading__plate${block.tone === "lime" ? " reading__plate--lime" : ""}` }, [
+    block.tone === "lime" && el("img", { class: "reading__plate-paw", src: "assets/hero-19.svg", alt: "" }),
+    lead && el("img", { class: "reading__plate-paw reading__plate-paw--lead", src: "assets/ab-cat-big.svg", alt: "" }),
+    el("span", { text: block.text })
+  ])
 }
 
 // Ряд статьи: полоса раздела, выделение или колонки с заголовками.
-function articleRow(row) {
+function articleRow(row, lead = false) {
   if (row.kind === "section") {
     return el("section", { class: "banner" }, [ el("h2", { class: "banner__title", text: row.text }) ])
   }
   if (row.kind === "highlight") return el("p", { class: "reading__highlight", text: row.text })
-  if (row.kind !== "row") return articleBlock(row)
+  if (row.kind !== "row") return articleBlock(row, { lead })
 
   const style = row.columns[0].style
-  const body = (column) => el("div", { class: "reading__col" }, column.blocks.map((b) => articleBlock(b)))
 
   // Плашка с заливкой: заголовок и текст внутри, во всю ширину.
   if (style === "filled") {
     return row.columns.map((column) => el("section", { class: `reading__filled reading__filled--${column.tone}` }, [
+      el("img", { class: "reading__filled-paw", alt: "",
+                  src: `assets/${column.tone === "lime" ? "hero-19.svg" : "ab-paw-cream.svg"}` }),
       el("h3", { class: "reading__filled-title", text: column.title }),
-      ...column.blocks.map((block) => articleBlock(block, true))
+      ...column.blocks.map((block) => articleBlock(block, { bare: true }))
     ]))
   }
 
-  // Панель с заголовком сбоку и содержимое рядом.
+  // Панель с заголовком сбоку и содержимое рядом. Салатовая панель стоит
+  // справа, значит руки у пунктов слева, и наоборот.
   if (style === "aside" && row.columns.length === 1) {
     const column = row.columns[0]
+    const paw = { tone: column.tone, side: column.tone === "lime" ? "left" : "right" }
 
     return el("div", { class: `reading__row reading__row--split reading__row--${column.tone}` }, [
-      el("h3", { class: `reading__panel reading__panel--${column.tone}`, text: column.title }),
-      body(column)
+      el("h3", { class: `reading__panel reading__panel--${column.tone}` }, [
+        el("img", { class: "reading__panel-paw", src: "assets/ab-paw-cream.svg", alt: "" }),
+        el("span", { text: column.title })
+      ]),
+      el("div", { class: "reading__col" }, column.blocks.map((b) => articleBlock(b, { paw })))
     ])
   }
 
@@ -512,13 +529,14 @@ function articleRow(row) {
     if (column.style === "inline") {
       return el("div", { class: "reading__frame" }, [
         el("h3", { class: "reading__frame-title", text: column.title }),
-        ...column.blocks.map((block) => articleBlock(block, true))
+        ...column.blocks.map((block) => articleBlock(block, { bare: true }))
       ])
     }
 
     return el("div", { class: "reading__column" }, [
-      column.title && el("h3", { class: "reading__panel reading__panel--lime", text: column.title }),
-      body(column)
+      column.title && el("h3", { class: "reading__panel reading__panel--lime" }, [ el("span", { text: column.title }) ]),
+      el("div", { class: "reading__col" },
+         column.blocks.map((b) => articleBlock(b, { badge: Boolean(column.title) })))
     ])
   }))
   grid.style.setProperty("--cols", row.columns.length)
@@ -761,30 +779,12 @@ async function articleScreen(id) {
   }
 
   // Статья приходит рядами плашек — та же раскладка, что на сайте.
-  const reading = el("article", { class: "reading" }, [
-    ...(article.layout || []).flatMap(articleRow),
-    el("div", { class: "reading__actions" }, [
-      el("a", { class: "btn", href: "#articles" }, "Все статьи"),
-      el("button", { class: "btn btn--coral btn--wide", type: "button", onClick: () => go("ads") }, "Присоединиться")
-    ])
-  ])
+  // Ниже последнего блока в макете ничего нет, поэтому и у нас пусто.
+  const rows = article.layout || []
+  const reading = el("article", { class: "reading" },
+    rows.flatMap((row, index) => articleRow(row, index === 0)))
 
-  const more = el("div", { class: "articles" })
-
-  render(banner(article.title), reading, more)
-
-  // «Читать дальше» — те же блоки, что и в списке.
-  try {
-    const { articles } = await api.articles({ page: 1 })
-    const rest = articles.filter((one) => one.readable && String(one.id) !== String(id)).slice(0, 2)
-    if (rest.length) {
-      more.replaceWith(el("section", { class: "banner" }, [
-        el("h2", { class: "banner__title", text: "Читать дальше" })
-      ]), el("div", { class: "articles" }, rest.map(articleCard)))
-    }
-  } catch {
-    more.remove()
-  }
+  render(banner(article.title), reading)
 }
 
 // ---------- профиль ----------

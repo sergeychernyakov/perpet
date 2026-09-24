@@ -6,6 +6,8 @@
 <% if style == "filled" %>
   <% columns.each do |column| %>
     <section class="reading__filled reading__filled--<%= column[:tone] %>">
+      <%= image_tag column[:tone] == "lime" ? "hero-19.svg" : "ab-paw-cream.svg",
+                    alt: "", class: "reading__filled-paw" %>
       <h3 class="reading__filled-title"><%= column[:title] %></h3>
       <% column[:blocks].each do |block| %>
         <%= render "articles/block", block: block, bare: true %>
@@ -14,12 +16,17 @@
   <% end %>
 <% elsif style == "aside" && columns.size == 1 %>
   <% column = columns.first %>
+  <%# Панель салатовая — она справа, значит руки у пунктов слева, и наоборот. %>
+  <% side = column[:tone] == "lime" ? "left" : "right" %>
   <div class="reading__row reading__row--split reading__row--<%= column[:tone] %>">
-    <h3 class="reading__panel reading__panel--<%= column[:tone] %>"><%= column[:title] %></h3>
+    <h3 class="reading__panel reading__panel--<%= column[:tone] %>">
+      <%= image_tag "ab-paw-cream.svg", alt: "", class: "reading__panel-paw" %>
+      <span><%= column[:title] %></span>
+    </h3>
 
     <div class="reading__col">
       <% column[:blocks].each do |block| %>
-        <%= render "articles/block", block: block %>
+        <%= render "articles/block", block: block, paw: { tone: column[:tone], side: side } %>
       <% end %>
     </div>
   </div>
@@ -36,12 +43,12 @@
       <% else %>
         <div class="reading__column">
           <% if column[:title].present? %>
-            <h3 class="reading__panel reading__panel--lime"><%= column[:title] %></h3>
+            <h3 class="reading__panel reading__panel--lime"><span><%= column[:title] %></span></h3>
           <% end %>
 
           <div class="reading__col">
             <% column[:blocks].each do |block| %>
-              <%= render "articles/block", block: block %>
+              <%= render "articles/block", block: block, badge: column[:title].present? %>
             <% end %>
           </div>
         </div>

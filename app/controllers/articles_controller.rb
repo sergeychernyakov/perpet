@@ -8,6 +8,5 @@ class ArticlesController < ApplicationController
   # списке и ссылки-то нет, но прямой адрес тоже не должен показывать пустоту.
   def show
     @article = Article.readable.find(params[:id])
-    @more = Article.readable.ordered.where.not(id: @article.id).limit(2)
   end
 end

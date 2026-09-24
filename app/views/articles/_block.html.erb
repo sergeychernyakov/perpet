@@ -1,14 +1,35 @@
-<%# Внутри плашки с заливкой и рамки колонки текст идёт без своей рамки. %>
+<%# Внутри плашки с заливкой и рамки колонки текст идёт без своей рамки.
+    paw — рука сбоку у пунктов, как в макете: цвета панели и с той стороны,
+    где панели нет. badge — кружок со стрелкой у пунктов чек-листа. %>
 <% bare = local_assigns.fetch(:bare, false) %>
+<% paw = local_assigns[:paw] %>
+<% badge = local_assigns.fetch(:badge, false) %>
+<% lead = local_assigns.fetch(:lead, false) %>
 
 <% if block[:kind] == "list" %>
   <div class="reading__pills">
     <% block[:items].each do |item| %>
-      <p class="reading__pill"><%= item %></p>
+      <p class="reading__pill <%= "reading__pill--paw reading__pill--paw-#{paw[:side]}" if paw %>">
+        <% if paw %>
+          <%= image_tag paw[:tone] == "coral" ? "hero-19.svg" : "paw-lime.svg", alt: "", class: "reading__pill-paw" %>
+          <%= image_tag "tb-logo-ear.svg", alt: "", class: "reading__pill-ear" %>
+        <% end %>
+        <% if badge %>
+          <span class="reading__pill-badge"><%= image_tag "shape-11.svg", alt: "" %></span>
+        <% end %>
+        <span><%= item %></span>
+      </p>
     <% end %>
   </div>
 <% elsif bare %>
   <p class="reading__text"><%= block[:text] %></p>
 <% else %>
-  <p class="reading__plate <%= "reading__plate--lime" if block[:tone] == "lime" %>"><%= block[:text] %></p>
+  <p class="reading__plate <%= "reading__plate--lime" if block[:tone] == "lime" %>">
+    <% if block[:tone] == "lime" %>
+      <%= image_tag "hero-19.svg", alt: "", class: "reading__plate-paw" %>
+    <% elsif lead %>
+      <%= image_tag "ab-cat-big.svg", alt: "", class: "reading__plate-paw reading__plate-paw--lead" %>
+    <% end %>
+    <span><%= block[:text] %></span>
+  </p>
 <% end %>
