@@ -245,6 +245,7 @@
 .footer {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: clamp(10px, 1.2vw, 18px);
   padding: clamp(14px, 1.6vw, 22px) var(--gutter) clamp(24px, 3vw, 36px);
 }
@@ -278,27 +279,6 @@
   color: var(--cream);
   transform: translateY(-2px);
 }
-
-/* Бренд-бук в макете живёт только в бургер-меню, а на широком экране
-   бургера нет — держим ссылку в подвале. Полоса подвала занята плашкой
-   контактов и иконками, поэтому ссылка сжимается, а не переносит их. */
-.footer__links {
-  display: flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  align-items: center;
-  justify-content: center;
-  padding: 0 clamp(8px, 1vw, 18px);
-  font-family: var(--font-mono);
-  font-size: clamp(12.6px, 1.08vw, 16.2px);
-  white-space: nowrap;
-}
-
-.footer__links a,
-.footer__links button { color: var(--gray); }
-
-.footer__links a:hover,
-.footer__links button:hover { color: var(--ink); }
 
 .footer__socials {
   display: flex;

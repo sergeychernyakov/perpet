@@ -42,61 +42,87 @@ class Article < ApplicationRecord
 
   # Текст статьи набирают в админке обычным текстом, пустая строка делит блоки:
   #
-  #   ## Заголовок   — коралловая полоса раздела во всю ширину
-  #   ! Текст        — салатовая плашка с крупной мыслью
-  #   + Текст        — салатовая плашка с обычным текстом
-  #   ### Заголовок  — колонка: плашка с заголовком и тем, что идёт под ней
-  #   - пункт        — пункты-«пилюли»
-  #   ---            — конец ряда колонок
-  #   обычный абзац  — плашка с текстом
+  #   ## Заголовок    — коралловая полоса раздела во всю ширину
+  #   @@ Заголовок    — плашка с заливкой: заголовок и текст внутри
+  #   @ Заголовок     — панель с заголовком сбоку, содержимое рядом
+  #   ### Заголовок   — колонка: рамка с заголовком внутри
+  #   #### Заголовок  — колонка: салатовая плашка-заголовок над содержимым
+  #   ! Текст         — салатовая плашка с крупной мыслью
+  #   + Текст         — салатовая плашка с обычным текстом
+  #   - пункт         — пункты-«пилюли»
+  #   ---             — конец ряда
+  #   обычный абзац   — плашка с текстом
   #
-  # Идущие подряд колонки встают в один ряд. Ряд из одной колонки макет
-  # раскладывает как панель с заголовком сбоку и пункты рядом.
-  def layout
-    rows = []
-    row = nil
-    column = nil
-    panels = 0
+  # Идущие подряд колонки встают в один ряд. У панелей и плашек с заливкой
+  # цвет чередуется салатовый — коралловый, как в макете.
+  COLUMN_MARKERS = [ [ "@@ ", "filled" ], [ "#### ", "pill" ],
+                     [ "### ", "inline" ], [ "@ ", "aside" ] ].freeze
+  TONED_STYLES = %w[filled aside].freeze
 
-    body_paragraphs.each do |chunk|
-      case chunk
-      when "---"
-        row = column = nil
-      when /\A## /
-        row = column = nil
-        rows << { kind: "section", text: chunk.delete_prefix("## ").strip }
-      when /\A! /
-        row = column = nil
-        rows << { kind: "highlight", text: chunk.delete_prefix("! ").strip }
-      when /\A\+ /
-        # Салатовые плашки подряд макет ставит в ряд — у них нет заголовка.
-        block = { kind: "plate", tone: "lime", text: chunk.delete_prefix("+ ").strip }
-        if column
-          column[:blocks] << block
-        else
-          column = { title: nil, blocks: [ block ] }
-          row ? row[:columns] << column : rows << (row = { kind: "row", columns: [ column ] })
-          column = nil
-        end
-      when /\A### /
-        panels += 1
-        column = { title: chunk.delete_prefix("### ").strip,
-                   tone: panels.odd? ? "lime" : "coral", blocks: [] }
-        if row
-          row[:columns] << column
-        else
-          row = { kind: "row", columns: [ column ] }
-          rows << row
-        end
-      when /\A- /
-        block = { kind: "list", items: chunk.split("\n").map { |line| line.sub(/\A-\s*/, "").strip } }
-        column ? column[:blocks] << block : rows << block
-      else
-        block = { kind: "plate", text: chunk }
-        column ? column[:blocks] << block : rows << block
-      end
+  def layout
+    state = { rows: [], row: nil, column: nil, panels: 0 }
+    body_paragraphs.each { |chunk| add_chunk(state, chunk) }
+    state[:rows]
+  end
+
+  private
+
+  def add_chunk(state, chunk)
+    marker = COLUMN_MARKERS.find { |prefix, _| chunk.start_with?(prefix) }
+
+    if chunk == "---"
+      close_row(state)
+    elsif marker
+      open_column(state, chunk.delete_prefix(marker.first).strip, marker.last)
+    elsif chunk.start_with?("## ")
+      close_row(state)
+      state[:rows] << { kind: "section", text: chunk.delete_prefix("## ").strip }
+    elsif chunk.start_with?("! ")
+      close_row(state)
+      state[:rows] << { kind: "highlight", text: chunk.delete_prefix("! ").strip }
+    elsif chunk.start_with?("+ ")
+      add_block(state, { kind: "plate", tone: "lime", text: chunk.delete_prefix("+ ").strip }, own_column: true)
+    elsif chunk.start_with?("- ")
+      add_block(state, { kind: "list", items: chunk.split("\n").map { |line| line.sub(/\A-\s*/, "").strip } })
+    else
+      add_block(state, { kind: "plate", text: chunk })
+    end
+  end
+
+  def close_row(state)
+    state[:row] = nil
+    state[:column] = nil
+  end
+
+  def open_column(state, title, style)
+    tone = nil
+
+    if TONED_STYLES.include?(style)
+      state[:panels] += 1
+      tone = state[:panels].odd? ? "lime" : "coral"
     end
 
-    rows
+    state[:column] = { title: title, style: style, tone: tone, blocks: [] }
+    place_column(state, state[:column])
+  end
+
+  def place_column(state, column)
+    if state[:row]
+      state[:row][:columns] << column
+    else
+      state[:row] = { kind: "row", columns: [ column ] }
+      state[:rows] << state[:row]
+    end
+  end
+
+  def add_block(state, block, own_column: false)
+    return state[:column][:blocks] << block if state[:column]
+
+    if own_column
+      place_column(state, { title: nil, style: "plain", tone: nil, blocks: [ block ] })
+    else
+      close_row(state)
+      state[:rows] << block
+    end
   end
 end

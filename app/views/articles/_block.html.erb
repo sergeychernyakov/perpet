@@ -1,9 +1,14 @@
+<%# Внутри плашки с заливкой и рамки колонки текст идёт без своей рамки. %>
+<% bare = local_assigns.fetch(:bare, false) %>
+
 <% if block[:kind] == "list" %>
   <div class="reading__pills">
     <% block[:items].each do |item| %>
       <p class="reading__pill"><%= item %></p>
     <% end %>
   </div>
+<% elsif bare %>
+  <p class="reading__text"><%= block[:text] %></p>
 <% else %>
   <p class="reading__plate <%= "reading__plate--lime" if block[:tone] == "lime" %>"><%= block[:text] %></p>
 <% end %>

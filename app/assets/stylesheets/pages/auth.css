@@ -160,6 +160,49 @@
 
 .reg__field:focus-visible { border-color: var(--coral); }
 
+/* Кружок с рукой рядом с кнопкой — та же пара, что на остальных страницах:
+   нажимается любая половина, светятся обе. */
+.reg__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.812cqw;
+}
+
+.reg__arrow {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: max(34px, 2.219cqw);
+  height: max(34px, 2.219cqw);
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: var(--cream);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.reg__arrow img {
+  width: max(13px, 1.041cqw);
+  aspect-ratio: 19.244 / 17;
+  pointer-events: none;
+}
+
+.reg__arrow:hover,
+.reg__arrow:has(+ .reg__submit:hover),
+.reg__arrow:has(+ .reg__switch-btn:hover) {
+  background: var(--coral);
+  transform: scale(1.06);
+}
+
+.reg__arrow:hover + .reg__submit,
+.reg__arrow:hover + .reg__switch-btn {
+  background: var(--coral);
+  color: var(--ink);
+  transform: scale(1.03);
+}
+
 .reg__submit {
   width: 82.6%;
   height: max(32px, 2.219cqw);
@@ -268,15 +311,25 @@
     font-size: 16px;
   }
 
+  .reg__actions { gap: 10px; }
+
+  .reg__arrow {
+    width: 48px;
+    height: 48px;
+  }
+
+  .reg__arrow img { width: 18px; }
+
   .reg__submit {
-    width: 100%;
+    flex: 1;
+    width: auto;
     height: 48px;
     font-size: 15.57px;
   }
 
   .reg__switch { gap: 14px; padding: 22px; border-radius: 28px; }
   .reg__switch-text { font-size: 15.3px; }
-  .reg__switch-btn { width: 100%; min-height: 48px; font-size: 15.57px; }
+  .reg__switch-btn { flex: 1; width: auto; min-height: 48px; font-size: 15.57px; }
 }
 
 .reg__remember {

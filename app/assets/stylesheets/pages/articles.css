@@ -104,10 +104,13 @@
   color: var(--gray);
 }
 
+/* Метки стоят с той же стороны, что и заголовок: у обычной карточки справа,
+   у зеркальной — слева. В макете они так и чередуются через одну. */
 .article__tags {
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: clamp(10px, 1vw, 18px);
   margin-top: auto;
 }
@@ -208,6 +211,54 @@
 
 .reading__plate--lime { background: var(--lime); }
 
+/* Текст без своей рамки — внутри плашки с заливкой и внутри рамки колонки. */
+.reading__text {
+  font-family: var(--font-hand);
+  font-size: max(12px, 1.082cqw);
+  line-height: 1.4;
+  color: var(--gray);
+}
+
+/* Плашка с заливкой: заголовок и текст внутри, во всю ширину. */
+.reading__filled {
+  display: flex;
+  flex-direction: column;
+  gap: 1.082cqw;
+  padding: 2.273cqw 2.706%;
+  border-radius: clamp(24px, 2.706vw, 50px);
+  border: 2px solid var(--line);
+}
+
+.reading__filled--lime { background: var(--lime); }
+.reading__filled--coral { background: var(--coral); }
+
+.reading__filled-title {
+  margin-bottom: 0.5cqw;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: max(16px, 2.597cqw);
+  line-height: 1.15;
+  color: var(--cream);
+}
+
+/* Рамка колонки: заголовок внутри, как у «Самолета» и «Поезда». */
+.reading__frame {
+  display: flex;
+  flex-direction: column;
+  gap: 1.082cqw;
+  padding: 2.273cqw 2.706%;
+  border-radius: clamp(24px, 2.706vw, 50px);
+  border: 2px solid var(--line);
+}
+
+.reading__frame-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: max(15px, 1.948cqw);
+  line-height: 1.15;
+  color: var(--ink);
+}
+
 .reading__highlight {
   padding: 1.57cqw 3.193%;
   border-radius: clamp(24px, 2.706vw, 50px);
@@ -295,11 +346,17 @@
 
   .reading__plate,
   .reading__pill,
-  .reading__panel { padding: 18px 22px; }
+  .reading__panel,
+  .reading__filled,
+  .reading__frame { padding: 18px 22px; }
 
   .reading__plate,
   .reading__pill { font-size: 15.3px; }
 
   .reading__panel,
+  .reading__filled-title,
   .reading__highlight { font-size: 24px; }
+
+  .reading__frame-title { font-size: 20px; }
+  .reading__text { font-size: 15.3px; }
 }

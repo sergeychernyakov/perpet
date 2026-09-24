@@ -48,12 +48,16 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   test "текст статьи раскладывается плашками, как в макете" do
     article = Article.create!(title: "Как везти кота", excerpt: "Коротко о главном.",
                               body: "Вступление.\n\n## Дорога\n\n! Главная мысль.\n\n" \
-                                    "### Что взять\n\n- Переноска.\n- Пеленки.")
+                                    "@@ Плюсы\n\nЕдем вместе.\n\n---\n\n" \
+                                    "### Самолет\n\nВ салоне до 8 кг.\n\n---\n\n" \
+                                    "@ Что взять\n\n- Переноска.\n- Пеленки.")
 
     get article_path(article)
 
     assert_select ".banner__title", text: "Дорога"
     assert_select ".reading__highlight", "Главная мысль."
+    assert_select ".reading__filled--lime .reading__filled-title", "Плюсы"
+    assert_select ".reading__frame .reading__frame-title", "Самолет"
     assert_select ".reading__row--split .reading__panel", "Что взять"
     assert_select ".reading__pill", 2
   end

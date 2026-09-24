@@ -1,35 +1,51 @@
-<%# Ряд из макета. Колонка с заголовком — панель сбоку (если она одна)
-    или панель сверху (если колонок несколько). Колонки без заголовка —
-    просто плашки в ряд. %>
+<%# Ряд из макета: плашка с заливкой, панель сбоку, рамки-колонки
+    или колонки с плашкой-заголовком сверху. %>
 <% columns = row[:columns] %>
-<% titled = columns.any? { |column| column[:title].present? } %>
-<% tone = columns.first[:tone] %>
+<% style = columns.first[:style] %>
 
-<% if titled && columns.size == 1 %>
-  <div class="reading__row reading__row--split reading__row--<%= tone %>">
-    <h3 class="reading__panel reading__panel--<%= tone %>"><%= columns.first[:title] %></h3>
+<% if style == "filled" %>
+  <% columns.each do |column| %>
+    <section class="reading__filled reading__filled--<%= column[:tone] %>">
+      <h3 class="reading__filled-title"><%= column[:title] %></h3>
+      <% column[:blocks].each do |block| %>
+        <%= render "articles/block", block: block, bare: true %>
+      <% end %>
+    </section>
+  <% end %>
+<% elsif style == "aside" && columns.size == 1 %>
+  <% column = columns.first %>
+  <div class="reading__row reading__row--split reading__row--<%= column[:tone] %>">
+    <h3 class="reading__panel reading__panel--<%= column[:tone] %>"><%= column[:title] %></h3>
 
     <div class="reading__col">
-      <% columns.first[:blocks].each do |block| %>
+      <% column[:blocks].each do |block| %>
         <%= render "articles/block", block: block %>
       <% end %>
     </div>
   </div>
 <% else %>
-  <%# Внутри ряда цвет панелей один — иначе колонки спорят друг с другом. %>
   <div class="reading__row" style="--cols: <%= columns.size %>;">
     <% columns.each do |column| %>
-      <div class="reading__column">
-        <% if column[:title].present? %>
-          <h3 class="reading__panel reading__panel--<%= tone %>"><%= column[:title] %></h3>
-        <% end %>
-
-        <div class="reading__col">
+      <% if column[:style] == "inline" %>
+        <div class="reading__frame">
+          <h3 class="reading__frame-title"><%= column[:title] %></h3>
           <% column[:blocks].each do |block| %>
-            <%= render "articles/block", block: block %>
+            <%= render "articles/block", block: block, bare: true %>
           <% end %>
         </div>
-      </div>
+      <% else %>
+        <div class="reading__column">
+          <% if column[:title].present? %>
+            <h3 class="reading__panel reading__panel--lime"><%= column[:title] %></h3>
+          <% end %>
+
+          <div class="reading__col">
+            <% column[:blocks].each do |block| %>
+              <%= render "articles/block", block: block %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     <% end %>
   </div>
 <% end %>

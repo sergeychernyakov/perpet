@@ -23,14 +23,24 @@
           </label>
         <% end %>
 
-        <%= f.submit "Вход", class: "reg__submit" %>
+        <div class="reg__actions">
+          <button class="reg__arrow" type="submit" title="Вход" aria-label="Вход">
+            <%= image_tag "shape-11.svg", alt: "" %>
+          </button>
+          <%= f.submit "Вход", class: "reg__submit" %>
+        </div>
       <% end %>
     </div>
   </section>
 
   <section class="reg__switch">
     <p class="reg__switch-text">Еще нет аккаунта?</p>
-    <%= link_to "Присоединиться", new_user_registration_path, class: "reg__switch-btn" %>
+    <div class="reg__actions">
+      <%= link_to new_user_registration_path, class: "reg__arrow", title: "Присоединиться" do %>
+        <%= image_tag "shape-11.svg", alt: "" %>
+      <% end %>
+      <%= link_to "Присоединиться", new_user_registration_path, class: "reg__switch-btn" %>
+    </div>
   </section>
 
   <div class="reg__aside">

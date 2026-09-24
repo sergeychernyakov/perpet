@@ -468,12 +468,13 @@ function adCard(ad) {
   ])
 }
 
-// Блок текста статьи: плашка с текстом или пункты-«пилюли».
-function articleBlock(block) {
+// Блок текста статьи: плашка, пункты-«пилюли» или текст без своей рамки.
+function articleBlock(block, bare = false) {
   if (block.kind === "list") {
     return el("div", { class: "reading__pills" },
       block.items.map((item) => el("p", { class: "reading__pill", text: item })))
   }
+  if (bare) return el("p", { class: "reading__text", text: block.text })
 
   return el("p", { class: `reading__plate${block.tone === "lime" ? " reading__plate--lime" : ""}`, text: block.text })
 }
@@ -486,18 +487,40 @@ function articleRow(row) {
   if (row.kind === "highlight") return el("p", { class: "reading__highlight", text: row.text })
   if (row.kind !== "row") return articleBlock(row)
 
-  const tone = row.columns[0].tone
-  const titled = row.columns.some((column) => column.title)
-  const panel = (column) => el("h3", { class: `reading__panel reading__panel--${tone}`, text: column.title })
-  const body = (column) => el("div", { class: "reading__col" }, column.blocks.map(articleBlock))
+  const style = row.columns[0].style
+  const body = (column) => el("div", { class: "reading__col" }, column.blocks.map((b) => articleBlock(b)))
 
-  if (titled && row.columns.length === 1) {
-    return el("div", { class: `reading__row reading__row--split reading__row--${tone}` },
-      [ panel(row.columns[0]), body(row.columns[0]) ])
+  // Плашка с заливкой: заголовок и текст внутри, во всю ширину.
+  if (style === "filled") {
+    return row.columns.map((column) => el("section", { class: `reading__filled reading__filled--${column.tone}` }, [
+      el("h3", { class: "reading__filled-title", text: column.title }),
+      ...column.blocks.map((block) => articleBlock(block, true))
+    ]))
   }
 
-  const grid = el("div", { class: "reading__row" }, row.columns.map((column) =>
-    el("div", { class: "reading__column" }, [ column.title && panel(column), body(column) ])))
+  // Панель с заголовком сбоку и содержимое рядом.
+  if (style === "aside" && row.columns.length === 1) {
+    const column = row.columns[0]
+
+    return el("div", { class: `reading__row reading__row--split reading__row--${column.tone}` }, [
+      el("h3", { class: `reading__panel reading__panel--${column.tone}`, text: column.title }),
+      body(column)
+    ])
+  }
+
+  const grid = el("div", { class: "reading__row" }, row.columns.map((column) => {
+    if (column.style === "inline") {
+      return el("div", { class: "reading__frame" }, [
+        el("h3", { class: "reading__frame-title", text: column.title }),
+        ...column.blocks.map((block) => articleBlock(block, true))
+      ])
+    }
+
+    return el("div", { class: "reading__column" }, [
+      column.title && el("h3", { class: "reading__panel reading__panel--lime", text: column.title }),
+      body(column)
+    ])
+  }))
   grid.style.setProperty("--cols", row.columns.length)
 
   return grid
@@ -739,7 +762,7 @@ async function articleScreen(id) {
 
   // Статья приходит рядами плашек — та же раскладка, что на сайте.
   const reading = el("article", { class: "reading" }, [
-    ...(article.layout || []).map(articleRow),
+    ...(article.layout || []).flatMap(articleRow),
     el("div", { class: "reading__actions" }, [
       el("a", { class: "btn", href: "#articles" }, "Все статьи"),
       el("button", { class: "btn btn--coral btn--wide", type: "button", onClick: () => go("ads") }, "Присоединиться")
