@@ -7,10 +7,11 @@
 
 <% if block[:kind] == "list" %>
   <div class="reading__pills">
-    <% block[:items].each do |item| %>
+    <% block[:items].each_with_index do |item, index| %>
       <p class="reading__pill <%= "reading__pill--paw reading__pill--paw-#{paw[:side]}" if paw %>">
         <% if paw %>
-          <%= image_tag paw[:tone] == "coral" ? "hero-19.svg" : "paw-lime.svg", alt: "", class: "reading__pill-paw" %>
+          <%= image_tag article_paw(paw[:tone], index), alt: "",
+                        class: "reading__pill-paw reading__pill-paw--#{index % 3 + 1}" %>
           <%= image_tag "tb-logo-ear.svg", alt: "", class: "reading__pill-ear" %>
         <% end %>
         <span><%= item %></span>

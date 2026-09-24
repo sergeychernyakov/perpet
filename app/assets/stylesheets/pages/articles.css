@@ -437,12 +437,17 @@
   transform: matrix(-0.9331, 0.3596, 0.3596, 0.9331, 0, 0);
 }
 
-/* Пункты в ряду с панелью: большая рука цвета панели и белое «ухо» поверх. */
+/* Пункты в ряду с панелью: большая рука цвета панели и белое «ухо» поверх.
+   Рука у каждого пункта своя — один палец, два, три, — и рука с тремя
+   пальцами шире остальных, а с одним короче и потому висит ниже. */
 .reading__pill-paw {
   top: 0.904cqw;
   width: 15.084%;
   transform: matrix(0.9992, -0.0409, 0.0409, 0.9992, 0, 0);
 }
+
+.reading__pill-paw--1 { top: 1.499cqw; }
+.reading__pill-paw--3 { width: 18.089%; }
 
 .reading__pill-ear {
   left: 1.375%;
@@ -453,6 +458,7 @@
 
 .reading__pill--paw-left .reading__pill-paw { left: 2.79%; }
 .reading__pill--paw-right .reading__pill-paw { left: 78.817%; top: 0.471cqw; }
+.reading__pill--paw-right .reading__pill-paw--1 { top: 1.071cqw; }
 
 /* Кружок со стрелкой у пунктов чек-листа — в макете он справа. */
 .reading__pill-badge {

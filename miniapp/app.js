@@ -474,8 +474,20 @@ const ART_IMAGES = {
   cat: "ab-cat-big.svg",
   plus: "hero-19.svg",
   minus: "ear-cream.svg",
-  hand: "hero-19.svg",
+  hand: "paw-coral-1.svg",
   "hand-right": "hero-19.svg"
+}
+
+// Рука у пункта в макете каждый раз своя: один палец, два, три — по кругу.
+const PAW_IMAGES = {
+  lime: [ "shape-14.svg", "shape-16.svg", "shape-13.svg" ],
+  coral: [ "paw-coral-1.svg", "hero-19.svg", "paw-coral-3.svg" ]
+}
+
+function articlePaw(tone, index) {
+  const paws = PAW_IMAGES[tone] || PAW_IMAGES.lime
+
+  return paws[index % paws.length]
 }
 
 function articleArt(art) {
@@ -488,10 +500,10 @@ function articleArt(art) {
 // paw — рука сбоку у пунктов, badge — кружок со стрелкой в чек-листе.
 function articleBlock(block, { bare = false, paw = null, badge = false } = {}) {
   if (block.kind === "list") {
-    return el("div", { class: "reading__pills" }, block.items.map((item) =>
+    return el("div", { class: "reading__pills" }, block.items.map((item, index) =>
       el("p", { class: `reading__pill${paw ? ` reading__pill--paw reading__pill--paw-${paw.side}` : ""}` }, [
-        paw && el("img", { class: "reading__pill-paw", alt: "",
-                           src: `assets/${paw.tone === "coral" ? "hero-19.svg" : "paw-lime.svg"}` }),
+        paw && el("img", { class: `reading__pill-paw reading__pill-paw--${index % 3 + 1}`, alt: "",
+                           src: `assets/${articlePaw(paw.tone, index)}` }),
         paw && el("img", { class: "reading__pill-ear", src: "assets/tb-logo-ear.svg", alt: "" }),
         el("span", { text: item }),
         badge && el("span", { class: "reading__pill-badge" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ])
