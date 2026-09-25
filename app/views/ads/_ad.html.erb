@@ -20,10 +20,17 @@
       <% end %>
     </p>
 
+    <%# В макете рядом с кнопкой стоит кружок с рукой — это одна кнопка. %>
     <% if ad.profile %>
-      <%= link_to ad.owner_label, public_profile_path(ad.profile), class: "ad__owner" %>
+      <%= link_to public_profile_path(ad.profile), class: "ad__owner" do %>
+        <span class="ad__owner-hand"><%= image_tag "shape-11.svg", alt: "" %></span>
+        <span class="ad__owner-label"><%= ad.owner_label %></span>
+      <% end %>
     <% else %>
-      <%= modal_button "Откликнуться", kind: "respond", subject: ad.title, css: "ad__owner" %>
+      <%= modal_button kind: "respond", subject: ad.title, css: "ad__owner" do %>
+        <span class="ad__owner-hand"><%= image_tag "shape-11.svg", alt: "" %></span>
+        <span class="ad__owner-label">Откликнуться</span>
+      <% end %>
     <% end %>
   </div>
 

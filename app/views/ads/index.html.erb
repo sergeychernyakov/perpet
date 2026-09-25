@@ -10,8 +10,7 @@
   <nav class="ads__switch">
     <% Ad::ROLES.each_with_index do |(role, label), index| %>
       <%= link_to ads_path(role: role),
-                  class: class_names("ads__tab", "ads__tab--right" => index.odd?,
-                                     "ads__tab--current" => role == @role),
+                  class: class_names("ads__tab", "ads__tab--right" => index.odd?),
                   aria: { current: ("page" if role == @role) } do %>
         <span class="ads__tab-arrow"><%= image_tag "shape-11.svg", alt: "" %></span>
         <span class="ads__tab-label">Обьявления <%= label %></span>

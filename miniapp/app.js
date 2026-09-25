@@ -370,7 +370,7 @@ async function adsScreen() {
   // Переключатель разделов: две плашки со стрелкой, как в макете.
   const tabs = el("nav", { class: "ads__switch" }, ROLES.map(([ key, name ], index) =>
     el("button", {
-      class: `ads__tab${index ? " ads__tab--right" : ""}${key === role ? " ads__tab--current" : ""}`,
+      class: `ads__tab${index ? " ads__tab--right" : ""}`,
       type: "button",
       onClick: () => { state.role = key; state.kind = KINDS[0]; state.query = ""; state.page = 1; adsScreen() }
     }, [
@@ -451,9 +451,16 @@ function adCard(ad) {
     ? el("img", { src: apiBase + ad.photo_url, alt: ad.title, loading: "lazy" })
     : el("img", { class: "ad__icon", src: `assets/${ad.icon}`, alt: "" })
 
+  // В макете рядом с кнопкой стоит кружок с рукой — это одна кнопка.
+  const ownerParts = (label) => [
+    el("span", { class: "ad__owner-hand" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ]),
+    el("span", { class: "ad__owner-label", text: label })
+  ]
+
   const owner = ad.owner_id
-    ? el("a", { class: "ad__owner", href: `#person/${ad.owner_id}`, text: ad.owner_label })
-    : el("button", { class: "ad__owner", type: "button", onClick: () => respondSheet(ad) }, "Откликнуться")
+    ? el("a", { class: "ad__owner", href: `#person/${ad.owner_id}` }, ownerParts(ad.owner_label))
+    : el("button", { class: "ad__owner", type: "button", onClick: () => respondSheet(ad) },
+         ownerParts("Откликнуться"))
 
   return el("article", { class: "ad" }, [
     el("img", { class: "ad__paw", src: "assets/tb-logo-ear.svg", alt: "" }),

@@ -33,7 +33,7 @@ class AdsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select ".ad", 1
     assert_select ".ad__title", "Пётр"
-    assert_select ".ads__tab--current", "Обьявления ситтеров"
+    assert_select ".ads__tab[aria-current=page]", text: /ситтеров/
   end
 
   test "поиск без результатов показывает пустое состояние" do

@@ -1,6 +1,8 @@
 /* Страница объявлений. */
 
+/* Заголовок каталога в макете салатовый — в отличие от остальных страниц. */
 .ads__head {
+  background: var(--lime);
   animation: pop-in 0.8s cubic-bezier(0.22, 0.7, 0.2, 1) both;
   animation-timeline: auto;
 }
@@ -83,9 +85,9 @@
 
 .ads__tab--right { flex-direction: row-reverse; }
 
-.ads__tab--current { background: var(--coral); }
-
-.ads__tab:not(.ads__tab--current):hover {
+/* В макете обе плашки одинаковые, без заливки: какой раздел открыт,
+   видно по заголовку страницы. */
+.ads__tab:hover {
   background: var(--lime);
   transform: translateY(3px);
 }
@@ -152,12 +154,15 @@
   box-shadow: 10px 10px 0 var(--coral);
 }
 
-/* Белая лапа из макета — за текстом, поэтому у остального z-index выше. */
+/* Белая рука из макета лежит наискось в правом верхнем углу, за текстом,
+   поэтому у остального z-index выше. */
 .ad__paw {
   position: absolute;
   left: 65.667%;
-  top: 22.53%;
+  top: 14.467cqw;
   width: 28.4%;
+  transform: matrix(0.7629, 0.6465, 0.6465, -0.7629, 0, 0);
+  transform-origin: 0 0;
   pointer-events: none;
 }
 
@@ -214,13 +219,24 @@
   color: var(--gray);
 }
 
+/* «Хозяин» — это кружок с рукой и кнопка рядом, как в макете. */
 .ad__owner {
   margin-top: auto;
   align-self: start;
-  display: inline-flex;
+  display: flex;
+  align-items: center;
+  gap: 2.007%;
+  width: 64.44%;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.ad__owner-hand,
+.ad__owner-label {
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 64.44%;
   min-height: max(30px, 4.556cqw);
   border-radius: var(--radius-pill);
   border: 2px solid var(--line);
@@ -231,7 +247,18 @@
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
-.ad__owner:hover {
+.ad__owner-hand {
+  flex: none;
+  width: 14.38%;
+  aspect-ratio: 43 / 41;
+}
+
+.ad__owner-hand img { width: 45%; }
+
+.ad__owner-label { flex: 1; }
+
+.ad__owner:hover .ad__owner-hand,
+.ad__owner:hover .ad__owner-label {
   background: var(--coral);
   color: var(--ink);
   transform: scale(1.03);
