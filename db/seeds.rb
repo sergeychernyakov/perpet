@@ -27,23 +27,23 @@ end
 # «Хозяин»/«Профиль» на карточке ведёт именно на него.
 PEOPLE = [
   { key: :maria, login: "maria", email: "m.mary@mail.ru", name: "Мария", age: "23", city: "г. Москва",
-    activity: "Обучение", phone: "89039487129",
+    activity: "Обучение", phone: "89039487129", photo: "person-maria.jpg",
     about: "Привет, меня зовут Мария и я буду рада помочь Вам с вашим питомцем, " \
            "так как сама хотела бы завести себе животное." },
   { key: :michael, login: "mixi", email: "mixi@mail.ru", name: "Михаил", age: "27", city: "г. Москва",
-    activity: "Работа", phone: "89059382319",
+    activity: "Работа", phone: "89059382319", photo: "person-mixi.jpg",
     about: "Привет, меня зовут Михаил, я хозяин нескольких замечательных питомцев, " \
            "с которыми я вынужден прощаться на время командировок." },
   { key: :peter, login: "petr", email: "petr@mail.ru", name: "Пётр", age: "32 года", city: "г. Москва",
-    activity: "Работа", phone: "89031157742",
+    activity: "Работа", phone: "89031157742", photo: "person-petr.jpg",
     about: "Привет, меня зовут Пётр, я хотел бы помочь другим с их животными, " \
            "так как работаю онлайн и буду рад быть не один." },
   { key: :margarita, login: "margarita", email: "margarita@mail.ru", name: "Маргарита", age: "44 года",
-    city: "г. Москва, метро Щелковская", activity: "-", phone: "89261480356",
+    city: "г. Москва, метро Щелковская", activity: "-", phone: "89261480356", photo: "person-margarita.jpg",
     about: "Привет, меня зовут Маргарита. Я вышла на пенсию, а дети выросли. " \
            "Хотела бы сделать доброе дело и помочь." },
   { key: :anastasia, login: "anastasia", email: "anastasia@mail.ru", name: "Анастасия", age: "19 года",
-    city: "г. Москва, Строгино", activity: "Учеба", phone: "89154402318",
+    city: "г. Москва, Строгино", activity: "Учеба", phone: "89154402318", photo: "person-anastasia.jpg",
     about: "Привет, меня зовут Анастасия. Сейчас каникулы и я хотела бы завести помочь, " \
            "так как сама хочу завести питомца." }
 ].freeze
@@ -81,7 +81,8 @@ def create_users
   @people = {}
   PEOPLE.each do |attributes|
     person = demo_user(attributes[:login], attributes[:email])
-    person.profile.update!(attributes.except(:key, :login).merge(email: attributes[:email]))
+    person.profile.update!(attributes.except(:key, :login, :photo).merge(email: attributes[:email]))
+    attach_photo(person.profile, attributes[:photo])
     @people[attributes[:key]] = person.profile
   end
 
@@ -154,12 +155,13 @@ def create_ads
 
   SITTER_ADS.each_with_index do |attributes, index|
     profile = @people[attributes[:key]]
-    Ad.create!(
+    ad = Ad.create!(
       role: Ad::SITTER, profile: profile, title: profile.name, age: profile.age,
       city: profile.city, activity: profile.activity, description: profile.about,
       period: attributes[:period], icon: "shape-04.svg",
       status: "published", published_on: Date.current - index.days
     )
+    attach_photo(ad, PEOPLE.find { |person| person[:key] == attributes[:key] }[:photo])
   end
 
   # Остальной каталог раздаём по кругу, чтобы у каждой карточки был хозяин.
@@ -176,12 +178,16 @@ end
 # Фотографии из макета — чтобы в каталоге с первой же страницы было видно,
 # как выглядит карточка со снимком, а не только с силуэтом.
 PET_PHOTOS = {
-  "Мартин" => "pet-simba.jpg",
-  "Грей" => "pet-musya.jpg",
+  "Мартин" => "pet-martin.jpg",
+  "Тоби" => "pet-tobi.jpg",
+  "Бантик" => "pet-bantik.jpg",
+  "Грей" => "pet-grey.jpg",
   "Барсик, 4 года" => "profile-photo.jpg"
 }.freeze
 
-def attach_pet_photo(record, file)
+def attach_photo(record, file)
+  return if file.blank?
+
   path = Rails.root.join("app/assets/images", file)
   return unless path.exist?
 
@@ -192,7 +198,7 @@ def attach_catalog_photos
   PET_PHOTOS.each do |title, file|
     ad = Ad.find_by(title: title) or next
 
-    attach_pet_photo(ad, file)
+    attach_photo(ad, file)
   end
 
   puts "Фотографий в каталоге: #{PET_PHOTOS.size}"
@@ -207,7 +213,7 @@ def create_my_ads
     published_on: Date.current - 14.days
   )
 
-  attach_pet_photo(@profile, "profile-photo.jpg")
+  attach_photo(@profile, "profile-photo.jpg")
 
   Ad.create!(
     profile: @profile,
