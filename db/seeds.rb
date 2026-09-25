@@ -175,14 +175,30 @@ def create_ads
        "ситтеров #{Ad.published.of_role(Ad::SITTER).count}"
 end
 
-# Фотографии из макета — чтобы в каталоге с первой же страницы было видно,
-# как выглядит карточка со снимком, а не только с силуэтом.
+# Фотографии из макета: снимки лежат прямо в Untitled.fig, поэтому в каталоге
+# у каждой карточки свой кадр, а не силуэт. Птиц в макете нет — им достался
+# рисунок с кореллой оттуда же.
 PET_PHOTOS = {
   "Мартин" => "pet-martin.jpg",
   "Тоби" => "pet-tobi.jpg",
   "Бантик" => "pet-bantik.jpg",
   "Грей" => "pet-grey.jpg",
-  "Барсик, 4 года" => "profile-photo.jpg"
+  "Барсик, 4 года" => "profile-photo.jpg",
+  "Тоша, 2 года" => "pet-shiba.jpg",
+  "Пряник, морская свинка" => "pet-rat.jpg",
+  "Муся, 7 лет" => "pet-tabby.jpg",
+  "Кеша, волнистый попугай" => "pet-bird.jpg",
+  "Лада, 5 лет" => "pet-bernese.jpg",
+  "Симба, 1 год" => "pet-ginger.jpg",
+  "Рекс, 6 лет" => "pet-collie.jpg",
+  "Соня, шиншилла" => "pet-chinchilla.jpg",
+  "Тиша и Миша, 3 года" => "pet-martin.jpg",
+  "Грета, корелла" => "pet-bird.jpg",
+  "Бублик, 4 года" => "pet-tobi.jpg",
+  "Пиксель, хомяк" => "pet-rat2.jpg",
+  "Багира, 9 лет" => "pet-fluffy.jpg",
+  "Чижик, канарейка" => "pet-bird.jpg",
+  "Новое объявление" => "pet-rabbit2.jpg"
 }.freeze
 
 def attach_photo(record, file)
