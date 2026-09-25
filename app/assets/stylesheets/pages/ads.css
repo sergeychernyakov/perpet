@@ -262,7 +262,7 @@
 .person__photo {
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
-  background: var(--lime);
+  background: var(--cream);
   overflow: hidden;
 }
 
@@ -293,8 +293,11 @@
   padding: clamp(20px, 2.3vw, 42px) clamp(22px, 2.7vw, 50px);
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
-  background: var(--lime);
+  background: var(--cream);
 }
+
+/* В карточке чужого профиля контакты в макете салатовые. */
+.person__card--lime { background: var(--lime); }
 
 .person__side {
   display: grid;

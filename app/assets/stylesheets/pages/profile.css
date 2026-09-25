@@ -1,15 +1,21 @@
 /* Профиль, карточка питомца и карточка временного хозяина (макет 2.0). */
 
-/* Кнопка «Изменить данные» в углу блока с информацией. */
+/* «Изменить данные» в углу блока с информацией — это кружок с рукой
+   и кнопка рядом: в макете они стоят вплотную и реагируют вместе. */
 .person__edit {
   align-self: flex-end;
   margin-top: auto;
-  display: inline-flex;
+  display: flex;
+  align-items: center;
+  gap: 0.866%;
+}
+
+.person__edit-hand,
+.person__edit-label {
+  display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 43%;
   min-height: 44px;
-  padding: 0 22px;
   border-radius: var(--radius-pill);
   border: 2px solid var(--line);
   background: var(--cream);
@@ -19,7 +25,22 @@
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
-.person__edit:hover {
+.person__edit-hand {
+  flex: none;
+  width: max(40px, 6.205%);
+  aspect-ratio: 43 / 41;
+}
+
+.person__edit-hand img { width: 45%; }
+
+.person__edit-label {
+  min-width: 36.08%;
+  padding: 0 22px;
+}
+
+
+.person__edit:hover .person__edit-hand,
+.person__edit:hover .person__edit-label {
   background: var(--coral);
   color: var(--ink);
   transform: scale(1.03);
@@ -217,6 +238,7 @@
    в углу, которая уходит за край. */
 
 .card-form__plate--photo {
+  container-type: inline-size;
   position: relative;
   align-items: center;
   justify-content: center;
@@ -224,11 +246,14 @@
   overflow: hidden;
 }
 
+/* Рука в макете лежит наискось через всю плашку, а «+» и подпись — поверх. */
 .card-form__paw {
   position: absolute;
-  left: 76.7%;
-  top: -14.9%;
-  width: 80.7%;
+  left: 76.641%;
+  top: -11.538cqw;
+  width: 80.744%;
+  transform: matrix(-0.9491, 0.3151, 0.3151, 0.9491, 0, 0);
+  transform-origin: 0 0;
   pointer-events: none;
 }
 
@@ -382,4 +407,5 @@
   .card-form__field { flex-direction: column; }
 
   .person__edit { align-self: stretch; }
+  .person__edit-label { flex: 1; }
 }

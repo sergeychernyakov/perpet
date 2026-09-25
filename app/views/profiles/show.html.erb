@@ -25,7 +25,11 @@
           <span>Расскажите о себе — так вас узнают другие пользователи.</span>
         <% end %>
       </p>
-      <%= link_to "Изменить данные", edit_profile_path, class: "person__edit" %>
+      <%# В макете рядом с кнопкой стоит кружок с рукой — это одна кнопка. %>
+      <%= link_to edit_profile_path, class: "person__edit" do %>
+        <span class="person__edit-hand"><%= image_tag "shape-11.svg", alt: "" %></span>
+        <span class="person__edit-label">Изменить данные</span>
+      <% end %>
     </article>
 
     <div class="person__side">
