@@ -504,7 +504,6 @@ function articleBlock(block, { bare = false, paw = null, badge = false } = {}) {
       el("p", { class: `reading__pill${paw ? ` reading__pill--paw reading__pill--paw-${paw.side}` : ""}` }, [
         paw && el("img", { class: `reading__pill-paw reading__pill-paw--${index % 3 + 1}`, alt: "",
                            src: `assets/${articlePaw(paw.tone, index)}` }),
-        paw && el("img", { class: "reading__pill-ear", src: "assets/tb-logo-ear.svg", alt: "" }),
         el("span", { text: item }),
         badge && el("span", { class: "reading__pill-badge" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ])
       ])))

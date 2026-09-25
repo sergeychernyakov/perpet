@@ -1,5 +1,6 @@
 <%# Внутри плашки с заливкой и рамки колонки текст идёт без своей рамки.
-    paw — рука сбоку у пунктов, badge — кружок со стрелкой в чек-листе. %>
+    paw — рука сбоку у пунктов, badge — кружок со стрелкой в чек-листе.
+    Белой руки поверх цветной в макете нет: она там скрыта. %>
 <% bare = local_assigns.fetch(:bare, false) %>
 <% paw = local_assigns[:paw] %>
 <% badge = local_assigns.fetch(:badge, false) %>
@@ -12,7 +13,6 @@
         <% if paw %>
           <%= image_tag article_paw(paw[:tone], index), alt: "",
                         class: "reading__pill-paw reading__pill-paw--#{index % 3 + 1}" %>
-          <%= image_tag "tb-logo-ear.svg", alt: "", class: "reading__pill-ear" %>
         <% end %>
         <span><%= item %></span>
         <% if badge %>

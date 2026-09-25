@@ -367,8 +367,7 @@
    плашки, вертикаль — в cqw, то есть в долях ширины всей статьи (1848). */
 .reading__art,
 .reading__eye,
-.reading__pill-paw,
-.reading__pill-ear {
+.reading__pill-paw {
   position: absolute;
   transform-origin: 0 0;
   pointer-events: none;
@@ -437,7 +436,7 @@
   transform: matrix(-0.9331, 0.3596, 0.3596, 0.9331, 0, 0);
 }
 
-/* Пункты в ряду с панелью: большая рука цвета панели и белое «ухо» поверх.
+/* Пункты в ряду с панелью: большая рука цвета панели.
    Рука у каждого пункта своя — один палец, два, три, — и рука с тремя
    пальцами шире остальных, а с одним короче и потому висит ниже. */
 .reading__pill-paw {
@@ -448,13 +447,6 @@
 
 .reading__pill-paw--1 { top: 1.499cqw; }
 .reading__pill-paw--3 { width: 18.089%; }
-
-.reading__pill-ear {
-  left: 1.375%;
-  top: 1.878cqw;
-  width: 9.249%;
-  transform: matrix(0.9918, -0.1278, 0.1278, 0.9918, 0, 0);
-}
 
 .reading__pill--paw-left .reading__pill-paw { left: 2.79%; }
 .reading__pill--paw-right .reading__pill-paw { left: 78.817%; top: 0.471cqw; }
@@ -509,7 +501,6 @@
   .reading__pill--paw { min-height: 72px; }
   .reading__pill-paw { width: 52px; top: 6px; }
   .reading__pill--paw-right .reading__pill-paw { left: auto; right: 10px; top: 6px; }
-  .reading__pill-ear { width: 32px; top: 12px; left: 6px; }
   .reading__pill-badge { width: 40px; margin-right: 0; }
 
   .reading__art--cat,
