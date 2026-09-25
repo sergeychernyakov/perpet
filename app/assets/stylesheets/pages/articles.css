@@ -369,6 +369,11 @@
   min-width: 0;
 }
 
+/* В макете соседние колонки ряда одной высоты, поэтому содержимое
+   растягивается на всю высоту ряда, а не обрывается по тексту. */
+.reading__column > .reading__col,
+.reading__col > * { flex-grow: 1; }
+
 .reading__pills {
   display: flex;
   flex-direction: column;
