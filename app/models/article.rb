@@ -54,6 +54,7 @@ class Article < ApplicationRecord
   #   обычный абзац   — плашка с текстом
   #   ~ cat           — рисунок у блока, отдельной строкой внутри блока
   #   ~ coral         — цвет плашки, если он не совпадает с чередованием
+  #   ~ side          — заголовок плашкой слева, содержимое рядом
   #
   # Идущие подряд колонки встают в один ряд. У панелей и плашек с заливкой
   # цвет чередуется салатовый — коралловый, как в макете.
@@ -67,7 +68,8 @@ class Article < ApplicationRecord
   # задают цвет, если в макете он выбивается из чередования.
   ARTS = %w[cat plus minus hand hand-right].freeze
   TONES = %w[lime coral].freeze
-  MARKS = (ARTS + TONES).freeze
+  LAYOUTS = %w[side side-lead].freeze
+  MARKS = (ARTS + TONES + LAYOUTS).freeze
 
   def layout
     state = { rows: [], row: nil, column: nil, panels: 0 }
@@ -78,13 +80,13 @@ class Article < ApplicationRecord
   private
 
   def add_chunk(state, chunk)
-    chunk, art, tone = take_marks(chunk)
+    chunk, art, tone, layout = take_marks(chunk)
     marker = COLUMN_MARKERS.find { |prefix, _| chunk.start_with?(prefix) }
 
     if chunk == "---"
       close_row(state)
     elsif marker
-      open_column(state, chunk.delete_prefix(marker.first).strip, marker.last, art, tone)
+      open_column(state, chunk.delete_prefix(marker.first).strip, marker.last, art, tone, layout)
     elsif chunk.start_with?("## ")
       close_row(state)
       state[:rows] << { kind: "section", text: chunk.delete_prefix("## ").strip }
@@ -110,7 +112,7 @@ class Article < ApplicationRecord
       marks << token if MARKS.include?(token)
     end
 
-    [ lines.join("\n").strip, (marks & ARTS).first, (marks & TONES).first ]
+    [ lines.join("\n").strip, (marks & ARTS).first, (marks & TONES).first, (marks & LAYOUTS).first ]
   end
 
   def close_row(state)
@@ -118,7 +120,7 @@ class Article < ApplicationRecord
     state[:column] = nil
   end
 
-  def open_column(state, title, style, art = nil, tone = nil)
+  def open_column(state, title, style, art = nil, tone = nil, layout = nil)
     if TONED_STYLES.include?(style)
       state[:panels] += 1
       tone ||= state[:panels].odd? ? "lime" : "coral"
@@ -126,7 +128,7 @@ class Article < ApplicationRecord
       tone = nil
     end
 
-    state[:column] = { title: title, style: style, tone: tone, art: art, blocks: [] }
+    state[:column] = { title: title, style: style, tone: tone, art: art, layout: layout, blocks: [] }
     place_column(state, state[:column])
   end
 
@@ -143,7 +145,7 @@ class Article < ApplicationRecord
     return state[:column][:blocks] << block if state[:column]
 
     if own_column
-      place_column(state, { title: nil, style: "plain", tone: nil, art: nil, blocks: [ block ] })
+      place_column(state, { title: nil, style: "plain", tone: nil, art: nil, layout: nil, blocks: [ block ] })
     else
       close_row(state)
       state[:rows] << block

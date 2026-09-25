@@ -35,6 +35,26 @@
       <% end %>
     </div>
   </div>
+<% elsif columns.size == 1 && columns.first[:layout] %>
+  <%# Заголовок плашкой слева, содержимое рядом — как «Для поездок по России».
+      У широкой плашки первый абзац стоит внутри неё же. %>
+  <% column = columns.first %>
+  <% lead = column[:blocks].first if column[:layout] == "side-lead" %>
+  <% blocks = lead ? column[:blocks].drop(1) : column[:blocks] %>
+  <div class="reading__row reading__row--<%= column[:layout] %>">
+    <div class="reading__panel reading__panel--lime">
+      <h3><%= column[:title] %></h3>
+      <% if lead %>
+        <p class="reading__panel-text"><%= lead[:text] %></p>
+      <% end %>
+    </div>
+
+    <div class="reading__col">
+      <% blocks.each do |block| %>
+        <%= render "articles/block", block: block %>
+      <% end %>
+    </div>
+  </div>
 <% else %>
   <div class="reading__row" style="--cols: <%= columns.size %>;">
     <% columns.each do |column| %>

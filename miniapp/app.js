@@ -557,6 +557,22 @@ function articleRow(row) {
     ])
   }
 
+  // Заголовок плашкой слева, содержимое рядом — как «Для поездок по России».
+  // У широкой плашки первый абзац стоит внутри неё же.
+  if (row.columns.length === 1 && row.columns[0].layout) {
+    const column = row.columns[0]
+    const lead = column.layout === "side-lead" ? column.blocks[0] : null
+    const blocks = lead ? column.blocks.slice(1) : column.blocks
+
+    return el("div", { class: `reading__row reading__row--${column.layout}` }, [
+      el("div", { class: "reading__panel reading__panel--lime" }, [
+        el("h3", { text: column.title }),
+        lead && el("p", { class: "reading__panel-text", text: lead.text })
+      ]),
+      el("div", { class: "reading__col" }, blocks.map((b) => articleBlock(b)))
+    ])
+  }
+
   const grid = el("div", { class: "reading__row" }, row.columns.map((column) => {
     if (column.style === "inline") {
       return el("div", { class: "reading__frame" }, [

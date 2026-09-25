@@ -300,6 +300,31 @@
   align-items: stretch;
 }
 
+/* Заголовок плашкой слева, содержимое рядом. В макете заголовок в такой
+   плашке прижат вправо, а текст рядом набран узкой колонкой. У широкой
+   плашки («Самая частая ошибка») первый абзац стоит внутри неё же. */
+.reading__row--side { grid-template-columns: minmax(0, 424fr) minmax(0, 1376fr); }
+.reading__row--side-lead { grid-template-columns: minmax(0, 623fr) minmax(0, 1177fr); }
+
+.reading__row--side .reading__panel,
+.reading__row--side-lead .reading__panel {
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.reading__row--side-lead .reading__panel { color: var(--cream); }
+
+.reading__panel-text {
+  margin-top: 2.597cqw;
+  font-family: var(--font-hand);
+  font-size: max(12px, 1.082cqw);
+  line-height: 1.4;
+  color: var(--gray);
+}
+
+.reading__row--side .reading__plate > span { max-width: 52%; }
+
 /* Ряд из одной колонки: панель с заголовком сбоку, содержимое рядом.
    В макете салатовая панель стоит справа, коралловая — слева. */
 .reading__row--split { grid-template-columns: minmax(0, 549fr) minmax(0, 1251fr); }
@@ -325,6 +350,16 @@
 
 .reading__panel--lime { background: var(--lime); }
 .reading__panel--coral { background: var(--coral); }
+
+/* Плашка-заголовок над столбцом: в макете она ниже панели, текст в ней
+   кремовый и стоит посередине. */
+.reading__column > .reading__panel {
+  align-items: center;
+  min-height: 5.411cqw;
+  padding-top: 0.893cqw;
+  padding-bottom: 0.893cqw;
+  color: var(--cream);
+}
 
 .reading__column,
 .reading__col {
@@ -486,7 +521,12 @@
 @media (max-width: 860px) {
   .reading__row,
   .reading__row--split,
-  .reading__row--lime { grid-template-columns: 1fr; }
+  .reading__row--lime,
+  .reading__row--side,
+  .reading__row--side-lead { grid-template-columns: 1fr; }
+
+  .reading__row--side .reading__plate > span { max-width: 100%; }
+  .reading__column > .reading__panel { min-height: 0; padding: 18px 22px; }
 
   .reading__row--lime .reading__panel { order: 0; }
 
