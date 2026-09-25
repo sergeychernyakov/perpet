@@ -18,21 +18,27 @@
     <% end %>
   </nav>
 
+  <%# Кнопки видов держатся вместе: на узком экране они переносятся всей
+      группой, а не последняя из них поодиночке. %>
   <%= form_with url: ads_path, method: :get, data: { turbo_frame: "_top" }, class: "filters" do %>
-    <label class="search">
-      <span class="search__label">Поиск</span>
-      <%= text_field_tag :q, @query, class: "form__input search__input", placeholder: "кошка, Москва, июнь…" %>
-      <%= hidden_field_tag :role, @role %>
-      <%= hidden_field_tag :kind, @kind %>
-    </label>
+    <div class="filters__row">
+      <label class="search">
+        <span class="search__label">Поиск</span>
+        <%= text_field_tag :q, @query, class: "form__input search__input", placeholder: "кошка, Москва, июнь…" %>
+        <%= hidden_field_tag :role, @role %>
+        <%= hidden_field_tag :kind, @kind %>
+      </label>
 
-    <%= submit_tag "Найти", name: nil, class: "chip chip--filter chip--search", data: { disable_with: false } %>
+      <%= submit_tag "Найти", name: nil, class: "chip chip--filter chip--search", data: { disable_with: false } %>
+    </div>
 
     <% if @role == Ad::PET %>
-      <% ([ Ad::ALL_KINDS ] + Ad::KINDS).each do |kind| %>
-        <%= link_to kind, ads_path(role: @role, kind: kind, q: @query.presence),
-                    class: class_names("chip", "chip--filter", "chip--current" => kind == @kind) %>
-      <% end %>
+      <div class="filters__kinds">
+        <% ([ Ad::ALL_KINDS ] + Ad::KINDS).each do |kind| %>
+          <%= link_to kind, ads_path(role: @role, kind: kind, q: @query.presence),
+                      class: class_names("chip", "chip--filter", "chip--current" => kind == @kind) %>
+        <% end %>
+      </div>
     <% end %>
   <% end %>
 

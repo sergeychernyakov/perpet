@@ -388,13 +388,15 @@ async function adsScreen() {
     class: "filters",
     onSubmit: (event) => { event.preventDefault(); state.query = input.value.trim(); state.page = 1; adsScreen() }
   }, [
-    el("label", { class: "search" }, [ el("span", { class: "search__label", text: "Поиск" }), input ]),
-    el("button", { class: "chip chip--filter chip--search", type: "submit" }, "Найти"),
-    ...(role === "pet" ? KINDS.map((kind) => el("button", {
+    el("div", { class: "filters__row" }, [
+      el("label", { class: "search" }, [ el("span", { class: "search__label", text: "Поиск" }), input ]),
+      el("button", { class: "chip chip--filter chip--search", type: "submit" }, "Найти")
+    ]),
+    role === "pet" && el("div", { class: "filters__kinds" }, KINDS.map((kind) => el("button", {
       class: `chip chip--filter${kind === state.kind ? " chip--current" : ""}`,
       type: "button",
       onClick: () => { state.kind = kind; state.page = 1; adsScreen() }
-    }, kind)) : [])
+    }, kind)))
   ])
 
   const list = el("div", { class: "ads", id: "ads-top" })
@@ -564,9 +566,10 @@ function articleRow(row) {
     const lead = flags.includes("lead") ? column.blocks[0] : null
     const blocks = lead ? column.blocks.slice(1) : column.blocks
 
-    const row = `reading__row reading__row--split reading__row--${column.tone}${check ? " reading__row--check" : ""}`
+    const rowClass =
+      `reading__row reading__row--split reading__row--${column.tone}${check ? " reading__row--check" : ""}`
 
-    return el("div", { class: row }, [
+    return el("div", { class: rowClass }, [
       el("div", { class: `reading__panel reading__panel--${column.tone}${plain ? " reading__panel--plain" : ""}` }, [
         el("img", { class: `reading__art reading__art--panel-${column.tone}`, alt: "",
                     src: `assets/${column.tone === "lime" ? "cat-cream.svg" : "vazhno-cream.svg"}` }),

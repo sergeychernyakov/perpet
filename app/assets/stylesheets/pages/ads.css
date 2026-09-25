@@ -21,10 +21,26 @@
   align-items: center;
 }
 
+/* Поиск с кнопкой — одна группа, кнопки видов — другая: на узком экране
+   переносится группа целиком, а не последняя кнопка поодиночке. */
+.filters__row {
+  display: flex;
+  flex: 1 1 320px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.filters__kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .search {
   display: flex;
   flex: 1;
-  min-width: 260px;
+  min-width: 0;
   align-items: center;
   gap: 12px;
   height: 56px;
