@@ -898,22 +898,25 @@ function personLines(values, fallback) {
 }
 
 // Две плашки «Добавь карточку» и пояснение — они же на экране «Ваши питомцы».
+// В макете у плашек коралловая рука с парой глаз, а заголовок лежит поверх неё.
 function addCards() {
-  const plate = (role, title, paw) =>
-    el("a", { class: "profile__add", href: `#card/${role}` }, [
-      el("span", { class: "profile__add-title", text: title }),
+  const plate = (role, title) =>
+    el("a", { class: `profile__add profile__add--${role}`, href: `#card/${role}` }, [
+      el("img", { class: "profile__add-paw", src: "assets/hero-19.svg", alt: "" }),
+      el("span", { class: "profile__add-eye profile__add-eye--a" }),
+      el("span", { class: "profile__add-eye profile__add-eye--b" }),
       el("span", { class: "person__arrow" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ]),
-      el("img", { class: "profile__add-paw", src: `assets/${paw}`, alt: "" })
+      el("span", { class: "profile__add-title", text: title })
     ])
 
   return el("div", { class: "profile__cards" }, [
-    plate("sitter", "Добавь карточку ситтера", "tb-logo-ear.svg"),
-    plate("pet", "Добавь карточку питомца", "ab-paw-cream.svg"),
-    el("p", {
-      class: "profile__note",
-      text: "После заполнения профиля добавляйте карточки хозяина или питомца, " +
-            "чтобы продолжать поддерживать питомцев и их хозяев."
-    })
+    plate("sitter", "Добавь карточку ситтера"),
+    plate("pet", "Добавь карточку питомца"),
+    el("p", { class: "profile__note" }, [
+      el("span", { text: "После заполнения профиля добавляйте карточки хозяина или питомца, " +
+                         "чтобы продолжать поддерживать питомцев и их хозяев." }),
+      el("img", { class: "profile__note-paw", src: "assets/vazhno-cream.svg", alt: "" })
+    ])
   ])
 }
 

@@ -1,0 +1,11 @@
+<%# Плашка «Добавь карточку»: рука с парой глаз стоит по координатам макета,
+    заголовок лежит поверх неё — в макете порядок слоёв такой же. %>
+<% side = role == Ad::SITTER ? "sitter" : "pet" %>
+
+<%= link_to new_ad_path(role: role), class: "profile__add profile__add--#{side}" do %>
+  <%= image_tag "hero-19.svg", alt: "", class: "profile__add-paw" %>
+  <span class="profile__add-eye profile__add-eye--a"></span>
+  <span class="profile__add-eye profile__add-eye--b"></span>
+  <span class="person__arrow"><%= image_tag "shape-11.svg", alt: "" %></span>
+  <span class="profile__add-title"><%= title %></span>
+<% end %>
