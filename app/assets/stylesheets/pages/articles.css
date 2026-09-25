@@ -212,6 +212,8 @@
 .reading__plate > span,
 .reading__filled-title,
 .reading__panel > span,
+.reading__panel > h3,
+.reading__panel > p,
 .reading__pill > span {
   position: relative;
 }
@@ -350,6 +352,17 @@
 
 .reading__panel--lime { background: var(--lime); }
 .reading__panel--coral { background: var(--coral); }
+
+/* В третьей статье в панели не заголовок, а обычный текст — как в макете. */
+.reading__panel--plain {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: max(12px, 1.082cqw);
+  line-height: 1.4;
+  color: var(--gray);
+}
+
+.reading__row--split .reading__panel { flex-direction: column; }
 
 /* Плашка-заголовок над столбцом: в макете она ниже панели, текст в ней
    кремовый и стоит посередине. */

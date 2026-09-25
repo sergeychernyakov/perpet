@@ -20,17 +20,25 @@
   <% end %>
 <% elsif style == "aside" && columns.size == 1 %>
   <% column = columns.first %>
-  <%# Панель салатовая — она справа, значит руки у пунктов слева, и наоборот. %>
+  <%# Панель салатовая — она справа, значит руки у пунктов слева, и наоборот.
+      В одних статьях в панели заголовок, в других — обычный текст, а иногда
+      внутри неё стоит ещё и первый абзац колонки. %>
   <% side = column[:tone] == "lime" ? "left" : "right" %>
+  <% plain = column[:flags].include?("plain") %>
+  <% lead = column[:blocks].first if column[:flags].include?("lead") %>
+  <% blocks = lead ? column[:blocks].drop(1) : column[:blocks] %>
   <div class="reading__row reading__row--split reading__row--<%= column[:tone] %>">
-    <h3 class="reading__panel reading__panel--<%= column[:tone] %>">
+    <div class="reading__panel reading__panel--<%= column[:tone] %> <%= "reading__panel--plain" if plain %>">
       <%= image_tag column[:tone] == "lime" ? "cat-cream.svg" : "vazhno-cream.svg", alt: "",
                     class: "reading__art reading__art--panel-#{column[:tone]}" %>
-      <span><%= column[:title] %></span>
-    </h3>
+      <%= content_tag plain ? :p : :h3, column[:title] %>
+      <% if lead %>
+        <p class="reading__panel-text"><%= lead[:text] %></p>
+      <% end %>
+    </div>
 
     <div class="reading__col">
-      <% column[:blocks].each do |block| %>
+      <% blocks.each do |block| %>
         <%= render "articles/block", block: block, paw: { tone: column[:tone], side: side } %>
       <% end %>
     </div>

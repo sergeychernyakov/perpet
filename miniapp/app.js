@@ -546,14 +546,19 @@ function articleRow(row) {
   if (style === "aside" && row.columns.length === 1) {
     const column = row.columns[0]
     const paw = { tone: column.tone, side: column.tone === "lime" ? "left" : "right" }
+    const flags = column.flags || []
+    const plain = flags.includes("plain")
+    const lead = flags.includes("lead") ? column.blocks[0] : null
+    const blocks = lead ? column.blocks.slice(1) : column.blocks
 
     return el("div", { class: `reading__row reading__row--split reading__row--${column.tone}` }, [
-      el("h3", { class: `reading__panel reading__panel--${column.tone}` }, [
+      el("div", { class: `reading__panel reading__panel--${column.tone}${plain ? " reading__panel--plain" : ""}` }, [
         el("img", { class: `reading__art reading__art--panel-${column.tone}`, alt: "",
                     src: `assets/${column.tone === "lime" ? "cat-cream.svg" : "vazhno-cream.svg"}` }),
-        el("span", { text: column.title })
+        el(plain ? "p" : "h3", { text: column.title }),
+        lead && el("p", { class: "reading__panel-text", text: lead.text })
       ]),
-      el("div", { class: "reading__col" }, column.blocks.map((b) => articleBlock(b, { paw })))
+      el("div", { class: "reading__col" }, blocks.map((b) => articleBlock(b, { paw })))
     ])
   }
 
