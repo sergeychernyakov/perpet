@@ -223,21 +223,28 @@
 .card-form__field--pair .form__input { min-width: 0; flex: 1; }
 .card-form__field--pair select.form__input { flex: 1.5; padding: 0 12px; }
 
+/* В макете плашка сама и есть поле: рамка, подпись сверху и место под
+   текст — без отдельной коробочки внутри. Салатовая только та, что с фото. */
 .card-form__plate {
   display: flex;
   flex-direction: column;
   gap: clamp(10px, 1.1vw, 18px);
   min-height: clamp(180px, 16.34vw, 302px);
-  padding: clamp(18px, 1.9vw, 35px) clamp(20px, 2.2vw, 40px);
+  padding: clamp(18px, 1.9vw, 35px) clamp(20px, 2.6vw, 50px);
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
-  background: var(--lime);
+  background: var(--cream);
+  cursor: text;
 }
 
-/* Плашка с фотографией: в макете круглый «+», подпись под ним и белая лапа
-   в углу, которая уходит за край. */
+.card-form__plate:has(:focus-visible) { outline: 2px solid var(--coral); outline-offset: 2px; }
+
+/* Плашка с фотографией: в макете она салатовая, «+» стоит ровно по центру,
+   подпись прижата к нижнему краю, а белая рука лежит наискось под ними. */
 
 .card-form__plate--photo {
+  background: var(--lime);
+  cursor: default;
   container-type: inline-size;
   position: relative;
   align-items: center;
@@ -261,8 +268,11 @@
 
 .photo-field--plus {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   gap: clamp(10px, 1.1vw, 18px);
 }
 
@@ -303,6 +313,13 @@
   color: var(--gray);
 }
 
+.photo-field--plus .photo-field__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6.623%;
+}
+
 .card-form__label {
   font-family: var(--font-hand);
   font-size: clamp(11.7px, 1.17vw, 18px);
@@ -310,41 +327,44 @@
   color: var(--gray);
 }
 
-.card-form__area {
-  flex: 1;
+.card-form__area,
+.card-form__plate .form__input {
   width: 100%;
-  padding: 14px 18px;
-  border-radius: clamp(18px, 1.6vw, 28px);
-  border: 2px solid var(--line);
-  background: var(--cream);
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   font-family: var(--font-hand);
   font-size: clamp(11.7px, 1.17vw, 18px);
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--gray);
-  resize: vertical;
+  resize: none;
 }
 
-.card-form__plate .form__input {
-  padding: 0 16px;
-  border-width: 2px;
-  border-radius: var(--radius-pill);
-  background: var(--cream);
-  font-family: var(--font-hand);
-  font-size: clamp(11.7px, 1.17vw, 18px);
-}
+.card-form__area { flex: 1; }
+
+/* Дата — обычная строка сразу под подписью, а не по центру плашки. */
+.card-form__plate .form__input { height: auto; min-height: 0; }
+
+.card-form__area:focus,
+.card-form__plate .form__input:focus { outline: none; }
 
 .card-form__note {
   grid-column: 1 / -1;
   min-height: clamp(80px, 7.4vw, 142px);
-  padding: clamp(18px, 1.9vw, 35px) clamp(20px, 2.2vw, 40px);
+  padding: clamp(18px, 1.9vw, 35px) clamp(20px, 2.6vw, 50px);
   border-radius: var(--radius-card);
   border: 2px solid var(--line);
   background: var(--lime);
   font-family: var(--font-hand);
   font-size: clamp(11.7px, 1.17vw, 18px);
-  line-height: 1.3;
+  line-height: 1.4;
   color: var(--gray);
 }
+
+/* В макете подсказка набрана узкой колонкой, а не во всю ширину плашки. */
+.card-form__note > span { display: block; max-width: 20%; }
 
 .card-form__actions {
   grid-column: 1 / -1;

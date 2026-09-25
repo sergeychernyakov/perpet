@@ -1119,11 +1119,12 @@ async function cardScreen(role, id) {
     el("div", { class: "card-form__plate card-form__plate--photo" }, [
       el("img", { class: "card-form__paw", src: "assets/tb-logo-ear.svg", alt: "" }), photo.field
     ]),
-    el("p", {
-      class: "card-form__note",
-      text: sitter ? "После заполнения карточки Ваш профиль отобразится у других пользователей."
-                   : "После заполнения карточки питомца Ваш профиль станет виден другим пользователям."
-    }),
+    el("p", { class: "card-form__note" }, [
+      el("span", {
+        text: sitter ? "После заполнения карточки Ваш профиль отобразится у других пользователей."
+                     : "После заполнения карточки питомца Ваш профиль станет виден другим пользователям."
+      })
+    ]),
     el("div", { class: "card-form__actions" }, [
       el("button", { class: "btn btn--coral btn--wide", type: "submit" }, "Сохранить"),
       el("a", { class: "btn", href: "#pets" }, "Отмена"),
