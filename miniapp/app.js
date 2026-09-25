@@ -498,15 +498,20 @@ function articleArt(art) {
 
 // Блок текста статьи: плашка, пункты-«пилюли» или текст без своей рамки.
 // paw — рука сбоку у пунктов, badge — кружок со стрелкой в чек-листе.
-function articleBlock(block, { bare = false, paw = null, badge = false } = {}) {
+function articleBlock(block, { bare = false, paw = null, badge = false, grid = false } = {}) {
   if (block.kind === "list") {
-    return el("div", { class: "reading__pills" }, block.items.map((item, index) =>
+    const pills = el("div", { class: `reading__pills${grid ? " reading__pills--grid" : ""}` },
+      block.items.map((item, index) =>
       el("p", { class: `reading__pill${paw ? ` reading__pill--paw reading__pill--paw-${paw.side}` : ""}` }, [
         paw && el("img", { class: `reading__pill-paw reading__pill-paw--${index % 3 + 1}`, alt: "",
                            src: `assets/${articlePaw(paw.tone, index)}` }),
         el("span", { text: item }),
         badge && el("span", { class: "reading__pill-badge" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ])
       ])))
+
+    pills.style.setProperty("--rows", Math.ceil(block.items.length / 2))
+
+    return pills
   }
   if (bare) return el("p", { class: "reading__text", text: block.text })
 
@@ -548,17 +553,21 @@ function articleRow(row) {
     const paw = { tone: column.tone, side: column.tone === "lime" ? "left" : "right" }
     const flags = column.flags || []
     const plain = flags.includes("plain")
+    const check = flags.includes("check")
     const lead = flags.includes("lead") ? column.blocks[0] : null
     const blocks = lead ? column.blocks.slice(1) : column.blocks
 
-    return el("div", { class: `reading__row reading__row--split reading__row--${column.tone}` }, [
+    const row = `reading__row reading__row--split reading__row--${column.tone}${check ? " reading__row--check" : ""}`
+
+    return el("div", { class: row }, [
       el("div", { class: `reading__panel reading__panel--${column.tone}${plain ? " reading__panel--plain" : ""}` }, [
         el("img", { class: `reading__art reading__art--panel-${column.tone}`, alt: "",
                     src: `assets/${column.tone === "lime" ? "cat-cream.svg" : "vazhno-cream.svg"}` }),
         el(plain ? "p" : "h3", { text: column.title }),
         lead && el("p", { class: "reading__panel-text", text: lead.text })
       ]),
-      el("div", { class: "reading__col" }, blocks.map((b) => articleBlock(b, { paw })))
+      el("div", { class: "reading__col" },
+         blocks.map((b) => articleBlock(b, { paw: check ? null : paw, badge: check, grid: check })))
     ])
   }
 

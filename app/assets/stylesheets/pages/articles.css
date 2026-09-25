@@ -337,6 +337,9 @@
 
 .reading__row--lime .reading__panel { order: 2; }
 
+/* Чек-лист рядом с панелью: пункты идут в два столбца, сверху вниз. */
+.reading__row--check { grid-template-columns: minmax(0, 1216fr) minmax(0, 584fr); }
+
 .reading__panel {
   display: flex;
   align-items: flex-start;
@@ -391,6 +394,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap);
+}
+
+.reading__pills--grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows, 2), auto);
+  grid-auto-flow: column;
 }
 
 .reading__pill {
@@ -541,7 +551,10 @@
   .reading__row--split,
   .reading__row--lime,
   .reading__row--side,
-  .reading__row--side-lead { grid-template-columns: 1fr; }
+  .reading__row--side-lead,
+  .reading__row--check { grid-template-columns: 1fr; }
+
+  .reading__pills--grid { grid-template-columns: 1fr; grid-auto-flow: row; }
 
   .reading__row--side .reading__plate > span { max-width: 100%; }
   .reading__column > .reading__panel { min-height: 0; padding: 18px 22px; }

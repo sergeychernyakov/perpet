@@ -4,10 +4,12 @@
 <% bare = local_assigns.fetch(:bare, false) %>
 <% paw = local_assigns[:paw] %>
 <% badge = local_assigns.fetch(:badge, false) %>
+<% grid = local_assigns.fetch(:grid, false) %>
 <% art = block[:art] %>
 
 <% if block[:kind] == "list" %>
-  <div class="reading__pills">
+  <div class="reading__pills <%= "reading__pills--grid" if grid %>"
+       style="--rows: <%= (block[:items].size / 2.0).ceil %>;">
     <% block[:items].each_with_index do |item, index| %>
       <p class="reading__pill <%= "reading__pill--paw reading__pill--paw-#{paw[:side]}" if paw %>">
         <% if paw %>

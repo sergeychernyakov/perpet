@@ -57,6 +57,7 @@ class Article < ApplicationRecord
   #   ~ side          — заголовок плашкой слева, содержимое рядом
   #   ~ plain         — текст панели обычный, а не заголовком
   #   ~ lead          — первый абзац колонки стоит внутри самой панели
+  #   ~ check         — пункты рядом с панелью идут в два столбца, с кружком
   #
   # Идущие подряд колонки встают в один ряд. У панелей и плашек с заливкой
   # цвет чередуется салатовый — коралловый, как в макете.
@@ -71,7 +72,7 @@ class Article < ApplicationRecord
   ARTS = %w[cat plus minus hand hand-right].freeze
   TONES = %w[lime coral].freeze
   LAYOUTS = %w[side side-lead].freeze
-  FLAGS = %w[plain lead].freeze
+  FLAGS = %w[plain lead check].freeze
   MARKS = (ARTS + TONES + LAYOUTS + FLAGS).freeze
 
   def layout

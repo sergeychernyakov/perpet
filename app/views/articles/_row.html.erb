@@ -25,9 +25,11 @@
       внутри неё стоит ещё и первый абзац колонки. %>
   <% side = column[:tone] == "lime" ? "left" : "right" %>
   <% plain = column[:flags].include?("plain") %>
+  <% check = column[:flags].include?("check") %>
   <% lead = column[:blocks].first if column[:flags].include?("lead") %>
   <% blocks = lead ? column[:blocks].drop(1) : column[:blocks] %>
-  <div class="reading__row reading__row--split reading__row--<%= column[:tone] %>">
+  <div class="reading__row reading__row--split reading__row--<%= column[:tone] %>
+              <%= "reading__row--check" if check %>">
     <div class="reading__panel reading__panel--<%= column[:tone] %> <%= "reading__panel--plain" if plain %>">
       <%= image_tag column[:tone] == "lime" ? "cat-cream.svg" : "vazhno-cream.svg", alt: "",
                     class: "reading__art reading__art--panel-#{column[:tone]}" %>
@@ -39,7 +41,8 @@
 
     <div class="reading__col">
       <% blocks.each do |block| %>
-        <%= render "articles/block", block: block, paw: { tone: column[:tone], side: side } %>
+        <%= render "articles/block", block: block, grid: check, badge: check,
+                   paw: (check ? nil : { tone: column[:tone], side: side }) %>
       <% end %>
     </div>
   </div>
