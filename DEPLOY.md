@@ -50,13 +50,16 @@ ssh deploy@195.19.209.216 'sudo journalctl -u perpet -n 50'   # логи
 ssh deploy@195.19.209.216 'cd /var/www/perpet && RAILS_ENV=production bundle exec rails console'
 ```
 
-## Что осталось настроить
+## Что уже настроено
 
-1. A-запись `perpet` → `195.19.209.216` в DNS домена маркетпульт.рф.
-2. После этого — сертификат: `sudo certbot --nginx -d perpet.xn--80akofbvesci4h.xn--p1ai`.
-3. Залить мини-приложение на хостинг VK — см. `miniapp/README.md`.
-   Пока пункта 1 нет, из VK оно до API не достучится: там разрешён только HTTPS,
-   а сертификат выпускается на имя, которого ещё нет в DNS.
+1. A-запись `perpet` → `195.19.209.216` в DNS домена маркетпульт.рф — есть.
+2. Сертификат Let's Encrypt выпущен (`sudo certbot --nginx -d perpet.xn--80akofbvesci4h.xn--p1ai`),
+   сайт открывается по HTTPS.
+3. Мини-приложение выложено на хостинг VK, приложение **54774841** — см. `miniapp/README.md`.
+
+Осталось: SMTP для писем восстановления пароля и «Войти через ВКонтакте» на сайте
+(код готов, выключен переменной `VK_ID_ENABLED` — нужен доверенный redirect URL
+в настройках приложения VK).
 
 ---
 
