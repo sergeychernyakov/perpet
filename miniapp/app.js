@@ -21,7 +21,7 @@ function render(...nodes) {
 }
 
 function banner(title, note) {
-  return el("section", { class: "banner ads__head" }, [
+  return el("section", { class: "banner" }, [
     el("h1", { class: "banner__title", text: title }),
     note && el("p", { class: "ads__found", text: note })
   ])
@@ -629,7 +629,7 @@ async function personScreen(id) {
 
   const photo = profile.photo_url
     ? el("img", { src: apiBase + profile.photo_url, alt: profile.name })
-    : el("img", { class: "person__photo-icon", src: "assets/ab-paw-cream.svg", alt: "" })
+    : el("img", { class: "person__photo-icon", src: "assets/shape-16.svg", alt: "" })
 
   const person = el("div", { class: "person" }, [
     el("div", { class: "person__photo" }, [ photo ]),
@@ -638,7 +638,7 @@ async function personScreen(id) {
       el("p", { class: "person__lines" }, (profile.card_lines || []).map((line) => el("span", { text: line })))
     ]),
     el("div", { class: "person__side" }, [
-      el("article", { class: "person__card person__card--short" }, [
+      el("article", { class: "person__card person__card--short person__card--lime" }, [
         el("h2", { class: "person__subtitle", text: "Контакты" }),
         el("p", { class: "person__lines" }, (profile.contact_lines || []).map((line) => el("span", { text: line })))
       ]),
@@ -875,16 +875,22 @@ async function profileScreen() {
     )
   }
 
-  const photo = profile.photo_url
-    ? el("img", { src: apiBase + profile.photo_url, alt: profile.name })
-    : el("img", { class: "person__photo-icon", src: "assets/ab-paw-cream.svg", alt: "" })
+  // Фото своё, а если его не загружали — аватарка из VK: она точно есть.
+  const src = profile.photo_url ? apiBase + profile.photo_url : vk.avatarUrl()
+  const photo = src
+    ? el("img", { src, alt: profile.name })
+    : el("img", { class: "person__photo-icon", src: "assets/shape-16.svg", alt: "" })
 
   const person = el("div", { class: "person" }, [
     el("div", { class: "person__photo" }, [ photo ]),
     el("article", { class: "person__card" }, [
       el("h2", { class: "person__subtitle", text: "Информация о пользователе" }),
       personLines(profile.card_lines, "Расскажите о себе — так вас узнают другие пользователи."),
-      el("a", { class: "person__edit", href: "#profile-edit", text: "Изменить данные" })
+      // В макете рядом с кнопкой стоит кружок с рукой — это одна кнопка.
+      el("a", { class: "person__edit", href: "#profile-edit" }, [
+        el("span", { class: "person__edit-hand" }, [ el("img", { src: "assets/shape-11.svg", alt: "" }) ]),
+        el("span", { class: "person__edit-label", text: "Изменить данные" })
+      ])
     ]),
     el("div", { class: "person__side" }, [
       el("article", { class: "person__card person__card--short" }, [

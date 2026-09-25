@@ -10,7 +10,8 @@
       <% if @profile.photo.attached? %>
         <%= image_tag @profile.photo_url, alt: @profile.name %>
       <% else %>
-        <%= image_tag "ab-paw-cream.svg", alt: "", class: "person__photo-icon" %>
+        <%# Плашка фото кремовая, поэтому силуэт салатовый — кремовый на ней не виден. %>
+        <%= image_tag "shape-16.svg", alt: "", class: "person__photo-icon" %>
       <% end %>
     </div>
 
