@@ -68,8 +68,14 @@ class Ad < ApplicationRecord
   end
 
   # Метки под карточкой: вид питомца, город и сроки.
+  # В метке город без «г.» и без уточнений: в макете это «Москва», хотя
+  # в строке «Место:» стоит «г. Москва, метро Спартак».
   def card_tags
-    [ (kind if pet?), city, period ].compact_blank
+    [ (kind if pet?), short_city, period ].compact_blank
+  end
+
+  def short_city
+    city.to_s.split(",").first.to_s.sub(/\A\s*г\.\s*/, "").strip
   end
 
   # Карточка ситтера — рассказ о себе, поэтому форма открывается уже

@@ -116,8 +116,9 @@
   text-align: right;
 }
 
-/* Карточка объявления: слева фото, справа строки «Ключ: значение»,
-   кнопка на карточку хозяина и метки снизу — всё долями ширины карточки. */
+/* Карточка объявления: слева фото, справа строки «Ключ: значение», кнопка
+   на карточку хозяина и метки снизу. Размеры внутри — в cqw, то есть в долях
+   ширины карточки без её отступов: 1cqw = 8 px при ширине карточки 900. */
 
 /* В макете карточки стоят по две в ряд на ширине 1848. Уже — ряд становится
    одним столбцом: на половинке узкого экрана карточка теряет пропорции. */
@@ -137,9 +138,10 @@
     "title title"
     "photo body"
     "tags  tags";
-  gap: 2.667cqw;
-  padding: 4.667cqw 5.556cqw;
-  border-radius: clamp(24px, 5.347cqw, 50px);
+  column-gap: 3%;
+  row-gap: clamp(12px, 1.25vw, 24px);
+  padding: 4.667% 5.556%;
+  border-radius: clamp(24px, 2.6vw, 50px);
   border: 2px solid var(--line);
   background: var(--lime);
   overflow: hidden;
@@ -159,7 +161,7 @@
 .ad__paw {
   position: absolute;
   left: 65.667%;
-  top: 14.467cqw;
+  top: 16.275cqw;
   width: 28.4%;
   transform: matrix(0.7629, 0.6465, 0.6465, -0.7629, 0, 0);
   transform-origin: 0 0;
@@ -171,7 +173,7 @@
 
 .ad__title {
   grid-area: title;
-  font-size: max(18px, 4cqw);
+  font-size: max(18px, 4.5cqw);
   line-height: 1.1;
   color: var(--ink);
 }
@@ -181,9 +183,9 @@
 .ad__photo {
   grid-area: photo;
   align-self: start;
-  height: 40.444cqw;
+  height: 45.5cqw;
   min-height: 120px;
-  border-radius: clamp(20px, 5.556cqw, 50px);
+  border-radius: clamp(20px, 6.25cqw, 50px);
   border: 2px solid var(--line);
   background: var(--lime);
   overflow: hidden;
@@ -209,13 +211,14 @@
   min-width: 0;
 }
 
+/* В макете строки карточки разделены пустой строкой — отсюда и отступ. */
 .ad__text {
   display: flex;
   flex-direction: column;
-  gap: 0.6cqw;
+  gap: 3.5cqw;
   font-family: var(--font-hand);
-  font-size: max(12px, 2.222cqw);
-  line-height: 1.25;
+  font-size: max(12px, 2.5cqw);
+  line-height: 1.4;
   color: var(--gray);
 }
 
@@ -237,12 +240,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: max(30px, 4.556cqw);
+  min-height: max(30px, 5.125cqw);
   border-radius: var(--radius-pill);
   border: 2px solid var(--line);
   background: var(--cream);
   font-family: var(--font-hand);
-  font-size: max(12px, 2.222cqw);
+  font-size: max(12px, 2.5cqw);
   color: var(--gray);
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
@@ -268,12 +271,18 @@
   grid-area: tags;
   display: flex;
   flex-wrap: wrap;
-  gap: 2.667cqw;
+  gap: 3cqw;
 }
 
+/* Метки в макете растянуты на всю ширину карточки. */
 .ad__tags .tag {
-  padding: 0.778cqw 4.444cqw;
-  font-size: max(12px, 2.222cqw);
+  flex: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: max(30px, 5.125cqw);
+  padding: 0.875cqw 5cqw;
+  font-size: max(12px, 2.5cqw);
   background: none;
 }
 
